@@ -159,7 +159,7 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    Brands
+                    Product Brands
                   </span>
                 </li>
               </Link>

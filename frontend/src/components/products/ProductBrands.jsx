@@ -3,6 +3,9 @@ import { AiTwotoneDelete } from 'react-icons/ai'
 import { BsPencilSquare } from 'react-icons/bs'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
 const ProductBrands = () => {
 
     const [brands, setBrands] = useState([]);
@@ -18,6 +21,7 @@ const ProductBrands = () => {
     // clear function 
     function clearData() {
         setBrand({ brandName: "", desc: "" })
+        setMsg("")
     }
 
     const fetchBrands = async () => {
@@ -34,14 +38,17 @@ const ProductBrands = () => {
         try {
             if (brand.brandName.trim() !== "") {
                 const res = await axios.post("http://localhost:3001/brands", brand);
-                console.log(res)
+                // console.log(res)
                 if (res.data.success) {
+                    clearData();
                     setMsg(res.data.message);
                     setColorStle("bg-green-100 text-green-700")
+                    fetchBrands()
                 } else {
                     clearData();
-                    setColorStle("bg-red-100 text-red-700")
                     setMsg(res.data.message);
+                    setColorStle("bg-red-100 text-red-700")
+
                 }
             } else {
                 setMsg("Please! Enter brand name.")
@@ -52,7 +59,40 @@ const ProductBrands = () => {
         }
     }
 
-    console.log(brand)
+
+    const handleDelete = async (id) => {
+        try {
+            const res = await axios.delete(`http://localhost:3001/brands/${id}`)
+            if (res.data.success) {
+                toast.success(`🦄 ${res.data.message}`, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                fetchBrands()
+            } else {
+
+                toast.error('🦄 Delete failed!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
 
     useEffect(() => {
         fetchBrands();
@@ -72,7 +112,7 @@ const ProductBrands = () => {
                         type="text"
                         style={{ width: "20rem" }}
                     />
-                    {/* add unit model */}
+                    {/* add brand model */}
                     <div className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" id="addBrand" tabIndex="-1" aria-labelledby="exampleModalLgLabel" aria-modal="true" role="dialog" onClick={
                         (e) => {
                             if (e.target.id === "addBrand") {
@@ -94,12 +134,7 @@ const ProductBrands = () => {
 
                                     <label htmlFor="unit" className="form-label inline-block mb-2 text-gray-700"
                                     >Brand name</label>
-                                    {/* ====== alert message ===== */}
-                                    {msg &&
-                                        <div className={`rounded py-1 text-center text-base mt-1 ${colorStyle}`} role="alert">
-                                            {msg}
-                                        </div>
-                                    }
+
                                     <input className="form-control
                                         block
                                         w-full
@@ -152,7 +187,12 @@ const ProductBrands = () => {
                                         onChange={handleChange}
                                         value={brand.desc}
                                     ></textarea>
-
+                                    {/* ====== alert message ===== */}
+                                    {msg &&
+                                        <div className={`rounded py-1 text-center text-base mt-1 ${colorStyle}`} role="alert">
+                                            {msg}
+                                        </div>
+                                    }
                                 </div>
                                 <div
                                     className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-gray-200 rounded-b-md">
@@ -206,14 +246,142 @@ const ProductBrands = () => {
                                                 {item.desc}
                                             </td>
                                             <td className="p-3 whitespace-nowrap">
-                                                <button className="mx-2 px-5 py-1.5 rounded-lg font-medium tracking-wider text-blue-700 bg-blue-200 hover:shadow" data-bs-toggle="modal" data-bs-target="#updateUnit">
+                                                <button className="mx-2 px-5 py-1.5 rounded-lg font-medium tracking-wider text-blue-700 bg-blue-200 hover:shadow" data-bs-toggle="modal" data-bs-target="#updateBrand">
                                                     <BsPencilSquare size={20} />
                                                 </button>
+                                                {/* update brand model */}
+                                                <div className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" id="updateBrand" tabIndex="-1" aria-labelledby="exampleModalLgLabel" aria-modal="true" role="dialog" onClick={
+                                                    (e) => {
+                                                        if (e.target.id === "addBrand") {
+                                                            clearData();
+                                                        }
+                                                    }
+                                                }>
+                                                    <div className="modal-dialog modal-lg relative w-auto pointer-events-none">
+                                                        <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                                            <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                                                <h5 className="text-xl font-medium leading-normal text-gray-800" id="updateBrand">
+                                                                    Update Brand
+                                                                </h5>
+                                                                <button type="button"
+                                                                    className="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                                                    data-bs-dismiss="modal" aria-label="Close" onClick={clearData}>
+                                                                </button>
+                                                            </div>
+                                                            <div className="modal-body relative p-4 mt-5 mb-5 text-left">
+                                                                <label htmlFor="unit" className="form-label inline-block mb-2 text-gray-700">Brand name</label>
+                                                                <input className="form-control
+                                                                    block
+                                                                    w-full
+                                                                    px-4
+                                                                    py-2
+                                                                    text-base
+                                                                    font-normal
+                                                                    text-gray-700
+                                                                    bg-white bg-clip-padding
+                                                                    border border-solid border-gray-300
+                                                                    rounded
+                                                                    transition
+                                                                    ease-in-out
+                                                                    m-0
+                                                                    focus:text-gray-700 
+                                                                    focus:bg-white focus:border-blue-600 
+                                                                    focus:outline-none"
+                                                                    placeholder="brand name"
+                                                                    id="brand" type="text"
+                                                                    name="brandName"
+                                                                    onChange={handleChange}
+
+                                                                />
+                                                                <label htmlFor="exampleFormControlTextarea1" className="form-label inline-block mb-2 text-gray-700 mt-5">
+                                                                    Description
+                                                                </label>
+                                                                <textarea className="
+                                                                    form-control
+                                                                    block
+                                                                    w-full
+                                                                    px-3
+                                                                    py-1.5
+                                                                    text-base
+                                                                    font-normal
+                                                                    text-gray-700
+                                                                    bg-white bg-clip-padding
+                                                                    border border-solid border-gray-300
+                                                                    rounded
+                                                                    transition
+                                                                    ease-in-out
+                                                                    m-0
+                                                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                                                    id="exampleFormControlTextarea1"
+                                                                    rows="3"
+                                                                    placeholder="Your message"
+                                                                    name='desc'
+
+
+                                                                ></textarea>
+                                                                {/* ====== alert message ===== */}
+                                                                {msg &&
+                                                                    <div className={`rounded py-1 text-center text-base mt-1 ${colorStyle}`} role="alert">
+                                                                        {msg}
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                            <div
+                                                                className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-gray-200 rounded-b-md">
+                                                                <button type="button"
+                                                                    className="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+                                                                    data-bs-dismiss="modal" onClick={clearData}>Close</button>
+
+                                                                {/* spin button */}
+
+                                                                <button type="button"
+                                                                    className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1">
+                                                                    submit
+                                                                </button>
+
+                                                                {/* end of spin button */}
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {/* end of add model */}
                                                 <button
-                                                    className="px-5 py-1.5 rounded-lg font-medium tracking-wider text-red-600 bg-red-200 hover:shadow" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"
+                                                    className="px-5 py-1.5 rounded-lg font-medium tracking-wider text-red-600 bg-red-200 hover:shadow" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                                 >
                                                     <AiTwotoneDelete size={20} />
                                                 </button>
+                                                {/* delete model */}
+                                                <div className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog">
+                                                    <div className="modal-dialog modal-dialog-centered relative w-auto pointer-events-none">
+                                                        <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                                            <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                                                <h5 className="text-xl font-medium leading-normal text-red-500" id="exampleModalScrollableLabel">
+                                                                    Delete Brand
+                                                                </h5>
+                                                                <button type="button"
+                                                                    className="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div className="modal-body relative p-4">
+                                                                <h2>Are you sure? You want to delete...!</h2>
+                                                            </div>
+                                                            <div
+                                                                className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                                                <button type="button"
+                                                                    className="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
+                                                                    data-bs-dismiss="modal">
+                                                                    Close
+                                                                </button>
+                                                                <button type="button"
+                                                                    className="inline-block px-6 py-2.5 bg-blue-600 text-white font-light text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1" data-bs-dismiss={"modal"} aria-label="Close" onClick={() => { handleDelete(item.id) }}>
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {/* end of delete modal */}
                                             </td>
                                         </tr>
                                     )
@@ -222,6 +390,8 @@ const ProductBrands = () => {
                         </tbody>
                     </table>
                 </div>
+                {/* toast message */}
+                <ToastContainer />
             </div>
         </>
     )

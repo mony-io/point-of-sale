@@ -96,7 +96,7 @@ const ProductUnit = () => {
       const res = await axios.delete(`http://localhost:3001/product-units/${id}`)
       if (res.data.success) {
         toast.success('🦄 Unit has been deleted successfully.', {
-          position: "top-center",
+          position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -109,7 +109,7 @@ const ProductUnit = () => {
       } else {
 
         toast.error('🦄 Delete failed!', {
-          position: "top-center",
+          position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,

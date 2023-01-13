@@ -4,19 +4,17 @@ class Category {
   constructor(categoryName, desc, photo) {
     this.categoryName = categoryName;
     this.desc = desc;
-    this.photo = photo;
   }
 
   save() {
-    const sql =
-      "INSERT INTO tblCategories(`categoryName`,`desc`,`photo`) VALUES(?,?,?)";
-    return db.execute(sql, [this.categoryName, this.desc, this.photo]);
+    const sql = "INSERT INTO tblCategories(`categoryName`,`desc`) VALUES(?,?)";
+    return db.execute(sql, [this.categoryName, this.desc]);
   }
 
-  static updateById(categoryName, desc, photo, id) {
+  static updateById(categoryName, desc, id) {
     const sql =
-      "UPDATE tblCategories SET `categoryName`=?,`desc`=?,`photo`=? WHERE `id` = ?";
-    return db.query(sql, [categoryName, desc, photo, id]);
+      "UPDATE tblCategories SET `categoryName`=?,`desc`=? WHERE `id` = ?";
+    return db.query(sql, [categoryName, desc, id]);
   }
 
   static deleteById(id) {

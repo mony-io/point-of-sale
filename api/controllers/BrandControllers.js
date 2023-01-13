@@ -10,7 +10,7 @@ exports.createNewBrand = async (req, res, next) => {
     const [brandName, _] = await Brand.findByName(req.body.brandName);
     if (brandName.length !== 0) {
       return res.send({
-        messsage: "This brand-name already exist. Please! Try another once.",
+        message: "This brand-name already exist. Please! Try another once.",
         success: false,
       });
     }
@@ -39,9 +39,12 @@ exports.deleteBrandById = async (req, res, next) => {
     const [brand] = await Brand.deleteById(req.params.id);
 
     if (brand.affectedRows !== 0) {
-      return res.send({ message: "Brand name has been deleted." });
+      return res.send({
+        message: "Brand name has been deleted.",
+        success: true,
+      });
     } else {
-      res.send({ message: "Delete failed." });
+      res.send({ message: "Delete failed.", success: false });
     }
   } catch (err) {
     next(err);
