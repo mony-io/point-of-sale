@@ -70,9 +70,11 @@ exports.updateBrand = async (req, res, next) => {
     );
 
     if (result.affectedRows !== 0) {
-      res.status(201).send({ message: "Brand has been updated." });
+      res
+        .status(201)
+        .send({ message: "Brand has been updated.", success: true });
     } else {
-      res.send({ message: "Brand update failed." });
+      res.send({ message: "Brand update failed.", success: false });
     }
   } catch (error) {
     next(error);

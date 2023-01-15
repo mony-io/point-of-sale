@@ -58,7 +58,7 @@ const Sidebar = () => {
             <span
               className={`flex-1 ${!open && "hidden"} duration-200 mt-[5px]`}
             >
-              Category
+              ក្រុមផលិតផល
             </span>
           </li>
         </Link>

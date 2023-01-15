@@ -59,6 +59,35 @@ const ProductBrands = () => {
         }
     }
 
+    // handle update function
+    const handleUpdate = async () => {
+
+        try {
+            if (brand.brandName.trim() !== '') {
+                const res = await axios.put(`http://localhost:3001/brands/${brand.id}`, brand)
+                if (res.data.success) {
+                    clearData()
+                    setColorStle("bg-green-100 text-green-700")
+                    setMsg(res.data.message);
+                    fetchBrands();
+                } else {
+                    clearData()
+                    setColorStle("bg-red-100 text-red-700")
+                    setMsg(res.data.message);
+                }
+
+                //console.log(res);
+            } else {
+                setColorStle("bg-red-100 text-red-700")
+                setMsg("Please! Enter brand name.")
+            }
+
+
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
 
     const handleDelete = async (id) => {
         try {
@@ -101,10 +130,11 @@ const ProductBrands = () => {
     return (
         <>
             <div className="p-5 h-screen bg-gray-100 flex-1">
-                <h1 className="text-xl mb-5 font-bold text-center">Product Brands</h1>
+                <h1 className="text-xl mb-4 text-left">ម៉ាកផលិតផល</h1>
+                <div className='w-full h-1 bg-blue-400 mb-7 shadow-sm'></div>
                 <div className="flex justify-between mb-3">
                     <button className="hidden md:block ml-1 px-4 py-1.5 rounded-lg font-medium tracking-wider bg-teal-400 text-neutral-900 hover:text-white hover:shadow" data-bs-toggle="modal" data-bs-target="#addBrand">
-                        Add Brand
+                        បន្ថែម
                     </button>
                     <input
                         className="hidden md:block bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl shadow-sm text-center p-2.5 hover:shadow mr-2"
@@ -124,7 +154,7 @@ const ProductBrands = () => {
                             <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
                                 <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
                                     <h5 className="text-xl font-medium leading-normal text-gray-800" id="exampleModalLgLabel">
-                                        Add Brand
+                                        បន្ថែមម៉ាកផលិតផល
                                     </h5>
                                     <button type="button"
                                         className="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
@@ -220,7 +250,7 @@ const ProductBrands = () => {
                         <thead className="bg-gray-50 border-gray-200">
                             <tr className="border-b-2 border-gray-100">
                                 <th className="p-3 text-sm font-semibold tracking-wide text-center">
-                                    ID
+                                    No
                                 </th>
                                 <th className="p-3 text-sm font-semibold tracking-wide text-center">
                                     Brand Name
@@ -246,8 +276,16 @@ const ProductBrands = () => {
                                                 {item.desc}
                                             </td>
                                             <td className="p-3 whitespace-nowrap">
-                                                <button className="mx-2 px-5 py-1.5 rounded-lg font-medium tracking-wider text-blue-700 bg-blue-200 hover:shadow" data-bs-toggle="modal" data-bs-target="#updateBrand">
-                                                    <BsPencilSquare size={20} />
+                                                <button className="mx-2 px-5 py-1.5 rounded-lg font-medium tracking-wider text-blue-700 bg-blue-200 hover:shadow" data-bs-toggle="modal" data-bs-target="#updateBrand" onClick={
+                                                    async () => {
+                                                        const res = await axios.get(`http://localhost:3001/brands/${item.id}`);
+                                                        //console.log(res.data)
+                                                        setBrand(...res.data)
+                                                    }
+                                                }>
+                                                    <BsPencilSquare size={20}
+
+                                                    />
                                                 </button>
                                                 {/* update brand model */}
                                                 <div className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" id="updateBrand" tabIndex="-1" aria-labelledby="exampleModalLgLabel" aria-modal="true" role="dialog" onClick={
@@ -291,6 +329,7 @@ const ProductBrands = () => {
                                                                     id="brand" type="text"
                                                                     name="brandName"
                                                                     onChange={handleChange}
+                                                                    value={brand.brandName}
 
                                                                 />
                                                                 <label htmlFor="exampleFormControlTextarea1" className="form-label inline-block mb-2 text-gray-700 mt-5">
@@ -316,7 +355,8 @@ const ProductBrands = () => {
                                                                     rows="3"
                                                                     placeholder="Your message"
                                                                     name='desc'
-
+                                                                    value={brand.desc}
+                                                                    onChange={handleChange}
 
                                                                 ></textarea>
                                                                 {/* ====== alert message ===== */}
@@ -335,8 +375,8 @@ const ProductBrands = () => {
                                                                 {/* spin button */}
 
                                                                 <button type="button"
-                                                                    className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1">
-                                                                    submit
+                                                                    className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1" onClick={handleUpdate} >
+                                                                    Update
                                                                 </button>
 
                                                                 {/* end of spin button */}

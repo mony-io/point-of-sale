@@ -130,10 +130,11 @@ const ProductUnit = () => {
 
   return (<>
     <div className="p-5 h-screen bg-gray-100 flex-1">
-      <h1 className="text-xl mb-5 font-bold text-center">Product Units</h1>
+      <h1 className="text-xl mb-4 text-left">ឯកតាផលិតផល</h1>
+      <div className='w-full h-1 bg-blue-400 mb-7 shadow-sm'></div>
       <div className="flex justify-between mb-3">
         <button className="hidden md:block ml-1 px-4 py-1.5 rounded-lg font-medium tracking-wider bg-teal-400 text-neutral-900 hover:text-white hover:shadow" data-bs-toggle="modal" data-bs-target="#addUnit">
-          Add Unit
+          បន្ថែម
         </button>
         <input
           className="hidden md:block bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl shadow-sm text-center p-2.5 hover:shadow mr-2"
