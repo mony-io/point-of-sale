@@ -16,7 +16,11 @@ const ProductUnit = () => {
   const [msg, setMsg] = useState("");
   const [colorStyle, setColorStle] = useState("");
   const [spin, setSpin] = useState(false);
-
+  //play sound 
+  function playAudio(url) {
+    const audio = new Audio(url);
+    audio.play();
+  }
   // fetch units of product function
   async function fetchUnits() {
     try {
@@ -97,6 +101,7 @@ const ProductUnit = () => {
         `http://localhost:3001/product-units/${id}`
       );
       if (res.data.success) {
+        playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
         toast.success("🦄 Unit has been deleted successfully.", {
           position: "top-right",
           autoClose: 3000,
@@ -109,6 +114,7 @@ const ProductUnit = () => {
         });
         fetchUnits();
       } else {
+        playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
         toast.error("🦄 Delete failed!", {
           position: "top-right",
           autoClose: 3000,
