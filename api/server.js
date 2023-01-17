@@ -1,3 +1,4 @@
+"use strict";
 require("dotenv").config(); // ALLOWS ENVIRONMENT VARIABLES TO BE SET ON PROCESS.ENV SHOULD BE AT TOP
 const express = require("express");
 const cors = require("cors");
@@ -7,6 +8,7 @@ const categoriesRoute = require("./routes/category.route");
 const brandsRoute = require("./routes/brand.route");
 const unitsRoute = require("./routes/productunit.route");
 const supplierRoute = require("./routes/sulppier.route");
+const productRoute = require("./routes/product.route");
 const app = express();
 
 // Middleware
@@ -16,9 +18,11 @@ app.use(brandsRoute);
 app.use(categoriesRoute);
 app.use(unitsRoute);
 app.use(supplierRoute);
+app.use(productRoute);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/images", express.static(path.join(__dirname, "/images")));
+app.use("/audio", express.static(path.join(__dirname, "/audio")));
 
 // Global Error Handler. IMPORTANT function params MUST start with err
 app.use((err, req, res, next) => {
