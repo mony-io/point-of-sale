@@ -13,8 +13,9 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`flex-2 ${open ? "w-56" : "w-12"
-        } bg-[#333] h-screen scrollbar relative duration-200`}
+      className={`flex-2 ${
+        open ? "w-56" : "w-12"
+      } bg-[#222] h-screen scrollbar relative duration-200`}
       id="sidenavExample"
     >
       <div
@@ -25,33 +26,33 @@ const Sidebar = () => {
       </div>
       <ul className="relative text-[#fff]">
         <Link to="/">
-          <li className="relative mt-20 flex items-center text-sm py-4 px-[12px] h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out cursor-pointer">
+          <li className="relative mt-20 flex items-center text-sm py-4 px-[12px] h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out cursor-pointer">
             <span className="block float-left mr-[6px]">
               <RiHome3Fill size={18} color="white" />
             </span>
             <span
               className={`flex-1 ${!open && "hidden"} duration-200 mt-[5px]`}
             >
-              Dashboard
+              ផ្ទាំងគ្រប់គ្រង
             </span>
           </li>
         </Link>
         <Link to="/sale">
           <div>
-            <li className="relative flex items-center text-sm py-4 px-[12px] h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out cursor-pointer">
+            <li className="relative flex items-center text-sm py-4 px-[12px] h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out cursor-pointer">
               <span className="block float-left mr-[6px]">
                 <FiShoppingCart size={18} color="white" />
               </span>
               <span
                 className={`flex-1 ${!open && "hidden"} duration-200 mt-[5px]`}
               >
-                Sale
+                ការលក់
               </span>
             </li>
           </div>
         </Link>
         <Link to="/category">
-          <li className="relative flex items-center text-sm py-4 px-[12px] h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out cursor-pointer">
+          <li className="relative flex items-center text-sm py-4 px-[12px] h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out cursor-pointer">
             <span className="block float-left mr-[6px]">
               <BiCategoryAlt size={18} color="white" />
             </span>
@@ -64,7 +65,7 @@ const Sidebar = () => {
         </Link>
         <li id="sidenavEx1">
           <div
-            className="flex items-center text-sm py-4 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out cursor-pointer"
+            className="flex items-center text-sm py-4 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out cursor-pointer"
             // data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
             data-bs-toggle="collapse"
@@ -81,7 +82,7 @@ const Sidebar = () => {
               <MdAddShoppingCart size={18} />
             </span>
             <span className={`flex-1 ${!open && "hidden"} duration-200 `}>
-              Products
+              ផលិតផល
             </span>
             {open && (
               <svg
@@ -108,7 +109,7 @@ const Sidebar = () => {
               data-bs-parent="#sidenavExample"
             >
               <Link to="/productunit">
-                <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+                <li className="relative flex items-center text-[12px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                   <span className="pl-6">
                     <RxDot size={20} />
                   </span>
@@ -117,12 +118,12 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    Product Units
+                    ឯកតាផលិតផល
                   </span>
                 </li>
               </Link>
               <Link to="/addproduct">
-                <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+                <li className="relative flex items-center text-[12px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                   <span className="pl-6">
                     <RxDot size={20} />
                   </span>
@@ -131,12 +132,12 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    Add Product
+                    បន្ថែមផលិតផល
                   </span>
                 </li>
               </Link>
               <Link to="/listproduct">
-                <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+                <li className="relative flex items-center text-[12px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                   <span className="pl-6">
                     <RxDot size={20} />
                   </span>
@@ -145,12 +146,12 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    List Products
+                    បញ្ជីផលិតផល
                   </span>
                 </li>
               </Link>
               <Link to="/product-brands">
-                <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+                <li className="relative flex items-center text-[12px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                   <span className="pl-6">
                     <RxDot size={20} />
                   </span>
@@ -159,7 +160,7 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    Product Brands
+                    ម៉ាកផលិតផល
                   </span>
                 </li>
               </Link>
@@ -168,7 +169,7 @@ const Sidebar = () => {
         </li>
         <li className="relative" id="sidenavEx4">
           <div
-            className="flex items-center text-sm py-4 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out cursor-pointer"
+            className="flex items-center text-sm py-4 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out cursor-pointer"
             // data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
             data-bs-toggle="collapse"
@@ -187,7 +188,7 @@ const Sidebar = () => {
             <span
               className={`flex-1 ${!open && "hidden"} duration-200 mt-[2px]`}
             >
-              Staff
+              បុគ្គលិក
             </span>
             {open && (
               <svg
@@ -214,7 +215,7 @@ const Sidebar = () => {
               data-bs-parent="#sidenavExample"
             >
               <Link to="/addstaff">
-                <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+                <li className="relative flex items-center text-[12px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                   <span className="pl-6">
                     <RxDot size={20} />
                   </span>
@@ -223,12 +224,12 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    add-staff
+                    បន្ថែមបុគ្គលិក
                   </span>
                 </li>
               </Link>
               <Link to="/liststaff">
-                <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+                <li className="relative flex items-center text-[12px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                   <span className="pl-6">
                     <RxDot size={20} />
                   </span>
@@ -237,7 +238,7 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    list-staff
+                    បញ្ជីបុគ្គលិក
                   </span>
                 </li>
               </Link>
@@ -246,7 +247,7 @@ const Sidebar = () => {
         </li>
         <li className="relative" id="sidenavEx2">
           <div
-            className="flex items-center text-sm py-4 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out cursor-pointer"
+            className="flex items-center text-sm py-4 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out cursor-pointer"
             // data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
             data-bs-toggle="collapse"
@@ -263,7 +264,7 @@ const Sidebar = () => {
               <RiCustomerServiceFill size={18} />
             </span>
             <span className={`flex-1 ${!open && "hidden"} duration-200 `}>
-              Customer
+              អតិថិជន
             </span>
             {open && (
               <svg
@@ -290,7 +291,7 @@ const Sidebar = () => {
               data-bs-parent="#sidenavExample"
             >
               <Link to="/addcustomer">
-                <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+                <li className="relative flex items-center text-[12px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                   <span className="pl-6">
                     <RxDot size={20} />
                   </span>
@@ -299,12 +300,12 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    add-customer
+                    បន្ថែមអតិថិជន
                   </span>
                 </li>
               </Link>
               <Link to="/listcustomer">
-                <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+                <li className="relative flex items-center text-[12px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                   <span className="pl-6">
                     <RxDot size={20} />
                   </span>
@@ -313,7 +314,7 @@ const Sidebar = () => {
                     // data-mdb-ripple="true"
                     data-mdb-ripple-color="dark"
                   >
-                    list-customer
+                    បញ្ជីអតិថិជន
                   </span>
                 </li>
               </Link>
@@ -322,7 +323,7 @@ const Sidebar = () => {
         </li>
         <li className="relative" id="sidenavEx3">
           <div
-            className="flex items-center text-sm py-3 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out cursor-pointer"
+            className="flex items-center text-sm py-3 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out cursor-pointer"
             // data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
             data-bs-toggle="collapse"
@@ -339,7 +340,7 @@ const Sidebar = () => {
               <FaUserAlt size={18} />
             </span>
             <span className={`flex-1 ${!open && "hidden"} duration-200 `}>
-              User
+              អ្នក​ប្រើ
             </span>
             {open && (
               <svg
@@ -365,7 +366,7 @@ const Sidebar = () => {
               aria-labelledby="sidenavEx3"
               data-bs-parent="#sidenavExample"
             >
-              <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+              <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                 <span className="pl-6">
                   <RxDot size={20} />
                 </span>
@@ -377,7 +378,7 @@ const Sidebar = () => {
                   add-category
                 </span>
               </li>
-              <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+              <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                 <span className="pl-6">
                   <RxDot size={20} />
                 </span>
@@ -394,7 +395,7 @@ const Sidebar = () => {
         </li>
         <li className="relative" id="sidenavEx5">
           <div
-            className="flex items-center text-sm py-3 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out cursor-pointer"
+            className="flex items-center text-sm py-3 px-3 h-12 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out cursor-pointer"
             // data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
             data-bs-toggle="collapse"
@@ -411,7 +412,7 @@ const Sidebar = () => {
               <AiFillSetting size={18} />
             </span>
             <span className={`flex-1 ${!open && "hidden"} duration-200 `}>
-              Role
+              តួនាទី
             </span>
             {open && (
               <svg
@@ -437,7 +438,7 @@ const Sidebar = () => {
               aria-labelledby="sidenavEx5"
               data-bs-parent="#sidenavExample"
             >
-              <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+              <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                 <span className="pl-6">
                   <RxDot size={20} />
                 </span>
@@ -449,7 +450,7 @@ const Sidebar = () => {
                   add-category
                 </span>
               </li>
-              <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#222] transition duration-300 ease-in-out">
+              <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                 <span className="pl-6">
                   <RxDot size={20} />
                 </span>
