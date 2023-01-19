@@ -12,6 +12,10 @@ import ListStaff from "./components/staffs/ListStaff";
 import AddCustomer from "./components/customers/AddCustomer";
 import ListCustomer from "./components/customers/ListCustomer";
 import ProductBrands from "./components/products/ProductBrands";
+import Login from "./pages/Login";
+import PrivateRoutes from "./utls/PrivateRoutes";
+import ResetPassword from "./components/login/ResetPassword";
+
 function App() {
   return (
     <>
@@ -19,17 +23,21 @@ function App() {
       <div className="flex">
         <Sidebar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/category" element={<Category />} />
-          <Route path="/sale" element={<Sale />} />
-          <Route path="/productunit" element={<ProductUnit />} />
-          <Route path="/addproduct" element={<AddProduct />} />
-          <Route path="/listproduct" element={<ListProduct />} />
-          <Route path="/addstaff" element={<AddStaff />} />
-          <Route path="/liststaff" element={<ListStaff />} />
-          <Route path="/addcustomer" element={<AddCustomer />} />
-          <Route path="/listcustomer" element={<ListCustomer />} />
-          <Route path="/product-brands" element={<ProductBrands />} />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/category" element={<Category />} />
+            <Route path="/sale" element={<Sale />} />
+            <Route path="/productunit" element={<ProductUnit />} />
+            <Route path="/addproduct" element={<AddProduct />} />
+            <Route path="/listproduct" element={<ListProduct />} />
+            <Route path="/addstaff" element={<AddStaff />} />
+            <Route path="/liststaff" element={<ListStaff />} />
+            <Route path="/addcustomer" element={<AddCustomer />} />
+            <Route path="/listcustomer" element={<ListCustomer />} />
+            <Route path="/product-brands" element={<ProductBrands />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/resetpassword" element={<ResetPassword />} />
         </Routes>
       </div>
     </>
