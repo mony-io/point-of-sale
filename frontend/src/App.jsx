@@ -13,6 +13,11 @@ import AddCustomer from "./components/customers/AddCustomer";
 import ListCustomer from "./components/customers/ListCustomer";
 import ProductBrands from "./components/products/ProductBrands";
 
+import Login from "./pages/Login";
+import PrivateRoutes from "./utls/PrivateRoutes";
+import ResetPassword from "./components/login/ResetPassword";
+
+
 function App() {
   return (
     <>
