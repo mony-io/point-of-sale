@@ -12,21 +12,25 @@ import ListStaff from "./components/staffs/ListStaff";
 import AddCustomer from "./components/customers/AddCustomer";
 import ListCustomer from "./components/customers/ListCustomer";
 import ProductBrands from "./components/products/ProductBrands";
-
+import NotFound from './pages/NotFound'
 import Login from "./pages/Login";
 import PrivateRoutes from "./utls/PrivateRoutes";
+import PublicRoute from './utls/PublicRoute'
 import ResetPassword from "./components/login/ResetPassword";
+import NewPassword from "./pages/NewPassword";
+import { AuthProvider } from "./utls/auth";
 
-
+//import RequireAuth from "./components/RequireAuth";
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Navbar />
       <div className="flex">
         <Sidebar />
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Home />} />
+            {/* <Route path="/dashboard" element={<Home />} /> */}
             <Route path="/category" element={<Category />} />
             <Route path="/sale" element={<Sale />} />
             <Route path="/productunit" element={<ProductUnit />} />
@@ -38,11 +42,19 @@ function App() {
             <Route path="/listcustomer" element={<ListCustomer />} />
             <Route path="/product-brands" element={<ProductBrands />} />
           </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/resetpassword" element={<ResetPassword />} />
+
+          <Route element={<PublicRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/resetpassword" element={<ResetPassword />} />
+          </Route>
+          <Route
+            path="/forgotpassword/:id/:token"
+            element={<NewPassword />}
+          ></Route>
+          <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </div>
-    </>
+    </AuthProvider>
   );
 }
 

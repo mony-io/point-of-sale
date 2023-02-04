@@ -4,12 +4,13 @@ class Product {
   constructor(
     category_id,
     brand_id,
+    sub_id,
+    unit_id,
     product_code,
     product_name,
     qty,
-    price_instock,
-    retail_price,
-    wholesale_price,
+    unit_price,
+    price,
     exp_date,
     product_image,
     desc,
@@ -18,12 +19,13 @@ class Product {
   ) {
     this.category_id = category_id;
     this.brand_id = brand_id;
+    this.sub_id = sub_id;
+    this.unit_id = unit_id;
     this.product_code = product_code;
     this.product_name = product_name;
     this.qty = qty;
-    this.price_instock = price_instock;
-    this.retail_price = retail_price;
-    this.wholesale_price = wholesale_price;
+    this.unit_price = unit_price;
+    this.price = price;
     this.exp_date = exp_date;
     this.product_image = product_image;
     this.desc = desc;
@@ -32,19 +34,19 @@ class Product {
   }
 
   save() {
-    //product_code,product_name,qty,price_instock,retail_price,wholesale_price,product_image,status ,reorder_number
     const sql =
-      "INSERT INTO tblProducts(category_id,brand_id,product_code,product_name,qty,price_instock,retail_price,wholesale_price,exp_date,product_image,`desc`,status,reorder_number) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      "INSERT INTO tblProducts(`category_id`,`brand_id`,`sub_id`,`unit_id`,`product_code`,`product_name`,qty,unit_price,price,exp_date,product_image,`desc`,`status`,reorder_number) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     return db.execute(sql, [
       this.category_id,
       this.brand_id,
+      this.sub_id,
+      this.unit_id,
       this.product_code,
       this.product_name,
       this.qty,
-      this.price_instock,
-      this.retail_price,
-      this.wholesale_price,
+      this.unit_price,
+      this.price,
       this.exp_date,
       this.product_image,
       this.desc,
@@ -56,12 +58,12 @@ class Product {
   static updateProductById(
     category_id,
     brand_id,
+    sub_id,
     product_code,
     product_name,
     qty,
-    price_instock,
-    retail_price,
-    wholesale_price,
+    unit_price,
+    price,
     exp_date,
     product_image,
     desc,
@@ -70,16 +72,16 @@ class Product {
     product_id
   ) {
     const sql =
-      "UPDATE tblProducts SET category_id=?,brand_id=?,product_code=?,product_name=?,qty=?,price_instock=?,retail_price=?,wholesale_price=?,exp_date=?,product_image=?,`desc`=?,status=?,reorder_number=? WHERE product_id=?";
+      "UPDATE tblProducts SET category_id=?,brand_id=?,sub_id=?,product_code=?,product_name=?,qty=?,unit_price=?,price=?,exp_date=?,product_image=?,`desc`=?,`status`=?,reorder_number=? WHERE product_id=?";
     return db.query(sql, [
       category_id,
       brand_id,
+      sub_id,
       product_code,
       product_name,
       qty,
-      price_instock,
-      retail_price,
-      wholesale_price,
+      unit_price,
+      price,
       exp_date,
       product_image,
       desc,
@@ -105,7 +107,17 @@ class Product {
   }
 
   static findAllProduct() {
-    const sql = "SELECT *FROM tblProducts";
+    const sql = `SELECT product_code,product_name,tblBrands.brandName,tblCategories.categoryName,unit_price,
+      price
+      FROM tblProducts
+      LEFT JOIN tblCategories 
+      ON tblProducts.category_id = tblCategories.id
+      LEFT JOIN tblBrands
+      ON tblProducts.brand_id = tblBrands.id
+      LEFT JOIN tblUnit 
+      ON tblProducts.
+
+    `;
     return db.execute(sql);
   }
 

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Pagination from "../components/Pagination";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -14,12 +15,37 @@ const Category = () => {
     desc: "",
   });
 
+
+  const [todosPerPage, setTodosPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const numberOfTotalPages = Math.ceil(categories.length / todosPerPage);
+  const pages = [...Array(numberOfTotalPages + 1).keys()].slice(1);
+
+  const indexOfLastTodo = currentPage * todosPerPage;
+  const indexOfFirstPage = indexOfLastTodo - todosPerPage;
+
+  const prevPageHandler = () => {
+    if (currentPage !== 1) setCurrentPage(currentPage - 1);
+  };
+
+  console.log(currentPage)
+  console.log(numberOfTotalPages)
+
+
+  const nextPageHandler = () => {
+    if (currentPage !== numberOfTotalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const visibleTodos = categories.slice(indexOfFirstPage, indexOfLastTodo);
+
+
   const [msg, setMsg] = useState("");
   const [colorStyle, setColorStle] = useState("");
 
   // clear function
   function clearData() {
-    setCategory({ categoryName: "", desc: "" });
+    setCategory({ categoryName: "", desc: "", id: "" });
     setMsg("");
   }
 
@@ -35,6 +61,8 @@ const Category = () => {
   const handleChange = (e) => {
     setCategory((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  //console.log(category)
 
   const createCategory = async () => {
     try {
@@ -107,6 +135,9 @@ const Category = () => {
           theme: "light",
         });
         fetchCategories();
+        clearData()
+        if (currentPage !== numberOfTotalPages)
+          prevPageHandler()
       } else {
         toast.error("🦄 Delete failed!", {
           position: "top-right",
@@ -124,9 +155,17 @@ const Category = () => {
     }
   };
 
+
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if (visibleTodos.length == 0) {
+      prevPageHandler()
+    }
+  }, [numberOfTotalPages])
+
 
   // React Pagination
 
@@ -298,8 +337,11 @@ const Category = () => {
               </tr>
             </thead>
             <tbody>
-              {categories.map((item, index) => {
+              {visibleTodos.map((item, index) => {
+                // console.log(item.id)
+
                 return (
+
                   <tr
                     className="text-center bg-white border-b-2 border-gray-100"
                     key={index + 1}
@@ -315,6 +357,7 @@ const Category = () => {
                     </td>
 
                     <td className="p-3 whitespace-nowrap">
+
                       <button
                         className="mx-2 px-3 py-1.5 rounded font-medium tracking-wider text-blue-700 bg-blue-200 hover:shadow"
                         data-bs-toggle="modal"
@@ -332,6 +375,7 @@ const Category = () => {
                       >
                         <BsPencilSquare size={20} />
                       </button>
+
                       {/* update brand model */}
                       <div
                         className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
@@ -418,6 +462,7 @@ const Category = () => {
                                 value={category.desc}
                                 onChange={handleChange}
                               ></textarea>
+
                               {/* ====== alert message ===== */}
                               {msg && (
                                 <div
@@ -458,17 +503,30 @@ const Category = () => {
                         className="px-3 py-1.5 rounded font-medium tracking-wider text-red-600 bg-red-200 hover:shadow"
                         data-bs-toggle="modal"
                         data-bs-target="#deleteModal"
+                        onClick={async () => {
+                          try {
+                            const res = await axios.get(
+                              `http://localhost:3001/categories/${item.id}`
+                            );
+                            setCategory(...res.data);
+
+                          } catch (err) {
+                            console.log(err);
+                          }
+                        }}
                       >
                         <AiTwotoneDelete size={20} />
                       </button>
+
                       {/* delete model */}
                       <div
                         className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
                         id="deleteModal"
-                        tabIndex="-1"
+                        //tabIndex="-1"
                         aria-labelledby="exampleModalCenterTitle"
                         aria-modal="true"
                         role="dialog"
+
                       >
                         <div className="modal-dialog modal-dialog-centered relative w-auto pointer-events-none">
                           <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
@@ -491,19 +549,22 @@ const Category = () => {
                             </div>
                             <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
                               <button
+
                                 type="button"
                                 className="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
                                 data-bs-dismiss="modal"
                               >
                                 Close
                               </button>
+
                               <button
                                 type="button"
                                 className="inline-block px-6 py-2.5 bg-blue-600 text-white font-light text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
                                 data-bs-dismiss={"modal"}
                                 aria-label="Close"
-                                onClick={() => {
-                                  handleDelete(item.id);
+                                onClick={(e) => {
+                                  handleDelete(category.id)
+                                  clearData();
                                 }}
                               >
                                 Delete
@@ -514,11 +575,21 @@ const Category = () => {
                       </div>
                       {/* end of delete modal */}
                     </td>
+
                   </tr>
                 );
               })}
             </tbody>
           </table>
+          {/* pagination */}
+          < Pagination
+            pages={pages}
+            setTodosPerPage={setTodosPerPage}
+            nextPageHandler={nextPageHandler}
+            prevPageHandler={prevPageHandler}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
         <ToastContainer />
       </div>

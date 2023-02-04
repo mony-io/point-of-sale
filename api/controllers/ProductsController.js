@@ -6,12 +6,15 @@ exports.createNewProduct = async (req, res, next) => {
   if (req.file) {
     path = req.file.path;
   }
-
+  // console.log(req.file);
+  // console.log(req.body);
   try {
     // get product name
     const [product_name] = await Product.findProductByName(
       req.body.product_name
     );
+
+    //console.log(product_name);
     // check product name
     if (product_name.length !== 0) {
       if (path !== "") {
@@ -25,6 +28,8 @@ exports.createNewProduct = async (req, res, next) => {
 
     // get product code
     const [product_code] = await Product.findProductCode(req.body.product_code);
+    //console.log(product_code);
+
     // check if product code already exist
     if (product_code.length !== 0) {
       if (path !== "") {
@@ -33,15 +38,18 @@ exports.createNewProduct = async (req, res, next) => {
       return res.send({ message: "Sorry! Product code already exist." });
     }
 
+    //console.log(path);
+
     let product = new Product(
       req.body.category_id,
       req.body.brand_id,
+      req.body.sub_id,
+      req.body.unit_id,
       req.body.product_code,
       req.body.product_name,
       req.body.qty,
-      req.body.price_instock,
-      req.body.retail_price,
-      req.body.wholesale_price,
+      req.body.unit_price,
+      req.body.price,
       req.body.exp_date,
       path,
       req.body.desc,
@@ -50,6 +58,7 @@ exports.createNewProduct = async (req, res, next) => {
     );
 
     product = await product.save();
+    //console.log(product);
 
     if (product[0].affectedRows !== 0) {
       res.send({ message: "Product created.", success: true });
@@ -94,7 +103,7 @@ exports.uppdateProduct = async (req, res, next) => {
     // check duplicate product code
     const [pro] = await Product.findDuplicateByProductCode(
       req.params.product_id,
-      product_code
+      req.body.product_code
     );
     if (pro.length !== 0) {
       if (req.file) {
@@ -109,12 +118,12 @@ exports.uppdateProduct = async (req, res, next) => {
     const [result] = await Product.updateProductById(
       req.body.category_id,
       req.body.brand_id,
+      req.body.sub_id,
       req.body.product_code,
       req.body.product_name,
       req.body.qty,
-      req.body.price_instock,
-      req.body.retail_price,
-      req.body.wholesale_price,
+      req.body.unit_price,
+      req.body.price,
       req.body.exp_date,
       path,
       req.body.desc,
@@ -140,6 +149,7 @@ exports.uppdateProduct = async (req, res, next) => {
 exports.findAll = async (req, res, next) => {
   try {
     const [products] = await Product.findAllProduct();
+    console.log(products);
     res.send(products);
   } catch (err) {
     next(err);

@@ -6,11 +6,11 @@ import { VscInbox } from "react-icons/vsc";
 import { HiShoppingCart } from "react-icons/hi";
 import { TbReportSearch } from "react-icons/tb";
 import { RiShareCircleFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { Spin } from "antd"
 const dashboard = () => {
   return (
-    <div className="h-screen flex-1">
+    <div className="flex-1 h-screen">
       <div className="grid grid-cols-4 gap-4 w-full">
         <div className="col-span-1 h-32 m-2">
           <div className="flex justify-between items-center h-24 bg-[#fff] mt-4 rounded-sm overflow-hidden shadow-sm">
@@ -105,6 +105,7 @@ const dashboard = () => {
         </div>
       </div>
     </div>
+
   );
 };
 

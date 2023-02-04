@@ -41,7 +41,7 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: { fileSize: maxSize },
-}).single("image");
+}).single("product_image");
 
 module.exports = async (req, res, next) => {
   // Error MiddleWare for multer file upload, so if any

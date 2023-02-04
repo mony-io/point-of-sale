@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const sendEmail = async (email, subject, text) => {
   try {
@@ -8,21 +9,22 @@ const sendEmail = async (email, subject, text) => {
       port: 587,
       secure: true,
       auth: {
-        user: process.env.USER,
-        pass: process.env.PASS,
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     await transporter.sendMail({
-      from: process.env.USER,
+      from: process.env.EMAIL,
       to: email,
       subject: subject,
-      text: text,
+      html: text,
     });
 
-    console.log("email sent sucessfully");
+    return true;
   } catch (error) {
-    console.log(error, "email not sent");
+    console.log(error);
+    return false;
   }
 };
 

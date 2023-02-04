@@ -1,6 +1,6 @@
 const express = require("express");
 const category = require("../controllers/CategoryControllers");
-
+const verifyToken = require("../middlewares/VerifyToken");
 const router = express.Router();
 
 router

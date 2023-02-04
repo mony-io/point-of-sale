@@ -11,7 +11,7 @@ class Supplier {
 
   save() {
     const sql =
-      "INSERT INTO tblSuppliers(`supName`,`companyName`,`email`,`phone`,`address`) VALUES(?,?,?,?,?)";
+      "INSERT INTO tblSupplies(`supName`,`companyName`,`email`,`phone`,`address`) VALUES(?,?,?,?,?)";
     return db.execute(sql, [
       this.supName,
       this.companyName,
@@ -22,7 +22,7 @@ class Supplier {
   }
 
   static findAll() {
-    const sql = "SELECT *FROM tblSuppliers";
+    const sql = "SELECT *FROM tblSupplies";
     return db.execute(sql);
   }
 
