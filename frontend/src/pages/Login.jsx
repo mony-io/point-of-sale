@@ -65,9 +65,10 @@ const Login = () => {
           if (res.data.success) {
             auth.Loading(true);
             const expirationTime = new Date(
-              new Date().getTime() + 60 * 24 * 1000
+              new Date().getTime() + +60 * 24 * 1000
             );
             auth.login(res.data.token, expirationTime.toISOString())
+            // console.log(res.data.token)
             navigate("/", { replace: true })
           } else {
             setEmail("")

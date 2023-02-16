@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Sidebar from "./components/Sidebar";
 import Category from "./pages/Category";
-import Navbar from "./components/Navbar";
 import Sale from "./pages/Sale";
 import AddProduct from "./components/products/AddProduct";
 import ListProduct from "./components/products/ListProduct";
@@ -19,18 +18,24 @@ import PublicRoute from './utls/PublicRoute'
 import ResetPassword from "./components/login/ResetPassword";
 import NewPassword from "./pages/NewPassword";
 import { AuthProvider } from "./utls/auth";
-
-//import RequireAuth from "./components/RequireAuth";
+import AddUser from "./pages/users/AddUser";
+import ListUsers from "./pages/users/ListUsers";
+import { useMemo } from 'react'
+import RequireAuth from "./utls/RequireAuth";
 function App() {
+
   return (
     <AuthProvider>
-      <Navbar />
       <div className="flex">
-        <Sidebar />
+        {
+          useMemo(() => {
+            return <Sidebar />
+          }, [])
+        }
+
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/dashboard" element={<Home />} /> */}
             <Route path="/category" element={<Category />} />
             <Route path="/sale" element={<Sale />} />
             <Route path="/productunit" element={<ProductUnit />} />
@@ -41,6 +46,11 @@ function App() {
             <Route path="/addcustomer" element={<AddCustomer />} />
             <Route path="/listcustomer" element={<ListCustomer />} />
             <Route path="/product-brands" element={<ProductBrands />} />
+            <Route element={<RequireAuth />}>
+              <Route path="/adduser" element={<AddUser />} />
+              <Route path="/listuser" element={<ListUsers />} />
+            </Route>
+
           </Route>
 
           <Route element={<PublicRoute />}>

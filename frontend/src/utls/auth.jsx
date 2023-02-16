@@ -13,7 +13,10 @@ const AuthContext = createContext({
   getId: () => { },
   id: '',
   isLoading: '',
-  Loading: () => { }
+  Loading: () => { },
+  isAdmin: false,
+  open: true,
+  setOpen: () => { }
 });
 
 let logoutTimer;
@@ -57,6 +60,8 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(initialToken);
   const [isLoading, setIsLoading] = useState(false);
   const [id, setId] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const userIsLoggedIn = !!token;
 
@@ -64,7 +69,6 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('expirationTime');
-
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
@@ -75,11 +79,12 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.get("http://localhost:3001/token", {
         withCredentials: true,
       });
+      console.log(response)
       setToken(response.data.access_token);
       const decoded = jwt_decode(response.data.access_token);
-
       setId(decoded.userid)
       getUser(decoded.username)
+      setAdmin(decoded.role)
     } catch (error) {
       if (error.response) {
         logoutHandler()
@@ -97,6 +102,14 @@ export const AuthProvider = ({ children }) => {
     logoutTimer = setTimeout(logoutHandler, remainingTime);
   };
 
+  const setAdmin = (role) => {
+    if (role === 'Admin') {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false)
+    }
+  }
+
   const getUser = (username) => {
     setUser(username);
   }
@@ -109,9 +122,13 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(result);
   }
 
+  const setOpen = (bool) => {
+    setIsOpen(bool)
+  }
+
   useEffect(() => {
     if (tokenData) {
-      console.log(tokenData.duration);
+      //console.log(tokenData.duration);
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
     }
     refreshToken();
@@ -127,9 +144,12 @@ export const AuthProvider = ({ children }) => {
     Loading: Loading,
     isLoading: isLoading,
     getId: getId,
-    id: id
+    id: id,
+    isAdmin: isAdmin,
+    open: isOpen,
+    setOpen: setOpen
   };
-  // = = = == 
+
   localStorage.setItem("token", "true");
 
 

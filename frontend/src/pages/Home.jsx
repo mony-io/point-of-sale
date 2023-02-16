@@ -18,7 +18,7 @@ const Home = () => {
     } else {
       setTimeout(() => {
         setLoading(false)
-      }, 500)
+      }, 400)
 
     }
   }, [auth.isLoading])

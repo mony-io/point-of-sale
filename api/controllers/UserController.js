@@ -9,16 +9,15 @@ exports.create = async (req, res, next) => {
     if (username.length !== 0) {
       return res.send({ message: "Username already exist.", success: false });
     }
-
-    const [email] = await Users.findByEmail(req.body.email);
-    if (email.length !== 0) {
-      return res.send({ message: "email already exist.", success: false });
+    if (req.body.email !== "") {
+      const [email] = await Users.findByEmail(req.body.email);
+      if (email.length !== 0) {
+        return res.send({ message: "email already exist.", success: false });
+      }
     }
 
     let password = await bcrypt.hash(req.body.password, 10);
     let user = new Users(
-      req.body.firstName,
-      req.body.lastName,
       req.body.username,
       password,
       req.body.email,
@@ -48,7 +47,7 @@ exports.UserLogin = async (req, res, next) => {
       return res.send({ message: "Email and Password are required." });
     }
     const [user, _] = await Users.findByEmail(req.body.email);
-
+    //console.log(user);
     if (user.length > 0) {
       const match = await bcrypt.compare(req.body.password, user[0].password);
       if (!match) {
@@ -61,15 +60,17 @@ exports.UserLogin = async (req, res, next) => {
       const userid = user[0].id;
       const username = user[0].username;
       const email = user[0].email;
+      let role = user[0].role_name;
+      //console.log(role);
 
       const accessToken = jwt.sign(
-        { userid, username, email },
+        { userid, username, email, role },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "30s" }
       );
 
       const refreshToken = jwt.sign(
-        { userid, username, email },
+        { userid, username, email, role },
         process.env.REFRESH_TOKEN_SECRET,
         {
           expiresIn: "1d",
@@ -102,15 +103,16 @@ exports.UserLogin = async (req, res, next) => {
         const userid = username[0].id;
         const user_name = username[0].username;
         const email = username[0].email;
+        let role = username[0].role_name;
 
         const accessToken = jwt.sign(
-          { userid, user_name, email },
+          { role, userid, user_name, email },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "30s" }
         );
 
         const refreshToken = jwt.sign(
-          { userid, user_name, email },
+          { userid, user_name, email, role },
           process.env.REFRESH_TOKEN_SECRET,
           {
             expiresIn: "1d",
@@ -272,6 +274,7 @@ exports.changePassword = async (req, res, next) => {
     const newPassword = await bcrypt.hash(req.body.newPassword, 10);
 
     const [user] = await Users.findById(req.params.id);
+
     console.log(user[0].password);
     const match = await bcrypt.compare(req.body.password, user[0].password);
     console.log(match);
@@ -299,5 +302,52 @@ exports.changePassword = async (req, res, next) => {
     }
   } catch (err) {
     next();
+  }
+};
+
+module.exports.findById = async (req, res, next) => {
+  try {
+    const [user] = await Users.findById(req.params.id);
+    res.send(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.deleteById = async (req, res, next) => {
+  try {
+    const [result] = await Users.deleteById(req.params.id);
+    if (result.affectedRows > 0) {
+      res.send({
+        message: "អ្នកប្រើប្រាស់ត្រូវបានលុបដោយជោគជ័យ!",
+        success: true,
+      });
+    } else {
+      res.send({ message: "ការលុបត្រូវបានបរាជ័យ!", success: false });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.updateOne = async (req, res, next) => {
+  try {
+    const [result] = await Users.updateOne(
+      req.body.username,
+      req.body.email,
+      req.body.phone_number,
+      req.body.role_id,
+      req.params.id
+    );
+    if (result.affectedRows > 0) {
+      res.send({
+        message: "អ្នកប្រើប្រាស់ត្រូវបានកែប្រែដដោយជោគជ័យ!",
+        success: true,
+      });
+    } else {
+      res.send({ message: "ការកែប្រែបរាជ័យ!", success: false });
+    }
+  } catch (err) {
+    next(err);
   }
 };

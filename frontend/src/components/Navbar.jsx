@@ -1,6 +1,7 @@
 import { FaUserCircle } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md"
 import Clock from "../components/date-time/Clock";
+import { AiOutlineMenu } from 'react-icons/ai'
 import Dates from "../components/date-time/Dates";
 import { useAuth } from "../utls/auth";
 import axios from "axios";
@@ -17,7 +18,8 @@ const Navbar = () => {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [comfirmPassword, setComfirmPassword] = useState("");
-
+  const [validPwd, setValidPwd] = useState(false);
+  const [match, setMatch] = useState(false);
   // message
   const [msg, setMsg] = useState("");
   const [msgNewPassword, setMsgNewPassword] = useState("");
@@ -27,7 +29,29 @@ const Navbar = () => {
   const showModal = () => {
     setIsModalOpen(true);
     clearFormData()
+    setValidPwd(false)
+    setMatch(false)
   };
+
+  // match password 
+  function matchPassword() {
+    if (newPassword !== "" && comfirmPassword !== "") {
+      if (newPassword === comfirmPassword) {
+        setMatch(true)
+        setMsgComfirm("")
+      } else {
+        setMsgComfirm("ពាក្យសម្ងាត់មិនផ្ទៀងផ្ទាត់!")
+        setMatch(false)
+      }
+    }
+  }
+
+  // fetch product name
+
+
+
+  // regular expressions
+  const PWD_REX = /^(?=.*).{4,}$/
 
   //play sound 
   function playAudio(url) {
@@ -36,70 +60,54 @@ const Navbar = () => {
   }
 
   const handleUpdate = async () => {
-    try {
-      if (password === "" && comfirmPassword === "" && newPassword === "") {
-        setMsg("Please! Enter your password")
-        setMsgNewPassword("Please! Enter new password")
-        setMsgComfirm("Please!  Enter comfirm password.")
-        setColor("text-red-500")
-      } else if (password === "" && comfirmPassword !== "" && newPassword !== "") {
-        setMsg("Please! Enter your password")
-        setMsgComfirm("")
-        setMsgNewPassword("")
-        setColor("text-red-500")
-      } else if (newPassword === "" && password !== "" && comfirmPassword !== "") {
-        setMsgNewPassword("Please! Enter new password")
-        setMsg("")
-        setMsgComfirm("")
-        setColor("text-red-500")
-      } else if (comfirmPassword === "" && password !== "" && newPassword !== "") {
-        setMsgComfirm("Please!  Enter comfirm password.")
-        setMsg("")
-        setMsgNewPassword("")
-        setColor("text-red-500")
-      } else if (password !== "" && comfirmPassword !== "" && newPassword !== "") {
-        const res = await axios.put(`http://localhost:3001/change-password/${auth.id}`, { password: password, newPassword: newPassword })
-        if (res.data.success) {
-          clearFormData()
-          playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
-          toast.success(`🦄${res.data.message}`, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        } else {
-          clearFormData()
-          playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
-          toast.error(`🦄${res.data.message}`, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+    matchPassword()
+    if (password === "") {
+      setMsg("សូម! បញ្ចូលពាក្យសម្ងាត់របស់អ្នក")
+    } else if (newPassword === "") {
+      setMsgNewPassword("សូម! បញ្ចូលពាក្យសម្ងាត់ថ្មី")
+    } else if (comfirmPassword === "") {
+      setMsgComfirm('សូម! ផ្ទៀងផ្ទាត់ពាក្យសម្ងាត់របស់អ្នក')
+    } else {
+      try {
+        if (validPwd !== false && match !== false) {
+          const res = await axios.put(`http://localhost:3001/change-password/${auth.id}`, { password: password, newPassword: newPassword })
+          if (res.data.success) {
+            clearFormData()
+            playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+            toast.success(`🦄${res.data.message}`, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          } else {
+            clearFormData()
+            playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+            toast.error(`🦄${res.data.message}`, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
         }
+      } catch (err) {
+        console.log(err)
       }
-
-    } catch (err) {
-      console.log(err)
     }
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const [token, setToken] = useState("");
-  const [expire, setExpire] = useState("");
-
 
   const logoutHandler = async () => {
     try {
@@ -113,7 +121,6 @@ const Navbar = () => {
     }
 
   }
-
   // clear data function 
   function clearFormData() {
     setPassword("")
@@ -153,6 +160,14 @@ const Navbar = () => {
 
                   {/* <!-- Left links --> */}
                   <ul className="navbar-nav flex flex-col pl-0 list-style-none mr-auto">
+
+                    <div
+                      className="nav-item py-2 pr-2 cursor-pointer"
+                      onClick={() => auth.setOpen(!auth.open)}
+                    >
+                      <AiOutlineMenu size={24} color="black" />
+                    </div>
+
                     <li className="nav-item p-2">
                       <a className="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" href="#">Dashboard</a>
                     </li>
@@ -258,13 +273,14 @@ const Navbar = () => {
                               update
                             </button>
                           ]}
+                          className={"modal-font"}
                         >
-                          <div>
+                          <div className="mb-4">
                             <label
                               htmlFor="exampleFormControlInput1"
-                              className="form-label inline-block mb-2 text-gray-700 mt-5"
+                              className="form-label inline-block text-gray-700 mt-5​ text-lg mb-2"
                             >
-                              Your Password
+                              ពាក្យសម្ងាត់
                             </label>
                             <input
                               className="form-control
@@ -288,15 +304,35 @@ const Navbar = () => {
                               type={"password"}
                               onChange={(e) => setPassword(e.target.value)}
                               value={password.trim()}
+                              onKeyUp={() => {
+                                if (password === "") {
+                                  setMsg("សូមបញ្ចូលពាក្យសម្ងាត់របស់អ្នក!")
+                                  setColor("text-red-500")
+                                } else {
+                                  if (PWD_REX.test(password)) {
+                                    setMsg("");
+                                    setValidPwd(true);
+                                  } else {
+                                    setValidPwd(false)
+                                    setColor("text-red-500")
+                                    setMsg("បញ្ជាក់!​ ពាក្យសម្ងាត់មិនត្រូវដកឃ្លានិងមានចំនួនចាប់ពី៤ខ្ទង់ឡើងទៅ!")
+                                  }
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.code === "Space") {
+                                  e.preventDefault();
+                                }
+                              }}
                             />
-                            {msg && <span className={`text-sm mt-2 ${color}`}>{msg}</span>}
+                            {msg && <span className={`text-sm mt-2 text-red-500`}>{msg}</span>}
                           </div>
-                          <div>
+                          <div className="mb-4">
                             <label
                               htmlFor="exampleFormControlInput1"
-                              className="form-label inline-block mb-2 text-gray-700 mt-3"
+                              className="form-label inline-block text-gray-700 mb-2 text-lg"
                             >
-                              New Password
+                              ពាក្យសម្ងាត់ថ្មី
                             </label>
                             <input
                               className="form-control
@@ -320,15 +356,34 @@ const Navbar = () => {
                               type={"password"}
                               onChange={(e) => setNewPassword(e.target.value)}
                               value={newPassword.trim()}
+                              onKeyUp={() => {
+                                if (newPassword === "") {
+                                  setMsgNewPassword("សូមបញ្ចូលពាក្យសម្ងាត់ថ្មី!")
+                                } else {
+                                  if (PWD_REX.test(newPassword)) {
+                                    setMsgNewPassword("");
+                                    setValidPwd(true);
+                                  } else {
+                                    setValidPwd(false)
+                                    setColor("text-red-500")
+                                    setMsgNewPassword("បញ្ជាក់!​ ពាក្យសម្ងាត់មិនត្រូវដកឃ្លានិងមានចំនួនចាប់ពី៤ខ្ទង់ឡើងទៅ!")
+                                  }
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.code === "Space") {
+                                  e.preventDefault();
+                                }
+                              }}
                             />
                             {msgNewPassword && <span className={`text-sm mt-2 ${color}`}>{msgNewPassword}</span>}
                           </div>
                           <div>
                             <label
                               htmlFor="exampleFormControlInput1"
-                              className="form-label inline-block mb-2 text-gray-700 mt-3"
+                              className="form-label inline-block mb-2 text-gray-700​ text-lg"
                             >
-                              Comfirm Password
+                              ផ្ទៀងផ្ទាត់ពាក្យសម្ងាត់
                             </label>
                             <input
                               className="form-control
@@ -352,6 +407,21 @@ const Navbar = () => {
                               type={"password"}
                               onChange={(e) => setComfirmPassword(e.target.value)}
                               value={comfirmPassword.trim()}
+                              onKeyUp={() => {
+                                if (comfirmPassword === "") {
+                                  setMsgComfirm('សូម​! ផ្ទៀងផ្ទាត់លេខសម្ងាត់!')
+                                  setColor("text-red-500")
+                                } else {
+                                  setMsgComfirm("")
+                                  matchPassword()
+                                }
+
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.code === "Space") {
+                                  e.preventDefault();
+                                }
+                              }}
                             />
                             {msgComfirm && <span className={`text-sm mt-2 ${color}`}>{msgComfirm}</span>}
                           </div>

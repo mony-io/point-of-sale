@@ -1,18 +1,8 @@
 const db = require("../config/db");
 
 class Users {
-  constructor(
-    firstName,
-    lastName,
-    username,
-    password,
-    email,
-    phone_number,
-    role_id
-  ) {
-    (this.firstName = firstName),
-      (this.lastName = lastName),
-      (this.username = username),
+  constructor(username, password, email, phone_number, role_id) {
+    (this.username = username),
       (this.password = password),
       (this.email = email),
       (this.phone_number = phone_number);
@@ -21,11 +11,9 @@ class Users {
 
   save() {
     const sql =
-      "INSERT INTO tblUsers(role_id,firstName,lastName,username,password,email,phone_number) VALUES(?,?,?,?,?,?,?)";
+      "INSERT INTO tblUsers(role_id,username,password,email,phone_number) VALUES(?,?,?,?,?)";
     return db.execute(sql, [
       this.role_id,
-      this.firstName,
-      this.lastName,
       this.username,
       this.password,
       this.email,
@@ -34,18 +22,21 @@ class Users {
   }
 
   static findAll() {
-    const sql =
-      "SELECT firstName,lastName,username,password,email,phone_number FROM tblUsers";
+    const sql = `SELECT id,username,email,phone_number,tblRoles.role_name FROM tblUsers 
+      INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id
+    `;
     return db.execute(sql);
   }
 
   static findByUsername(username) {
-    const sql = "SELECT *FROM tblUsers WHERE username = ?";
+    const sql = `SELECT id,username,email,tblRoles.role_name,password FROM tblUsers 
+    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id WHERE username = ?`;
     return db.execute(sql, [username]);
   }
 
   static findByEmail(email) {
-    const sql = "SELECT *FROM tblUsers WHERE email = ?";
+    const sql = `SELECT id,username,email,tblRoles.role_name,password FROM tblUsers 
+    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id WHERE email = ?`;
     return db.execute(sql, [email]);
   }
 
@@ -55,7 +46,9 @@ class Users {
   }
 
   static findByRefreshToken(refresh_token) {
-    const sql = "SELECT *FROM tblUsers WHERE token = ?";
+    const sql = `SELECT username,email,id,tblRoles.role_name FROM tblUsers 
+    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id
+    WHERE token = ?`;
     return db.execute(sql, [refresh_token]);
   }
 
@@ -70,8 +63,20 @@ class Users {
   }
 
   static findById(id) {
-    const sql = "SELECT *FROM tblUsers WHERE id = ?";
+    const sql = `SELECT id,username,email,tblRoles.role_name,tblUsers.role_id,phone_number,password FROM tblUsers 
+    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id WHERE id = ?`;
     return db.execute(sql, [id]);
+  }
+
+  static deleteById(id) {
+    const sql = "DELETE FROM tblUsers WHERE id = ?";
+    return db.execute(sql, [id]);
+  }
+
+  static updateOne(username, email, phone_number, role_id, id) {
+    const sql =
+      "UPDATE tblUsers SET username=?,email=?,phone_number=?,role_id=? WHERE id = ?";
+    return db.query(sql, [username, email, phone_number, role_id, id]);
   }
 }
 

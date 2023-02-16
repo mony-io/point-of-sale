@@ -1,5 +1,6 @@
 const Product = require("../models/model.products");
 const deleteImg = require("../middlewares/deleteImage");
+const fs = require("fs");
 
 exports.createNewProduct = async (req, res, next) => {
   let path = "";
@@ -207,6 +208,65 @@ exports.findOne = async (req, res, next) => {
   try {
     const [product] = await Product.findProductById(req.params.product_id);
     res.send(product);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.queryProductByName = async (req, res, next) => {
+  if (!req.query.q) {
+    return res.end();
+  }
+  try {
+    const [product] = await Product.findProductByName(req.query.q);
+    if (product.length !== 0) {
+      res.send({
+        message: "Product already exist.Please! try another once.",
+        success: false,
+      });
+    } else {
+      res.send({ message: "", success: true });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.queryProductByProductCode = async (req, res, next) => {
+  if (!req.query.q) {
+    return;
+  }
+  try {
+    const [product] = await Product.findProductCode(req.query.q);
+    if (product.length !== 0) {
+      res.send({
+        message: "Product Code already exist.Please! try another once.",
+        success: false,
+      });
+    } else {
+      res.send({ message: "", success: true });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+function base64_encode(file) {
+  try {
+    return "data:image/png;base64," + fs.readFileSync(file, "base64");
+  } catch (err) {}
+}
+exports.productCard = async (req, res, next) => {
+  try {
+    const [proCard] = await Product.productCard();
+
+    proCard.map((item) => {
+      if (item.product_image !== "") {
+        // console.log(base64_encode("./" + item.product_image));
+        item.product_image = base64_encode("./" + item.product_image);
+      }
+    });
+    res.send(proCard);
   } catch (err) {
     next(err);
   }

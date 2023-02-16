@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.modal-font{
+  font-family:"Kantumruy", sans-serif
+}
+
 /* Firefox */
 * {
   scrollbar-width: thin;
@@ -52,4 +56,6 @@ body {
   .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #333;
   }
+
+  
 }

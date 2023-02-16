@@ -147,6 +147,12 @@ class Product {
     const sql = "SELECT *FROM tblProducts WHERE product_id=?";
     return db.execute(sql, [id]);
   }
+
+  static productCard() {
+    const sql =
+      "SELECT product_id,product_name,price,product_image,qty FROM tblProducts WHERE `status` = 1";
+    return db.execute(sql);
+  }
 }
 
 module.exports = Product;

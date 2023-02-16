@@ -1,41 +1,90 @@
 import React, { useState } from "react";
 import { AiFillDelete, AiOutlineSearch } from "react-icons/ai";
 import Cart from "../components/sales/Cart";
-import data from "../data.js";
 import Main from "../components/sales/Main";
+import Navbar from "../components/Navbar";
+import axios from 'axios';
+import { Space, Spin } from 'antd';
+import { useQuery } from "react-query";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
+const fetchProducts = async () => {
+  const { data } = await axios.get('http://localhost:3001/product_card');
+  return data
+}
+
+
 
 const Sale = () => {
-  const { products } = data;
+
   const [cartItems, setCartItems] = useState([]);
+  const { data, isLoading } = useQuery('products_card', fetchProducts);
+  //console.log(cartItems)
+
+  //play sound 
+  function playAudio(url) {
+    const audio = new Audio(url);
+    audio.play();
+  }
+
   const onAdd = (product) => {
-    const exist = cartItems.find((x) => x.id === product.id);
+    const exist = cartItems.find((x) => x.product_id === product.product_id);
     if (exist) {
       setCartItems(
         cartItems.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+          x.product_id === product.product_id && x.qty < x.old_qty ? { ...exist, qty: exist.qty + 1 } : x
         )
       );
+      if (exist.qty >= exist.old_qty) {
+        playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+        toast.error("🦄 សូមអភ័យទោស! ចំនួនផលិតផលរបស់អ្នកមិនគ្រប់គ្រាន់ទេ", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     } else {
-      setCartItems([...cartItems, { ...product, qty: 1 }]);
+      setCartItems([...cartItems, { ...product, qty: 1, old_qty: product.qty }]);
     }
   };
 
   const onRemove = (product) => {
-    const exist = cartItems.find((x) => x.id === product.id);
-    if (exist.qty === 1) {
-      setCartItems(cartItems.filter((x) => x.id !== product.id));
+    const exist = cartItems.find((x) => x.product_id === product.product_id);
+    if (exist.qty === 1 || exist.qty === '') {
+      setCartItems(cartItems.filter((x) => x.product_id !== product.product_id));
     } else {
       setCartItems(
         cartItems.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty - 1 } : x
+          x.product_id === product.product_id ? { ...exist, qty: exist.qty - 1 } : x
         )
       );
     }
   };
 
+  const onChangeHandler = (product, qty) => {
+    const exist = cartItems.find((x) => x.product_id === product.product_id);
+    if (exist) {
+      setCartItems(
+        cartItems.map((x) =>
+          x.product_id === product.product_id && qty <= x.old_qty ? { ...exist, qty: qty } : x
+        )
+      );
+    } else {
+      setCartItems([...cartItems, { ...product, qty: qty, old_qty: product.qty }]);
+    }
+  }
+
   return (
     <>
       <div className="flex-1">
+        <Navbar />
         <div className="grid grid-cols-5 gap-4 ml-4 mr-4 h-screen">
           <div className="col-span-2 mr-6">
             <div className="grid grid-cols-4 gap-4">
@@ -65,6 +114,7 @@ const Sale = () => {
                     cartItems={cartItems}
                     onAdd={onAdd}
                     onRemove={onRemove}
+                    onChangeHandler={onChangeHandler}
                   />
                 </div>
               </div>
@@ -95,10 +145,20 @@ const Sale = () => {
                 </select>
               </div>
             </div>
-            <Main products={products} onAdd={onAdd} />
+            {!isLoading ? <Main products={data} onAdd={onAdd} /> : <Space direction="vertical" style={{ width: '100%' }}>
+              <Space className="grid items-center mt-[300px]">
+                <Spin tip="Loading" size="large" className="text-black">
+                  <div className="content" />
+                </Spin>
+              </Space>
+            </Space>
+            }
           </div>
         </div>
+        {/* toast message */}
+        <ToastContainer />
       </div>
+
     </>
   );
 };

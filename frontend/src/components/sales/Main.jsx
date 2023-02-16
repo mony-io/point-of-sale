@@ -6,7 +6,7 @@ const Main = (props) => {
   return (
     <div className="grid grid-cols-4 grid-rows-1 gap-4 m-3">
       {products.map((product) => (
-        <SaleItem key={product.id} product={product} onAdd={onAdd} />
+        <SaleItem key={product.product_id} product={product} onAdd={onAdd} />
       ))}
     </div>
   );

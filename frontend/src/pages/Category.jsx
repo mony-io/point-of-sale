@@ -8,6 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Pagination from "../components/Pagination";
 
 const Category = () => {
+  // Search
+  const [search, setSearch] = useState('')
+
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState({
     id: "",

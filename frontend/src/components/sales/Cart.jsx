@@ -1,14 +1,15 @@
 import React from "react";
 
 const Cart = (props) => {
-  const { cartItems, onAdd, onRemove } = props;
+  const { cartItems, onAdd, onRemove, onChangeHandler } = props;
   const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
+  console.log(cartItems)
   // const taxPrice = itemsPrice * 0.14;
   // const shippingPrice = itemsPrice > 200 ? 0 : 50;
   const totalPrice = itemsPrice;  //+ taxPrice + shippingPrice
-  const handleChange = (e) => {
-    console.log("handle change called");
-  };
+
+
+  // handlechange function
 
   return (
     <>
@@ -21,15 +22,17 @@ const Cart = (props) => {
           )}
         </div>
         {cartItems.map((item) => (
+
           <div
-            key={item.id}
+            key={item.product_id}
             className="flex justify-between items-center m-2 text-slate-600"
           >
-            <div className="text-sm w-[70px] ml-6">{item.name}</div>
+            <div className="text-sm w-[70px] ml-6">{item.product_name}</div>
             <input
               value={item.qty}
-              onChange={handleChange}
               className="w-9 border outline-none border-gray-300 text-center text-sm"
+              type={"text"}
+              onChange={(e) => onChangeHandler(item, e.target.value)}
             />
             <span className="text-sm w-6">${item.price * item.qty}</span>
             <div className="mr-1">
@@ -46,6 +49,7 @@ const Cart = (props) => {
                 -
               </button>
             </div>
+
           </div>
         ))}
       </div>
