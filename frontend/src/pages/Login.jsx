@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useAuth } from "../utls/auth";
 import { Spin, Space } from 'antd';
 import { toast, ToastContainer } from "react-toastify";
+import logo from "../assets/logo.png"
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -107,14 +108,17 @@ const Login = () => {
   return (
     <>
       {loading ? (
-        <section className="bg-[#ddd] w-full h-screen absolute top-0">
-
+        <section className="bg-gradient-to-r from-[#aaa] to-[#ddd] w-full h-screen absolute top-0">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div className="items-center flex mb-3 justify-center">
+              <img
+                src={logo}
+                className="w-40 h-28 object-cover"
+                alt="logo"
+              />
+            </div>
             <div className="w-full bg-[#fff] rounded-lg shadow-md dark:border md:mt-0 sm:max-w-md xl:p-0">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <h1 className="text-3xl font-bold leading-tight text-center tracking-tight text-gray-900">
-                  Login
-                </h1>
                 <div>{msg}</div>
                 <form className="space-y-4 md:space-y-6" action="#">
                   <div>
@@ -122,7 +126,7 @@ const Login = () => {
                       htmlFor="email"
                       className="block mb-2 text-sm font-medium text-gray-900"
                     >
-                      Username or Email
+                      អុីមែល​/ឈ្មោះ​អ្នកប្រើប្រាស់
                     </label>
                     <input
                       value={email.trim()}
@@ -163,8 +167,7 @@ const Login = () => {
                       for="password"
                       className="block mb-2 text-sm font-medium text-gray-900"
                     >
-                      Password
-
+                      ពាក្យសម្ងាត់
                     </label>
                     <input
                       ref={pwdRef}
@@ -200,21 +203,20 @@ const Login = () => {
                     />
                     {msgPwd && <span className="text-red-500 text-sm mt-2">{msgPwd}</span>}
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div class="flex justify-end">
                     <a
                       href="#"
-                      className="text-sm font-medium text-primary-600 hover:underline ml-1"
+                      class="text-xs text-primary-600 text-blue-500 underline ml-1 -mt-5"
                     >
-                      <Link to="/resetpassword">Forgot password ?</Link>
+                      <Link to="/resetpassword">ភ្លេច​លេខសំងាត់​ ?</Link>
                     </a>
-
                   </div>
                   <button
                     onClick={handleClick}
-                    type="button"
-                    className="w-full text-md text-gray-900 bg-blue-500 hover:bg-blue-400 p-3 rounded"
+                    type="submit"
+                    class="w-full text-md text-[#fff] bg-teal-400 hover:bg-teal-300 p-3 rounded"
                   >
-                    Login
+                    <Link to="/">ចូល</Link>
                   </button>
                 </form>
               </div>

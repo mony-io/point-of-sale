@@ -20,6 +20,7 @@ const fetchProducts = async () => {
 const Sale = () => {
 
   const [cartItems, setCartItems] = useState([]);
+
   const { data, isLoading } = useQuery('products_card', fetchProducts);
   //console.log(cartItems)
 
@@ -34,22 +35,10 @@ const Sale = () => {
     if (exist) {
       setCartItems(
         cartItems.map((x) =>
-          x.product_id === product.product_id && x.qty < x.old_qty ? { ...exist, qty: exist.qty + 1 } : x
+          x.product_id === product.product_id && x.qty < x.old_qty ? { ...exist, qty: parseInt((exist.qty) + 1) } : x
         )
       );
-      if (exist.qty >= exist.old_qty) {
-        playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
-        toast.error("🦄 សូមអភ័យទោស! ចំនួនផលិតផលរបស់អ្នកមិនគ្រប់គ្រាន់ទេ", {
-          position: "top-center",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
+
     } else {
       setCartItems([...cartItems, { ...product, qty: 1, old_qty: product.qty }]);
     }
@@ -76,8 +65,29 @@ const Sale = () => {
           x.product_id === product.product_id && qty <= x.old_qty ? { ...exist, qty: qty } : x
         )
       );
+
+      if (qty > exist.old_qty) {
+        playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+        toast.error("🦄 សូមអភ័យទោស!ចំនួនផលិតផលរបស់អ្នកមិនគ្រប់គ្រាន់ទេ", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     } else {
       setCartItems([...cartItems, { ...product, qty: qty, old_qty: product.qty }]);
+    }
+  }
+
+  const deleteHandler = (product) => {
+    const exist = cartItems.find((x) => x.product_id === product.product_id);
+    if (exist) {
+      setCartItems(cartItems.filter((x) => x.product_id !== product.product_id));
     }
   }
 
@@ -85,15 +95,15 @@ const Sale = () => {
     <>
       <div className="flex-1">
         <Navbar />
-        <div className="grid grid-cols-5 gap-4 ml-4 mr-4 h-screen">
-          <div className="col-span-2 mr-6">
+        <div className="grid grid-cols-6 gap-4 ml-4 mr-4 pt-4">
+          <div className="col-span-2 mr-6 bg-blue-50 h-[775px]">
             <div className="grid grid-cols-4 gap-4">
-              <div className="col-span-4 h-12">
-                <div className="flex mt-4">
+              <div className="col-span-4 h-[38px] mt-[4px] px-1">
+                <div className="flex">
                   <select
                     name=""
                     id=""
-                    className="w-full h-9 outline-none border"
+                    className="w-full h-[42px] outline-none border border-gray-300 shadow-sm overflow-hidden p-1 bg-gray-50 rounded-sm"
                   >
                     <option value="all">លក់ដុំ</option>
                     <option value="all">លក់រាយ</option>
@@ -101,8 +111,8 @@ const Sale = () => {
                 </div>
               </div>
               <div className="col-span-4">
-                <div className="grid grid-cols-4 gap-4">
-                  <div className="col-span-4 flex justify-between bg-[#333] p-2 items-center text-slate-300">
+                <div className="grid grid-cols-4 gap-4 px-1">
+                  <div className="col-span-4 flex justify-between rounded-sm pt-3 shadow-sm bg-[#333] p-2 items-center text-[#fff]">
                     <span className="ml-6">ផលិតផល</span>
                     <span>ចំនួន</span>
                     <span>តម្លៃ</span>
@@ -115,27 +125,25 @@ const Sale = () => {
                     onAdd={onAdd}
                     onRemove={onRemove}
                     onChangeHandler={onChangeHandler}
+                    deleteHandler={deleteHandler}
                   />
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-span-3 -ml-6 mt-1 overflow-auto scrollbar h-[700px]">
-            <div className="h-9 mt-3 px-1 flex justify-between items-center bg-white mx-3">
+          <div className="col-span-4 -ml-6 overflow-auto scrollbar h-[775px] bg-blue-50">
+            <div className="h-12 px-1 flex justify-between items-center">
               <div className="flex items-center rounded-sm overflow-hidden">
                 <input
                   type="search"
-                  placeholder="search"
-                  className="p-1 outline-none w-32 bg-[#ddd]"
+                  placeholder="ស្វែងរក"
+                  className="p-2 outline-none w-64 text-sm text-center bg-gray-50 border rounded-sm border-gray-300 shadow-sm"
                 />
-                <div className="bg-[#333] text-[#fff] p-[6px]">
-                  <AiOutlineSearch size={20} />
-                </div>
               </div>
               <div className="flex">
                 <select
                   id="default"
-                  class="bg-gray-50 border rounded-sm w-32 border-gray-300 text-gray-900 text-sm px-2 py-[2px] block dark:bg-[#333] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  class="shadow-sm rounded-sm bg-gray-50 border outline-none w-64 border-gray-300 text-gray-900 text-sm px-2 py-[6px] block"
                 >
                   <option selected>អំពូល</option>
                   <option value="US">ការោ</option>

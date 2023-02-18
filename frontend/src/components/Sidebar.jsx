@@ -6,6 +6,7 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { RxDot } from "react-icons/rx";
 import { MdAddShoppingCart } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
+import { TbReport } from "react-icons/tb"
 import { Link } from "react-router-dom";
 import { useAuth } from "../utls/auth";
 import { FaUsers } from "react-icons/fa";
@@ -19,7 +20,7 @@ const Sidebar = () => {
         auth.isLoggedIn && (<>
           <div
             className={`flex-2 ${auth.open ? "w-56" : "w-12"
-              } bg-[#222] h-auto scrollbar relative duration-200 shadow-lg font-bold`}
+              } bg-[#222] scrollbar h-[100vh] relative duration-200 shadow-lg font-bold`}
             id="sidebar"
           >
 
@@ -269,7 +270,7 @@ const Sidebar = () => {
                     <RiCustomerServiceFill size={18} />
                   </span>
                   <span className={`flex-1 ${!auth.open && "hidden"} duration-200 `}>
-                    អតិថិជន
+                    អ្នក​ពាក់ព័ន្ធ
                   </span>
                   {auth.open && (
                     <svg
@@ -342,10 +343,10 @@ const Sidebar = () => {
                     data-prefix="fas"
                     className="w-3 h-5 mr-3"
                   >
-                    <FaUserAlt size={18} />
+                    <TbReport size={18} />
                   </span>
-                  <span className={`flex-1 ${!auth.open && "hidden"} duration-200 `}>
-                    អ្នក​ប្រើ
+                  <span className={`flex-1 ${!open && "hidden"} duration-200 `}>
+                    របាយការណ៏
                   </span>
                   {auth.open && (
                     <svg
@@ -417,7 +418,7 @@ const Sidebar = () => {
                     <AiFillSetting size={18} />
                   </span>
                   <span className={`flex-1 ${!auth.open && "hidden"} duration-200 `}>
-                    តួនាទី
+                    ការកំណត់
                   </span>
                   {auth.open && (
                     <svg

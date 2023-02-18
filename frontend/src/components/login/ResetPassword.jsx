@@ -67,12 +67,12 @@ const ResetPassword = () => {
     emailRef.current?.focus();
   }, [])
   return (
-    <section className="bg-[#ddd] w-full absolute top-0">
+    <section className="bg-gradient-to-r from-[#aaa] to-[#ddd] w-full absolute top-0">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-[#fff] rounded-lg shadow-md dark:border md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-3xl font-bold leading-tight text-center tracking-tight text-gray-900">
-              Reset-Password
+            <h1 className="text-2xl font-bold leading-tight text-center tracking-tight text-gray-900">
+              ផ្លាស់ប្តូរពាក្យសម្ងាត់
             </h1>
             <form className="space-y-4 md:space-y-6">
               <div>
@@ -80,7 +80,7 @@ const ResetPassword = () => {
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Email
+                  អុីមែល
                 </label>
                 <input
                   ref={emailRef}
@@ -116,18 +116,18 @@ const ResetPassword = () => {
               </div>
               <button
                 type="submit"
-                className="w-full text-md text-gray-900 bg-blue-500 hover:bg-blue-400 p-3 rounded"
+                className="w-full text-md text-[#fff] bg-teal-400 hover:bg-teal-300 p-3 rounded"
                 onClick={handleClicked}
               >
-                {spin ? <span><Spin indicator={antIcon} className="text-blue-100" /> Loading...</span> : "send"}
+                {spin ? <span><Spin indicator={antIcon} className="text-blue-100" /> Loading...</span> : "បញ្ចូន"}
               </button>
             </form>
           </div>
 
         </div>
         <div style={{ marginLeft: "-19vw", marginTop: "5px" }}>
-          <span className="text-blue-700 font-bold hover:underline">
-            <Link to="/login">Go Back!!</Link>
+          <span className="text-xs text-blue-500 underline cursor-pointer">
+            <Link to="/login">ត្រឡប់​ក្រោយ!</Link>
           </span>
         </div>
       </div>
