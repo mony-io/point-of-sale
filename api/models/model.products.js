@@ -107,18 +107,8 @@ class Product {
   }
 
   static findAllProduct() {
-    const sql = `SELECT product_code,product_name,tblBrands.brandName,tblCategories.categoryName,unit_price,
-      price
-      FROM tblProducts
-      LEFT JOIN tblCategories 
-      ON tblProducts.category_id = tblCategories.id
-      LEFT JOIN tblBrands
-      ON tblProducts.brand_id = tblBrands.id
-      LEFT JOIN tblUnit 
-      ON tblProducts.
-
-    `;
-    return db.execute(sql);
+    const v_sql = `SELECT *FROM getAllProducts`;
+    return db.execute(v_sql);
   }
 
   static findDuplicateByName(id, product_name) {

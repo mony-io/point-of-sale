@@ -150,7 +150,15 @@ exports.uppdateProduct = async (req, res, next) => {
 exports.findAll = async (req, res, next) => {
   try {
     const [products] = await Product.findAllProduct();
-    console.log(products);
+
+    products.map((item) => {
+      if (item.product_image !== "") {
+        // console.log(base64_encode("./" + item.product_image));
+        item.product_image = base64_encode("./" + item.product_image);
+      }
+    });
+
+    //console.log(products);
     res.send(products);
   } catch (err) {
     next(err);

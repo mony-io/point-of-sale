@@ -1,20 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GoPlus } from 'react-icons/go'
 import { HiMinus } from 'react-icons/hi'
 import { RxCross2 } from 'react-icons/rx'
 import { Modal, Button } from "antd";
+import { useQuery } from 'react-query'
+import axios from 'axios'
+import { useAuth } from "../../utls/auth";
+import { useReactToPrint } from "react-to-print";
+import PrintPayment from "./PrintPayment";
+
+const fetchPayment = async () => {
+  const { data } = await axios.get('http://localhost:3001/api/payments')
+  return data
+}
+
 const Cart = (props) => {
+
+  // PAYMENT
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "pay-data",
+    // onAfterPrint: () => alert("Your Payment Printed Successfully!"),
+  });
+
+  const auth = useAuth()
+
+  const { data } = useQuery('paymentType', fetchPayment)
+  const [payemntType, setPaymentType] = useState('')
+
   const { cartItems, onAdd, onRemove, onChangeHandler, deleteHandler } = props;
   const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
-  //console.log(cartItems)
-  // const taxPrice = itemsPrice * 0.14;
-  // const shippingPrice = itemsPrice > 200 ? 0 : 50;
-  const totalPrice = itemsPrice;  //+ taxPrice + shippingPrice
 
-  // number of item
-  const [itemNumber, setItemNumber] = useState(0);
+  const totalPrice = itemsPrice;
+
   const [paid, setPaid] = useState(0);
   const [remain, setRemain] = useState(0);
+  const [products, setProducts] = useState([])
+  const [open, setOpen] = useState(false);
+  const [paymentMsg, setPaymentMsg] = useState('');
+  const [invoice, setInvoice] = useState([])
 
   const calcPayment = () => {
     if (paid === 0 || paid === '') {
@@ -24,11 +50,9 @@ const Cart = (props) => {
     }
 
   }
-
   // total item
   const totalItem = cartItems.reduce((pre, cur) => pre + cur.qty, 0)
 
-  const [open, setOpen] = useState(false);
   // open modal function
   const showModal = () => {
     setOpen(true);
@@ -40,11 +64,51 @@ const Cart = (props) => {
     setRemain(0)
   }
 
-  useEffect(() => {
-    if (cartItems.length >= 0) {
-      setItemNumber(cartItems.length);
+  const addSaleID = async (id) => {
+    products.map((item) => {
+      item.sale_id = id
+    })
+  }
+
+  // ===========
+  const handleSubmit = async () => {
+    try {
+      if (payemntType === '') {
+        setPaymentMsg("សូម! ជ្រើសរើសការបង់ប្រាក់")
+      } else {
+        setPaymentMsg('')
+        const invoice = await axios.post('http://localhost:3001/api/invoice', { amount: paid, payment_id: payemntType, remain: remain })
+        const sale = await axios.post('http://localhost:3001/api/sale', { user_id: auth.id, invoice_id: invoice.data.id, customer_id: 0 })
+        await addSaleID(sale.data.id)
+        const saleDetail = await axios.post('http://localhost:3001/api/sale_detail', products)
+        if (saleDetail.data.success) {
+          const res = await axios.get(`http://localhost:3001/api/saleInvoice/${sale.data.id}`);
+          setInvoice(res.data[0])
+          setOpen(false)
+          cartItems.splice(0, cartItems.length)
+        }
+      }
+    } catch (err) {
+      console.log(err)
     }
-  }, [cartItems.length])
+  }
+
+  useEffect(() => {
+    setProducts(cartItems.map((item) => {
+      return ({
+        product_id: item.product_id,
+        qty: item.qty,
+      })
+    }))
+    setPaid(itemsPrice)
+    calcPayment()
+  }, [open, totalItem])
+
+  useEffect(() => {
+    if (invoice.length !== 0) {
+      handlePrint();
+    }
+  }, [invoice])
 
   return (
 
@@ -124,7 +188,7 @@ const Cart = (props) => {
         </Button>,
         <Button
           key="submit"
-
+          onClick={handleSubmit}
           type="button"
           className="bg-blue-600 text-white text-md leading-tight rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
         >
@@ -134,11 +198,11 @@ const Cart = (props) => {
         {/* ======== content ======== */}
         <div className="grid grid-cols-2 bg-blue-500 pb-4 rounded-lg justify-items-center mt-5">
           <div className="mt-4 flex justify-around w-1/2">
-            <h3 className="text-lg text-white">ចំនួនសរុប</h3>
-            <span className="text-lg text-white">{itemNumber} ( {totalItem} )</span>
+            <h3 className="text-lg text-white">ទំនិញសរុប</h3>
+            <span className="text-lg text-white">{totalItem}</span>
           </div>
           <div className="mt-4 flex justify-around w-1/2 whitespace-nowrap">
-            <h3 className="text-lg mr-3 text-white">ចំណាយសរុប</h3>
+            <h3 className="text-lg mr-3 text-white">ប្រាក់ត្រូវបង់សរុប</h3>
             <span className="text-lg text-white">{totalPrice}$</span>
           </div>
           <div className="mt-4 flex justify-around w-1/2 whitespace-nowrap">
@@ -153,10 +217,10 @@ const Cart = (props) => {
         <div className="grid grid-cols-2 gap-4 mt-5 mb-8">
           <div>
             <label
-              htmlFor="exampleFormControlInput1"
+              htmlFor="amount"
               className="form-label inline-block text-gray-700 mb-2 text-lg"
             >
-              ទឹកប្រាក់ (KH)
+              ចំនួនទឹកប្រាក់
             </label>
             <input
               className="form-control
@@ -175,15 +239,12 @@ const Cart = (props) => {
                                 m-0
                               focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               placeholder=""
-              id="exampleFormControlInput1"
-              name="newPassword"
+              id="amount"
+              name="amount"
               type={"number"}
               value={paid}
               onChange={(e) => { setPaid(e.target.value) }}
-              onKeyUp={(e) => {
-                if (e.target.value === '') {
-                  setPaid(0)
-                }
+              onKeyUp={() => {
                 calcPayment()
               }}
             />
@@ -209,19 +270,27 @@ const Cart = (props) => {
                                     transition
                                     ease-in-out
                                     m-0
+            
                                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example" defaultValue={""}
+              onChange={(e) => {
+                setPaymentType(e.target.value)
+              }}
             >
               <option>ការបង់ប្រាក់</option>
+              {data && data.map((item) =>
+                <option value={item.id} key={item.id}>{item.payment_type}</option>
+              )}
             </select>
+            {paymentMsg && <span className="text-red-500">{paymentMsg}</span>}
           </div>
           <div>
             <label
-              htmlFor="exampleFormControlInput1"
+              htmlFor="note"
               className="form-label inline-block text-gray-700 mb-2 text-lg"
             >
               ចំណាំ
             </label>
-            <input
+            <textarea
               className="form-control
                                 block
                                 w-full
@@ -245,8 +314,12 @@ const Cart = (props) => {
             />
           </div>
         </div>
+
         {/* ========= end of content ==== */}
       </Modal>
+      <div className="hidden mr-16">
+        {invoice.length !== 0 && <PrintPayment componentRef={componentRef} data={invoice} />}
+      </div>
       {/* end of payemnt */}
     </>
   );

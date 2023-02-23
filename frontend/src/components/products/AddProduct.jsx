@@ -14,10 +14,10 @@ const AddProduct = () => {
   const [status, setStatus] = useState([]);
 
   const [product, setProduct] = useState({
-    category_id: "",
-    brand_id: "",
-    sub_id: "",
-    unit_id: "",
+    category_id: 0,
+    brand_id: 0,
+    sub_id: 0,
+    unit_id: 0,
     product_code: "",
     product_name: "",
     qty: "",
@@ -27,7 +27,7 @@ const AddProduct = () => {
     product_image: "",
     desc: "",
     status: "",
-    reorder_number: ""
+    reorder_number: 0
   })
 
   const fetchCategories = async () => {

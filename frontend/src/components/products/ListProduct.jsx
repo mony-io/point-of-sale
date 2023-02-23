@@ -2,7 +2,19 @@ import React from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import { AiTwotoneDelete } from "react-icons/ai";
 import Navbar from '../Navbar'
+import axios from "axios";
+import { useQuery } from 'react-query'
+
+const fetchAllProducts = async () => {
+  const { data } = await axios.get('http://localhost:3001/products');
+  return data
+}
+
 const ListProduct = () => {
+
+  const { data } = useQuery('getProducts', fetchAllProducts);
+  //console.log(data)
+
   return (
     <>
       <div className="h-screen bg-gray-100 flex-1">
@@ -47,57 +59,63 @@ const ListProduct = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  className="text-center bg-white border-b-2 border-gray-100"
-                  key={"1"}
-                >
-                  <td className="p-3 text-sm text-blue-500 font-bold whitespace-nowrap">
-                    {"1"}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <div className="w-[40px] h-[50px] flex justify-center p-1 bg-white border rounded ">
-                      <img
-                        src="http://localhost:3001/images/1675009127997code.png"
-                        className="object-cover w-[30px] h-[40px]"
-                      />
-                    </div>
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    012
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    date
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    date
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    date
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    123
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    123
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    123
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    123
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    123
-                  </td>
-                  <td className="p-3 whitespace-nowrap">
-                    <button className="mx-2 px-3 py-1.5 rounded font-medium tracking-wider text-blue-700 bg-blue-200 hover:shadow">
-                      <BsPencilSquare size={20} />
-                    </button>
-                    <button className="px-3 py-1.5 rounded font-medium tracking-wider text-red-600 bg-red-200 hover:shadow">
-                      <AiTwotoneDelete size={20} />
-                    </button>
-                  </td>
-                </tr>
+                {data && data.map((item, index) => {
+                  return (
+                    <tr
+                      className="text-center bg-white border-b-2 border-gray-100"
+                      key={index + 1}
+                    >
+                      <td className="p-3 text-sm text-blue-500 font-bold whitespace-nowrap">
+                        {index + 1}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        <div className="w-[40px] h-[50px] flex justify-center p-1 bg-white border rounded ">
+                          <img
+                            src={item.product_image && `${item.product_image}`}
+                            className="object-cover w-[30px] h-[40px]"
+                          />
+
+                        </div>
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.product_code}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.product_name}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.brandName}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.categoryName}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.unit_price}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.price}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.qty}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.unit}
+                      </td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {item.reorder_number}
+                      </td>
+                      <td className="p-3 whitespace-nowrap">
+                        <button className="mx-2 px-3 py-1.5 rounded font-medium tracking-wider text-blue-700 bg-blue-200 hover:shadow">
+                          <BsPencilSquare size={20} />
+                        </button>
+                        <button className="px-3 py-1.5 rounded font-medium tracking-wider text-red-600 bg-red-200 hover:shadow">
+                          <AiTwotoneDelete size={20} />
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
+
               </tbody>
             </table>
           </div>

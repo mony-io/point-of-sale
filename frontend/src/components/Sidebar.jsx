@@ -46,7 +46,7 @@ const Sidebar = () => {
                     <span
                       className={`flex-1 ${!auth.open && "hidden"} duration-200 mt-[5px]`}
                     >
-                      បញ្ជាការការលក់
+                      បញ្ជាលក់
                     </span>
                   </li>
                 </div>
