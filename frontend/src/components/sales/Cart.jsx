@@ -9,16 +9,15 @@ import { useAuth } from "../../utls/auth";
 import { useReactToPrint } from "react-to-print";
 import PrintPayment from "./PrintPayment";
 
+
 const fetchPayment = async () => {
   const { data } = await axios.get('http://localhost:3001/api/payments')
   return data
 }
 
 const Cart = (props) => {
-
   // PAYMENT
   const componentRef = useRef();
-
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: "pay-data",
@@ -52,16 +51,22 @@ const Cart = (props) => {
   }
   // total item
   const totalItem = cartItems.reduce((pre, cur) => pre + cur.qty, 0)
-
+  console.log(totalItem)
   // open modal function
   const showModal = () => {
-    setOpen(true);
+    if (totalItem > 0) {
+      setOpen(true);
+    }
+    setPaid(itemsPrice)
+    calcPayment()
+    setPaymentType('')
   };
 
   const onClose = () => {
     setOpen(false)
     setPaid(0)
     setRemain(0)
+    setPaymentMsg('')
   }
 
   const addSaleID = async (id) => {
@@ -107,6 +112,7 @@ const Cart = (props) => {
   useEffect(() => {
     if (invoice.length !== 0) {
       handlePrint();
+      setInvoice([])
     }
   }, [invoice])
 
@@ -127,7 +133,7 @@ const Cart = (props) => {
             key={item.product_id}
             className="flex justify-between items-center m-2 text-slate-600"
           >
-            <div className="text-sm w-[70px] ml-6">{item.product_name}</div>
+            <div className="text-sm w-[70px] ml-6 whitespace-nowrap">{item.product_name}</div>
             <div className="flex items-center">
               <GoPlus className="text-blue-500 mr-1 cursor-pointer" onClick={() => onAdd(item)} />
               <input
@@ -170,7 +176,7 @@ const Cart = (props) => {
               </span>
             </button>
             <button onClick={showModal}>
-              <span className="bg-green-500 w-full p-2 px-6 ml-1 hover:bg-green-600 duration-200 text-[#fff] rounded-sm shadow-sm text-lg text-center cursor-pointer">
+              <span className={`bg-green-500 w-full p-2 px-6 ml-1 hover:bg-green-600 duration-200 text-[#fff] rounded-sm shadow-sm text-lg text-center cursor-pointer`}>
                 ការទូទាត់
               </span>
             </button>
@@ -275,8 +281,9 @@ const Cart = (props) => {
               onChange={(e) => {
                 setPaymentType(e.target.value)
               }}
+              value={payemntType}
             >
-              <option>ការបង់ប្រាក់</option>
+              <option value={''}>ការបង់ប្រាក់</option>
               {data && data.map((item) =>
                 <option value={item.id} key={item.id}>{item.payment_type}</option>
               )}

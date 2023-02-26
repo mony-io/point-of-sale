@@ -165,7 +165,7 @@ const AddProduct = () => {
           <h1 className="text-xl mb-4 text-left">បន្ថែមផលិតផល</h1>
           <div className="w-full h-1 bg-blue-400 mb-1 shadow-sm"></div>
           <div className="shadow bg-white rounded-sm">
-            <h2 className="text-left ml-1 p-1">សូម!​ បំពេញពត៍មានខាងក្រោម</h2>
+            <h2 className="text-left ml-1 p-1">សូម! បំពេញពត៍មានខាងក្រោម</h2>
             <div className="flex justify-around mt-5">
               {/* column 1 */}
               <div className="flex-col mt-5">
@@ -189,7 +189,7 @@ const AddProduct = () => {
                     name="category_id"
                     onChange={handleChange}
                   >
-                    <option>select category</option>
+                    <option value={0}>select category</option>
                     {categories.map((item, inext) => {
 
                       return (
@@ -272,7 +272,7 @@ const AddProduct = () => {
                     name="brand_id"
                     onChange={handleChange}
                   >
-                    <option>select brand</option>
+                    <option value={0}>select brand</option>
                     {
                       brands.map((item, index) => {
                         return (
@@ -303,7 +303,7 @@ const AddProduct = () => {
                     name="unit_id"
                     onChange={handleChange}
                   >
-                    <option selected>select product units</option>
+                    <option value={0}>select product units</option>
                     {units.map((item, index) => {
                       return (
                         <option value={item.id} key={index + 1}>{item.unit}</option>
@@ -417,7 +417,6 @@ const AddProduct = () => {
                     name="status"
                     onChange={handleChange}
                   >
-                    <option selected>product status</option>
                     {status.map((item, index) => {
                       return (
                         <option value={item.id} key={index + 1}>{item.status}</option>
@@ -505,7 +504,7 @@ const AddProduct = () => {
                     name="sub_id"
                     onChange={handleChange}
                   >
-                    <option>select supplyer</option>
+                    <option value={0}>select supplyer</option>
                     {
                       supplies.map((item, index) => {
                         return (
