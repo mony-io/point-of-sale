@@ -10,17 +10,19 @@ import { useReactToPrint } from "react-to-print";
 import PrintPayment from "./PrintPayment";
 
 
+
 const fetchPayment = async () => {
   const { data } = await axios.get('http://localhost:3001/api/payments')
   return data
 }
 
 const Cart = (props) => {
+  const newDate = new Date();
   // PAYMENT
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: "pay-data",
+    documentTitle: `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}-${newDate.getHours()}-pssinvoice`,
     // onAfterPrint: () => alert("Your Payment Printed Successfully!"),
   });
 
@@ -29,7 +31,7 @@ const Cart = (props) => {
   const { data } = useQuery('paymentType', fetchPayment)
   const [payemntType, setPaymentType] = useState('')
 
-  const { cartItems, onAdd, onRemove, onChangeHandler, deleteHandler } = props;
+  const { cartItems, onAdd, onRemove, onChangeHandler, deleteHandler, customerId, setCustomerId } = props;
   const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
 
   const totalPrice = itemsPrice;
@@ -51,7 +53,7 @@ const Cart = (props) => {
   }
   // total item
   const totalItem = cartItems.reduce((pre, cur) => pre + cur.qty, 0)
-  console.log(totalItem)
+  console.log(cartItems)
   // open modal function
   const showModal = () => {
     if (totalItem > 0) {
@@ -83,7 +85,7 @@ const Cart = (props) => {
       } else {
         setPaymentMsg('')
         const invoice = await axios.post('http://localhost:3001/api/invoice', { amount: paid, payment_id: payemntType, remain: remain })
-        const sale = await axios.post('http://localhost:3001/api/sale', { user_id: auth.id, invoice_id: invoice.data.id, customer_id: 0 })
+        const sale = await axios.post('http://localhost:3001/api/sale', { user_id: auth.id, invoice_id: invoice.data.id, customer_id: customerId })
         await addSaleID(sale.data.id)
         const saleDetail = await axios.post('http://localhost:3001/api/sale_detail', products)
         if (saleDetail.data.success) {
@@ -91,6 +93,7 @@ const Cart = (props) => {
           setInvoice(res.data[0])
           setOpen(false)
           cartItems.splice(0, cartItems.length)
+          setCustomerId(1)
         }
       }
     } catch (err) {

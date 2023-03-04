@@ -13,6 +13,14 @@ const AddProduct = () => {
   const [supplies, setSupplies] = useState([]);
   const [status, setStatus] = useState([]);
 
+  // message
+  const [catMsg, setCatMsg] = useState('');
+  const [proCodeMsg, setProCodeMsg] = useState('');
+  const [proNameMsg, setProNameMsg] = useState('');
+  const [unitMsg, setUnitMsg] = useState('');
+  const [msgPriceInstock, setMsgPriceInstock] = useState('');
+  const [msgPriceOut, setMsgPriceOut] = useState('');
+
   const [product, setProduct] = useState({
     category_id: 0,
     brand_id: 0,
@@ -20,13 +28,13 @@ const AddProduct = () => {
     unit_id: 0,
     product_code: "",
     product_name: "",
-    qty: "",
+    qty: 0,
     unit_price: "",
     price: "",
-    exp_date: "",
+    exp_date: '',
     product_image: "",
     desc: "",
-    status: "",
+    status: 1,
     reorder_number: 0
   })
 
@@ -88,6 +96,41 @@ const AddProduct = () => {
     setProduct((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
+  const formValidation = () => {
+    let bool = false
+    if (product.category_id === 0 && product.product_code === '' && product.product_name === "" && product.unit_id === 0) {
+      setCatMsg('សូមជ្រើសរើសប្រភេទផលិតផល!')
+      setProCodeMsg('សូមបញ្ចូលលេខកូដផលិតផលរបស់អ្នក!')
+      setProNameMsg('សូមបញ្ចូលផលិតផល!')
+      setUnitMsg('សូមបញ្ចូលឯកតា!')
+    } else if (product.category_id !== 0 && product.product_code === '' && product.product_name === '') {
+      setProCodeMsg('សូមបញ្ចូលលេខកូដផលិតផលរបស់អ្នក!')
+      setProNameMsg('សូមបញ្ចូលផលិតផល!')
+    } else if (product.category_id !== 0 && product.product_code !== '' && product.product_name === '') {
+      setProNameMsg('សូមបញ្ចូលផលិតផល!')
+    }
+    else if (product.unit_id !== 0 && product.category_id === 0 && product.product_code === '' && product.product_name === '') {
+      setCatMsg('សូមជ្រើសរើសប្រភេទផលិតផល!')
+      setProCodeMsg('សូមបញ្ចូលលេខកូដផលិតផលរបស់អ្នក!')
+      setProNameMsg('សូមបញ្ចូលផលិតផល!')
+    }
+    else if (product.product_code === '') {
+      setProCodeMsg('សូមបញ្ចូលលេខកូដផលិតផលរបស់អ្នក!')
+    } else if (product.product_name === '') {
+      setProNameMsg('សូមបញ្ចូលផលិតផល!')
+    } else if (product.unit_id === 0) {
+      setUnitMsg('សូមបញ្ចូលឯកតា!')
+    } else if (product.price === '') {
+      setMsgPriceInstock('សូមបញ្ចូលតម្លៃដើម!')
+    } else if (product.unit_price === '') {
+      setMsgPriceOut('សូមបញ្ចូលតម្លៃលក់ចេញ!')
+    }
+    else {
+      bool = true
+    }
+    return bool
+  }
+
   const handleSubmit = async (e) => {
 
 
@@ -108,38 +151,40 @@ const AddProduct = () => {
       formData.append('desc', product.desc);
       formData.append('status', product.status);
       formData.append('reorder_number', product.reorder_number);
-
-      const result = await axios.post('http://localhost:3001/products', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      if (formValidation()) {
+        const result = await axios.post('http://localhost:3001/products', formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
+        })
+        if (result.data.success) {
+          playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+          toast.success(`${result.data.message}`, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+          toast.error(`${result.data.message}`, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
-      })
-      if (result.data.success) {
-        playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
-        toast.success(`${result.data.message}`, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
-        toast.error(`${result.data.message}`, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        console.log(result);
+
       }
-      console.log(result);
 
     } catch (err) {
       console.log(err)
@@ -189,7 +234,7 @@ const AddProduct = () => {
                     name="category_id"
                     onChange={handleChange}
                   >
-                    <option value={0}>select category</option>
+                    <option value={0}>ជ្រើសរើសប្រភេទផលិតផល</option>
                     {categories.map((item, inext) => {
 
                       return (
@@ -197,6 +242,7 @@ const AddProduct = () => {
                       )
                     })}
                   </select>
+                  {catMsg && <span className="text-red-500 text-xs">{catMsg}</span>}
                 </div>
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="ProductName" className="form-label inline-block mb-2 text-gray-700">ឈ្មោះផលិតផល</label>
@@ -220,11 +266,13 @@ const AddProduct = () => {
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                 "
                     id="ProductName"
-                    placeholder="Product Name"
+                    placeholder="ឈ្មោះ"
                     name="product_name"
                     onChange={handleChange}
                   />
+                  {proNameMsg && <span className="text-red-500 text-xs">{proNameMsg}</span>}
                 </div>
+
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="ProductCode" className="form-label inline-block mb-2 text-gray-700">កូដផលិតផល</label>
                   <input
@@ -247,13 +295,14 @@ const AddProduct = () => {
                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                   "
                     id="ProductCode"
-                    placeholder="Product Code"
+                    placeholder="xxxx"
                     name="product_code"
                     onChange={handleChange}
                   />
+                  {proCodeMsg && <span className="text-red-500 text-xs">{proCodeMsg}</span>}
                 </div>
                 <div className="mb-7 xl:w-96">
-                  <label htmlFor="ProductBrand" className="form-label inline-block mb-2 text-gray-700">ម៉ាកផលិតផល</label>
+                  <label htmlFor="ProductBrand" className="form-label inline-block mb-2 text-gray-700">ម៉ាកផលិតផល(Optional)</label>
                   <select className="form-select appearance-none
                                     block
                                     w-full
@@ -272,7 +321,7 @@ const AddProduct = () => {
                     name="brand_id"
                     onChange={handleChange}
                   >
-                    <option value={0}>select brand</option>
+                    <option value={0}>ជ្រើសរើសម៉ាក</option>
                     {
                       brands.map((item, index) => {
                         return (
@@ -303,14 +352,14 @@ const AddProduct = () => {
                     name="unit_id"
                     onChange={handleChange}
                   >
-                    <option value={0}>select product units</option>
+                    <option value={0}>ជ្រើសរើសឯកតា</option>
                     {units.map((item, index) => {
                       return (
                         <option value={item.id} key={index + 1}>{item.unit}</option>
                       )
                     })}
-
                   </select>
+                  {unitMsg && <span className="text-red-500 text-xs">{unitMsg}</span>}
                 </div>
               </div>
               {/* end of column 1 */}
@@ -340,9 +389,10 @@ const AddProduct = () => {
                   "
                     name="unit_price"
                     id="UnitPrice"
-                    placeholder="Unit Price"
+                    placeholder=""
                     onChange={handleChange}
                   />
+                  {msgPriceInstock && <span className="text-red-500">{msgPriceInstock}</span>}
                 </div>
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="outPrice" className="form-label inline-block mb-2 text-gray-700">តម្លៃលក់ចេញ</label>
@@ -366,14 +416,14 @@ const AddProduct = () => {
                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                   "
                     id="outPrice"
-                    placeholder="sale out price"
+                    placeholder=""
                     name="price"
                     onChange={handleChange}
                   />
                 </div>
 
                 <div className="mb-7 xl:w-96">
-                  <label htmlFor="date" className="form-label inline-block mb-2 text-gray-700">ថ្ងៃខែផុតកំណត់</label>
+                  <label htmlFor="date" className="form-label inline-block mb-2 text-gray-700">ថ្ងៃខែផុតកំណត់(Optional)</label>
                   <input type="date" className="
                 form-control
                 block
@@ -398,7 +448,7 @@ const AddProduct = () => {
 
                 </div>
                 <div className="mb-7 xl:w-96">
-                  <label htmlFor="status" className="form-label inline-block mb-2 text-gray-700">Status</label>
+                  <label htmlFor="status" className="form-label inline-block mb-2 text-gray-700">ស្ថានភាព</label>
                   <select className="form-select appearance-none
                                     block
                                     w-full
@@ -424,38 +474,6 @@ const AddProduct = () => {
                     })}
                   </select>
                 </div>
-                <div className="mb-7 xl:w-96">
-                  <label htmlFor="qtyAlert" className="form-label inline-block mb-2 text-gray-700">Quanity Alert</label>
-                  <input
-                    type="number"
-                    className="
-                    form-control
-                    block
-                    w-full
-                    px-3
-                    py-1.5
-                    text-base
-                    font-normal
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded
-                    transition
-                    ease-in-out
-                    m-0
-                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                  "
-                    name="reorder_number"
-                    id="qtyAlert"
-                    placeholder="Quanity Alert"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              {/* end of column 2 */}
-
-              {/* start column 3 */}
-              <div className="flex-col mt-5">
 
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="qty" className="form-label inline-block mb-2 text-gray-700">ចំនួន</label>
@@ -484,8 +502,41 @@ const AddProduct = () => {
                     onChange={handleChange}
                   />
                 </div>
+              </div>
+              {/* end of column 2 */}
+
+              {/* start column 3 */}
+              <div className="flex-col mt-5">
+
                 <div className="mb-7 xl:w-96">
-                  <label htmlFor="sup" className="form-label inline-block mb-2 text-gray-700">អ្នកផ្គត់ផ្គង់</label>
+                  <label htmlFor="qtyAlert" className="form-label inline-block mb-2 text-gray-700">ចំនួនដាស់តឿន(Optional)</label>
+                  <input
+                    type="number"
+                    className="
+                    form-control
+                    block
+                    w-full
+                    px-3
+                    py-1.5
+                    text-base
+                    font-normal
+                    text-gray-700
+                    bg-white bg-clip-padding
+                    border border-solid border-gray-300
+                    rounded
+                    transition
+                    ease-in-out
+                    m-0
+                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                  "
+                    name="reorder_number"
+                    id="qtyAlert"
+                    placeholder="Quanity Alert"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="mb-7 xl:w-96">
+                  <label htmlFor="sup" className="form-label inline-block mb-2 text-gray-700">អ្នកផ្គត់ផ្គង់(Optional)</label>
                   <select className="form-select appearance-none
                                     block
                                     w-full
@@ -504,7 +555,7 @@ const AddProduct = () => {
                     name="sub_id"
                     onChange={handleChange}
                   >
-                    <option value={0}>select supplyer</option>
+                    <option value={0}>ជ្រើសរើសអ្នកផ្គត់ផ្គង់</option>
                     {
                       supplies.map((item, index) => {
                         return (
@@ -515,7 +566,7 @@ const AddProduct = () => {
                   </select>
                 </div>
                 <div className="mb-7 xl:w-96">
-                  <label htmlFor="desc" className="form-label inline-block mb-2 text-gray-700">ការបរិយាយ</label>
+                  <label htmlFor="desc" className="form-label inline-block mb-2 text-gray-700">ការបរិយាយ(Optional)</label>
                   <textarea
                     className="
                     form-control
@@ -542,7 +593,7 @@ const AddProduct = () => {
                   ></textarea>
                 </div>
                 <div className="mb-7 xl:w-96">
-                  <label htmlFor="photo" className="form-label inline-block mb-2 text-gray-700">រូបភាព</label>
+                  <label htmlFor="photo" className="form-label inline-block mb-2 text-gray-700">រូបភាព(Optional)</label>
                   <input className="form-control
                               block
                               w-full
@@ -570,8 +621,8 @@ const AddProduct = () => {
             <div className="flex space-x-2 p-5 ml-[4rem]">
               <button type="button" className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                 onClick={handleSubmit}
-              >Submit</button>
-              <button type="button" className="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">Clear</button>
+              >បញ្ជូន</button>
+              <button type="button" className="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">សម្អាត</button>
             </div>
           </div>
         </div>

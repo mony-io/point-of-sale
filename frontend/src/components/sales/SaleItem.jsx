@@ -3,7 +3,9 @@ import React from "react";
 const SaleItems = (props) => {
   const { product, onAdd } = props;
   //console.log(product)
+
   return (
+
     <div
       className="row-span-1 border border-slate-500 cursor-pointer overflow-hidden rounded-sm shadow-md"
       onClick={() => onAdd(product)}

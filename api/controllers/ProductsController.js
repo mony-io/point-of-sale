@@ -7,8 +7,13 @@ exports.createNewProduct = async (req, res, next) => {
   if (req.file) {
     path = req.file.path;
   }
+
+  let expDate = req.body.exp_date;
+  if (expDate === "") {
+    expDate = null;
+  }
   // console.log(req.file);
-  // console.log(req.body);
+  console.log(req.body);
   try {
     // get product name
     const [product_name] = await Product.findProductByName(
@@ -51,7 +56,7 @@ exports.createNewProduct = async (req, res, next) => {
       req.body.qty,
       req.body.unit_price,
       req.body.price,
-      req.body.exp_date,
+      expDate,
       path,
       req.body.desc,
       req.body.status,
@@ -275,6 +280,23 @@ exports.productCard = async (req, res, next) => {
       }
     });
     res.send(proCard);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.findByProcode = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const [product] = await Product.findByProcode(req.params.productcode);
+
+    product.map((item) => {
+      if (item.product_image !== "") {
+        // console.log(base64_encode("./" + item.product_image));
+        item.product_image = base64_encode("./" + item.product_image);
+      }
+    });
+    res.send(product);
   } catch (err) {
     next(err);
   }

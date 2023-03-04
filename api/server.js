@@ -17,6 +17,7 @@ const PaymentTypeRoute = require("./routes/PaymentRoute");
 const InvoiceRoute = require("./routes/InvoiceRoute");
 const SaleRoute = require("./routes/SaleRoute");
 const SaleDetailRoute = require("./routes/SaleDetailRoute");
+const customerRoute = require("./routes/CustomerRoute");
 const app = express();
 
 // Middleware
@@ -44,6 +45,7 @@ app.use(PaymentTypeRoute);
 app.use(InvoiceRoute);
 app.use(SaleRoute);
 app.use(SaleDetailRoute);
+app.use(customerRoute);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 

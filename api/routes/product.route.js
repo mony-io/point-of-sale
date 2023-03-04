@@ -16,4 +16,6 @@ router.route("/product_code/query").get(Product.queryProductByProductCode);
 router.route("/image/:product_id").get(Product.findImgById);
 router.route("/image/:product_id").put(Product.deleteImageOne);
 router.route("/product_card").get(Product.productCard);
+router.route("/api/procode/:productcode").get(Product.findByProcode);
+
 module.exports = router;

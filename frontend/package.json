@@ -20,7 +20,8 @@
     "react-router-dom": "^6.6.1",
     "react-to-print": "^2.14.12",
     "react-toastify": "^9.1.1",
-    "tw-elements": "^1.0.0-alpha13"
+    "tw-elements": "^1.0.0-alpha13",
+    "use-scan-detection": "^0.2.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.26",

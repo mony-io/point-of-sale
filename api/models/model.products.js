@@ -140,8 +140,14 @@ class Product {
 
   static productCard() {
     const sql =
-      "SELECT product_id,product_name,price,product_image,qty FROM tblProducts WHERE `status` = 1";
+      "SELECT product_id,product_name,price,product_image,qty,product_code,category_id FROM tblProducts WHERE `status` = 1 AND qty>0";
     return db.execute(sql);
+  }
+
+  static findByProcode(procode) {
+    const sql =
+      "SELECT product_id,product_name,price,product_image,qty,product_code FROM tblProducts WHERE `status` = 1 AND product_code=?";
+    return db.execute(sql, [procode]);
   }
 }
 
