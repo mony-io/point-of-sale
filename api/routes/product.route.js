@@ -11,7 +11,7 @@ router
 router.route("/product/:product_id").put(upload, Product.uppdateProduct);
 router.route("/product/:product_id").delete(Product.delete);
 router.route("/product/:product_id").get(Product.findOne);
-router.route("/product/query").get(Product.queryProductByName);
+router.route("/product/query").post(Product.queryProductByName);
 router.route("/product_code/query").get(Product.queryProductByProductCode);
 router.route("/image/:product_id").get(Product.findImgById);
 router.route("/image/:product_id").put(Product.deleteImageOne);

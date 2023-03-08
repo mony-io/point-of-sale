@@ -4,14 +4,13 @@ import { AiTwotoneDelete } from "react-icons/ai";
 import Navbar from '../../components/Navbar'
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RiLockPasswordFill } from 'react-icons/ri'
 import { useAuth } from "../../utls/auth";
 import { useState } from "react";
 import { Modal, Button } from "antd";
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-
 
 // fetch user function
 const fetchUsers = async () => {
@@ -37,6 +36,7 @@ const ListUsers = () => {
     username: '',
     email: '',
     role_id: '',
+    status_id: 1,
     phone_number: ''
   })
 
@@ -50,12 +50,13 @@ const ListUsers = () => {
   const fetchOne = async (id) => {
     try {
       const res = await axios.get(`http://localhost:3001/api/user/${id}`);
-      //console.log(res.data[0])
+      // console.log(res.data[0])
       setUser({
         username: res.data[0].username,
         email: res.data[0].email,
         role_id: res.data[0].role_id,
-        phone_number: res.data[0].phone_number
+        phone_number: res.data[0].phone_number,
+        status_id: res.data[0].status_id
       })
     } catch (err) {
       console.log(err)
@@ -217,6 +218,7 @@ const ListUsers = () => {
                 <th>តួនាទី</th>
                 <th>អុីមែល</th>
                 <th>លេខទូរស័ព្ទ</th>
+                <th>ស្ថានភាព</th>
                 <th>ប្រតិបត្តិការ</th>
               </tr>
             </thead>
@@ -241,6 +243,9 @@ const ListUsers = () => {
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                       {user.phone_number}
+                    </td>
+                    <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      {user.status}
                     </td>
                     <td className="p-3 whitespace-nowrap">
 
@@ -323,7 +328,7 @@ const ListUsers = () => {
                   <div className="mt-4">
                     <label
                       htmlFor="username"
-                      className="form-label inline-block text-gray-700 mt-5​ text-sm mb-2"
+                      className="form-label inline-block text-gray-700 mt-5 text-sm mb-2"
                     >
                       ឈ្មោះ​អ្នកប្រើប្រាស់
                     </label>
@@ -446,6 +451,39 @@ const ListUsers = () => {
                       value={user.phone_number}
                     />
                   </div>
+                  <div className="">
+                    <label
+                      htmlFor="status_id"
+                      className="block mb-2 text-sm font-medium text-gray-900 "
+                    >
+                      ស្ថានភាព
+                    </label>
+                    <select
+                      onChange={handleChange}
+                      id="status_id"
+                      name="status_id"
+                      value={user.status_id}
+                      className="form-select appearance-none
+                                    block
+                                    w-full
+                                    px-3
+                                    py-2.5
+                                    text-base
+                                    font-normal
+                                    text-gray-700
+                                    bg-white bg-clip-padding bg-no-repeat
+                                    border border-solid border-gray-300
+                                    rounded
+                                    transition
+                                    ease-in-out
+                                    m-0
+                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                      aria-label="Default select example"
+                    >
+                      <option value={1}>Enable</option>
+                      <option value={2}>Disable</option>
+                    </select>
+                  </div>
                 </div>
                 {/* ========= end of content ==== */}
               </Modal>
@@ -455,7 +493,6 @@ const ListUsers = () => {
           </table>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

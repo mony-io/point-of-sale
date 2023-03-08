@@ -18,10 +18,13 @@ import PublicRoute from './utls/PublicRoute'
 import ResetPassword from "./components/login/ResetPassword";
 import NewPassword from "./pages/NewPassword";
 import { AuthProvider } from "./utls/auth";
+import RequireAuth from "./utls/RequireAuth";
 import AddUser from "./pages/users/AddUser";
 import ListUsers from "./pages/users/ListUsers";
 import { useMemo } from 'react'
-import RequireAuth from "./utls/RequireAuth";
+import EditeProduct from "./components/products/EditeProduct";
+import { ToastContainer } from "react-toastify";
+
 function App() {
 
   return (
@@ -46,11 +49,11 @@ function App() {
             <Route path="/addcustomer" element={<AddCustomer />} />
             <Route path="/listcustomer" element={<ListCustomer />} />
             <Route path="/product-brands" element={<ProductBrands />} />
+            <Route path="/update-product/:id" element={<EditeProduct />}></Route>
             <Route element={<RequireAuth />}>
               <Route path="/adduser" element={<AddUser />} />
               <Route path="/listuser" element={<ListUsers />} />
             </Route>
-
           </Route>
 
           <Route element={<PublicRoute />}>
@@ -63,6 +66,8 @@ function App() {
           ></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
+        {/* toast message */}
+        <ToastContainer />
       </div>
     </AuthProvider>
   );

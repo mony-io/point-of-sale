@@ -81,6 +81,10 @@ exports.createNewProduct = async (req, res, next) => {
 
 exports.uppdateProduct = async (req, res, next) => {
   try {
+    let expDate = req.body.exp_date;
+    if (expDate === "") {
+      expDate = null;
+    }
     let path = "";
     // get path of image
     const [oldPath] = await Product.findImageById(req.params.product_id);
@@ -130,7 +134,7 @@ exports.uppdateProduct = async (req, res, next) => {
       req.body.qty,
       req.body.unit_price,
       req.body.price,
-      req.body.exp_date,
+      expDate,
       path,
       req.body.desc,
       req.body.status,
@@ -143,7 +147,7 @@ exports.uppdateProduct = async (req, res, next) => {
         await deleteImg(oldPath[0].product_image);
       }
 
-      res.send({ message: "Product updated.", success: true });
+      res.send({ message: "ការប្រែជោគជ័យ!", success: true });
     } else {
       res.send({ message: "Update failed.", success: false });
     }
@@ -230,11 +234,13 @@ exports.queryProductByName = async (req, res, next) => {
   if (!req.query.q) {
     return res.end();
   }
+  console.log(req.query);
   try {
     const [product] = await Product.findProductByName(req.query.q);
+    console.log(product);
     if (product.length !== 0) {
       res.send({
-        message: "Product already exist.Please! try another once.",
+        message: "ផលិតផលមាននៅក្នុងប្រព័ន្ធរួចរាល់ហើយ!",
         success: false,
       });
     } else {
@@ -264,11 +270,13 @@ exports.queryProductByProductCode = async (req, res, next) => {
   }
 };
 
+// encode image to base64
 function base64_encode(file) {
   try {
     return "data:image/png;base64," + fs.readFileSync(file, "base64");
   } catch (err) {}
 }
+
 exports.productCard = async (req, res, next) => {
   try {
     const [proCard] = await Product.productCard();

@@ -345,7 +345,7 @@ const Sidebar = () => {
                   >
                     <TbReport size={18} />
                   </span>
-                  <span className={`flex-1 ${!open && "hidden"} duration-200 `}>
+                  <span className={`flex-1 ${!auth.open && "hidden"} duration-200 `}>
                     របាយការណ៏
                   </span>
                   {auth.open && (
@@ -453,7 +453,7 @@ const Sidebar = () => {
                         // data-mdb-ripple="true"
                         data-mdb-ripple-color="dark"
                       >
-                        add-category
+                        Backup
                       </span>
                     </li>
                     <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
@@ -465,7 +465,7 @@ const Sidebar = () => {
                         // data-mdb-ripple="true"
                         data-mdb-ripple-color="dark"
                       >
-                        add-category
+                        Restore
                       </span>
                     </li>
                   </ul>

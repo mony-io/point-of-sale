@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const backup = require("../backup/backupdb");
 
-router.get("/backup", backup.backup);
-router.get("/restore", backup.restore);
+router.get("/api/backup", backup.backup);
+router.get("/api/restore", backup.restore);
 
 module.exports = router;

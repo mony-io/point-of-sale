@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.get("http://localhost:3001/token", {
         withCredentials: true,
       });
-      console.log(response)
+      //console.log(response)
       setToken(response.data.access_token);
       const decoded = jwt_decode(response.data.access_token);
       setId(decoded.userid)
@@ -89,6 +89,9 @@ export const AuthProvider = ({ children }) => {
       if (error.response) {
         logoutHandler()
       }
+    }
+    if (sessionStorage.getItem("bool") === null) {
+      logoutHandler()
     }
   };
 
@@ -132,6 +135,7 @@ export const AuthProvider = ({ children }) => {
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
     }
     refreshToken();
+
   }, [tokenData, logoutHandler]);
 
   const contextValue = {

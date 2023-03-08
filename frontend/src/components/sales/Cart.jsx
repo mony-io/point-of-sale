@@ -17,12 +17,19 @@ const fetchPayment = async () => {
 }
 
 const Cart = (props) => {
-  const newDate = new Date();
+  const currentdate = new Date();
+  let datetime = currentdate.getDate() + "/"
+    + (currentdate.getMonth() + 1) + "/"
+    + currentdate.getFullYear() + "/"
+    + currentdate.getHours() + "/"
+    + currentdate.getMinutes() + "/"
+    + currentdate.getSeconds();
   // PAYMENT
+  console.log(datetime)
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}-${newDate.getHours()}-pssinvoice`,
+    documentTitle: `${datetime}/pssinvoice`,
     // onAfterPrint: () => alert("Your Payment Printed Successfully!"),
   });
 
@@ -53,7 +60,9 @@ const Cart = (props) => {
   }
   // total item
   const totalItem = cartItems.reduce((pre, cur) => pre + cur.qty, 0)
-  console.log(cartItems)
+  //console.log(cartItems)
+
+  //console.log(localStorage.getItem('cartItems') || '[]')
   // open modal function
   const showModal = () => {
     if (totalItem > 0) {
@@ -94,6 +103,7 @@ const Cart = (props) => {
           setOpen(false)
           cartItems.splice(0, cartItems.length)
           setCustomerId(1)
+          localStorage.removeItem('cartItems')
         }
       }
     } catch (err) {
@@ -150,12 +160,22 @@ const Cart = (props) => {
                   }
                 }}
               />
-              <HiMinus className="ml-2 text-red-500 cursor-pointer" onClick={() => onRemove(item)} />
+              <HiMinus className="ml-2 text-red-500 cursor-pointer" onClick={() => {
+                if (cartItems.length === 1) {
+                  localStorage.removeItem('cartItems')
+                }
+                onRemove(item)
+              }} />
             </div>
 
             <span className="text-sm w-6">${item.price * item.qty}</span>
             <div className="text-center" >
-              <RxCross2 className="text-red-500 mr-8 cursor-pointer text-xl" onClick={() => { deleteHandler(item) }} />
+              <RxCross2 className="text-red-500 mr-8 cursor-pointer text-xl" onClick={() => {
+                if (cartItems.length === 1) {
+                  localStorage.removeItem('cartItems')
+                }
+                deleteHandler(item)
+              }} />
             </div>
           </div>
         ))}

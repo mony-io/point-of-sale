@@ -22,7 +22,8 @@ exports.create = async (req, res, next) => {
       password,
       req.body.email,
       req.body.phone_number,
-      req.body.role_id
+      req.body.role_id,
+      req.body.status_id
     );
     await user.save();
     res.status(200).send({ message: "User created.", success: true });
@@ -337,6 +338,7 @@ module.exports.updateOne = async (req, res, next) => {
       req.body.email,
       req.body.phone_number,
       req.body.role_id,
+      req.body.status_id,
       req.params.id
     );
     if (result.affectedRows > 0) {

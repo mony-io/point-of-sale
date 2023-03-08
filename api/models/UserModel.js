@@ -1,19 +1,21 @@
 const db = require("../config/db");
 
 class Users {
-  constructor(username, password, email, phone_number, role_id) {
+  constructor(username, password, email, phone_number, role_id, status_id) {
     (this.username = username),
       (this.password = password),
       (this.email = email),
       (this.phone_number = phone_number);
     this.role_id = role_id;
+    this.status_id = status_id;
   }
 
   save() {
     const sql =
-      "INSERT INTO tblUsers(role_id,username,password,email,phone_number) VALUES(?,?,?,?,?)";
+      "INSERT INTO tblUsers(role_id,status_id,username,password,email,phone_number) VALUES(?,?,?,?,?,?)";
     return db.execute(sql, [
       this.role_id,
+      this.status_id,
       this.username,
       this.password,
       this.email,
@@ -22,21 +24,22 @@ class Users {
   }
 
   static findAll() {
-    const sql = `SELECT id,username,email,phone_number,tblRoles.role_name FROM tblUsers 
+    const sql = `SELECT tblUsers.id,username,email,phone_number,tblRoles.role_name,tblStatus.status FROM tblUsers 
       INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id
+      INNER JOIN tblStatus ON tblUsers.status_id = tblStatus.id
     `;
     return db.execute(sql);
   }
 
   static findByUsername(username) {
     const sql = `SELECT id,username,email,tblRoles.role_name,password FROM tblUsers 
-    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id WHERE username = ?`;
+    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id WHERE username = ? AND status_id=1`;
     return db.execute(sql, [username]);
   }
 
   static findByEmail(email) {
     const sql = `SELECT id,username,email,tblRoles.role_name,password FROM tblUsers 
-    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id WHERE email = ?`;
+    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id WHERE email = ? AND status_id =1`;
     return db.execute(sql, [email]);
   }
 
@@ -63,8 +66,10 @@ class Users {
   }
 
   static findById(id) {
-    const sql = `SELECT id,username,email,tblRoles.role_name,tblUsers.role_id,phone_number,password FROM tblUsers 
-    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id WHERE id = ?`;
+    const sql = `SELECT tblUsers.id,username,email,tblRoles.role_name,tblUsers.role_id,phone_number,password,tblUsers.status_id FROM tblUsers 
+    INNER JOIN tblRoles ON tblUsers.role_id = tblRoles.role_id 
+    INNER JOIN tblStatus ON tblUsers.status_id = tblStatus.id
+    WHERE tblUsers.id = ?`;
     return db.execute(sql, [id]);
   }
 
@@ -73,10 +78,17 @@ class Users {
     return db.execute(sql, [id]);
   }
 
-  static updateOne(username, email, phone_number, role_id, id) {
+  static updateOne(username, email, phone_number, role_id, status_id, id) {
     const sql =
-      "UPDATE tblUsers SET username=?,email=?,phone_number=?,role_id=? WHERE id = ?";
-    return db.query(sql, [username, email, phone_number, role_id, id]);
+      "UPDATE tblUsers SET username=?,email=?,phone_number=?,role_id=?,status_id=? WHERE id = ?";
+    return db.query(sql, [
+      username,
+      email,
+      phone_number,
+      role_id,
+      status_id,
+      id,
+    ]);
   }
 }
 

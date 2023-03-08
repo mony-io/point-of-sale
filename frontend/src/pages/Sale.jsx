@@ -137,7 +137,9 @@ const Sale = () => {
     const exist = cartItems.find((x) => x.product_id === product.product_id);
     if (exist.qty === 1 || exist.qty === '') {
       setCartItems(cartItems.filter((x) => x.product_id !== product.product_id));
+
     } else {
+
       setCartItems(
         cartItems.map((x) =>
           x.product_id === product.product_id ? { ...exist, qty: exist.qty - 1 } : x
@@ -186,7 +188,22 @@ const Sale = () => {
       if (productCode !== '') {
         const { data } = await axios.get('http://localhost:3001/api/procode/' + productCode)
         if (data.length > 0) {
-          onAdd(data[0])
+          if (data[0].qty > 0) {
+            onAdd(data[0])
+          } else {
+            playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+            toast.error("🦄 សូមអភ័យទោស! ផលិតផលមិនមាននៅក្នុងស្តុកទេ", {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+
         }
       }
     } catch (err) {
@@ -206,9 +223,21 @@ const Sale = () => {
     setCategories(res.data);
   }
 
+  // set cart items to localStorage
+  if (cartItems.length > 0) {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems))
+  }
+
+  console.log(cartItems.length)
+
   useEffect(() => {
     fetchAllCustomer()
     fetchAllCategories()
+    let localStorageCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    console.log(localStorageCartItems)
+    if (localStorageCartItems.length !== null) {
+      setCartItems([...localStorageCartItems])
+    }
   }, [])
 
   useEffect(() => {

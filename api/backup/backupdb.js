@@ -5,7 +5,7 @@ const path = require("path");
 
 const location = path.basename("./dbbackup");
 
-module.exports.backup = async (req, res, next) => {
+module.exports.backup = (req, res, next) => {
   const location = path.basename("./dbbackup");
   const wstream = fs.createWriteStream(
     location + `/${process.env.DB_NAME}.sql`
@@ -19,7 +19,8 @@ module.exports.backup = async (req, res, next) => {
     .pipe(wstream)
     .on("finish", function () {
       console.log("Completed");
-      res.send("ok");
+      //console.log(location + `/${process.env.DB_NAME}.sql`);
+      res.download(location + `/${process.env.DB_NAME}.sql`);
     })
     .on("error", function (err) {
       res.send(err);

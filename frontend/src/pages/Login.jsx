@@ -64,6 +64,7 @@ const Login = () => {
           );
           //console.log(res.data.token)
           if (res.data.success) {
+            sessionStorage.setItem("bool", true);
             auth.Loading(true);
             const expirationTime = new Date(
               new Date().getTime() + +60 * 24 * 1000

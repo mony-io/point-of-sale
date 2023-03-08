@@ -1,6 +1,6 @@
 import React from "react";
 import axios from 'axios';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../Navbar";
@@ -12,6 +12,10 @@ const AddProduct = () => {
   const [units, setUnits] = useState([]);
   const [supplies, setSupplies] = useState([]);
   const [status, setStatus] = useState([]);
+
+  // ref hook
+  const inputFileRef = useRef();
+
 
   // message
   const [catMsg, setCatMsg] = useState('');
@@ -37,6 +41,33 @@ const AddProduct = () => {
     status: 1,
     reorder_number: 0
   })
+
+  // clear function
+  function clear_data() {
+    inputFileRef.current.value = ''
+    setProduct({
+      category_id: 0,
+      brand_id: 0,
+      sub_id: 0,
+      unit_id: 0,
+      product_code: "",
+      product_name: "",
+      qty: 0,
+      unit_price: "",
+      price: "",
+      exp_date: '',
+      product_image: "",
+      desc: "",
+      status: 1,
+      reorder_number: 0
+    })
+    setProCodeMsg('')
+    setProNameMsg('')
+    setUnitMsg('')
+    setMsgPriceInstock('')
+    setMsgPriceOut('')
+    setCatMsg('')
+  }
 
   const fetchCategories = async () => {
     try {
@@ -132,8 +163,6 @@ const AddProduct = () => {
   }
 
   const handleSubmit = async (e) => {
-
-
     try {
       e.preventDefault();
       let formData = new FormData();
@@ -169,6 +198,7 @@ const AddProduct = () => {
             progress: undefined,
             theme: "light",
           });
+          clear_data()
         } else {
           playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
           toast.error(`${result.data.message}`, {
@@ -191,6 +221,19 @@ const AddProduct = () => {
     }
 
   }
+  // find product exist by name
+  const findProductName = async () => {
+    try {
+      const res = await axios.post(`http://localhost:3001/product/query?q=${encodeURIComponent(product.product_name)}`);
+      if (!res.data.success) {
+        setProNameMsg(res.data.message)
+      } else {
+        setProNameMsg('')
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
 
   useEffect(() => {
@@ -200,7 +243,13 @@ const AddProduct = () => {
     fetchSupplies();
     fetchStatus();
   }, [])
-  console.log(product)
+
+  useEffect(() => {
+    if (product.product_name !== '') {
+      findProductName();
+    }
+  }, [product.product_name])
+  //console.log(product)
   // console.log(supplies)
   return (
     <>
@@ -233,6 +282,7 @@ const AddProduct = () => {
                                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example"
                     name="category_id"
                     onChange={handleChange}
+                    value={product.category_id}
                   >
                     <option value={0}>ជ្រើសរើសប្រភេទផលិតផល</option>
                     {categories.map((item, inext) => {
@@ -269,6 +319,7 @@ const AddProduct = () => {
                     placeholder="ឈ្មោះ"
                     name="product_name"
                     onChange={handleChange}
+                    value={product.product_name}
                   />
                   {proNameMsg && <span className="text-red-500 text-xs">{proNameMsg}</span>}
                 </div>
@@ -298,6 +349,7 @@ const AddProduct = () => {
                     placeholder="xxxx"
                     name="product_code"
                     onChange={handleChange}
+                    value={product.product_code}
                   />
                   {proCodeMsg && <span className="text-red-500 text-xs">{proCodeMsg}</span>}
                 </div>
@@ -319,6 +371,7 @@ const AddProduct = () => {
                                     m-0
                                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example"
                     name="brand_id"
+                    value={product.brand_id}
                     onChange={handleChange}
                   >
                     <option value={0}>ជ្រើសរើសម៉ាក</option>
@@ -351,6 +404,7 @@ const AddProduct = () => {
                                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example" defaultValue={""}
                     name="unit_id"
                     onChange={handleChange}
+                    value={product.unit_id}
                   >
                     <option value={0}>ជ្រើសរើសឯកតា</option>
                     {units.map((item, index) => {
@@ -367,13 +421,15 @@ const AddProduct = () => {
               {/* start column 2 */}
               <div className="flex-col mt-5">
                 <div className="mb-7 xl:w-96">
-                  <label htmlFor="UnitPrice inline-block mb-2 text-gray-700">តម្លៃដើម</label>
+                  <label htmlFor="UnitPrice inline-block text-gray-700 mb-3">តម្លៃដើម</label>
                   <input
+                    value={product.unit_price}
                     type="number"
                     className="
                     form-control
                     block
                     w-full
+                    mt-2
                     px-3
                     py-1.5
                     text-base
@@ -397,6 +453,7 @@ const AddProduct = () => {
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="outPrice" className="form-label inline-block mb-2 text-gray-700">តម្លៃលក់ចេញ</label>
                   <input
+                    value={product.price}
                     type="number"
                     className="
                     form-control
@@ -425,22 +482,23 @@ const AddProduct = () => {
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="date" className="form-label inline-block mb-2 text-gray-700">ថ្ងៃខែផុតកំណត់(Optional)</label>
                   <input type="date" className="
-                form-control
-                block
-                w-full
-                px-3
-                py-1.5
-                text-base
-                font-normal
-                text-gray-700
-                bg-white bg-clip-padding
-                border border-solid border-gray-300
-                rounded
-                transition
-                ease-in-out
-                m-0
-                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                      form-control
+                      block
+                      w-full
+                      px-3
+                      py-1.5
+                      text-base
+                      font-normal
+                      text-gray-700
+                      bg-white bg-clip-padding
+                      border border-solid border-gray-300
+                      rounded
+                      transition
+                      ease-in-out
+                      m-0
+                      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                 "
+                    value={product.exp_date}
                     name="exp_date"
                     id="date"
                     onChange={handleChange}
@@ -466,6 +524,7 @@ const AddProduct = () => {
                                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example" defaultValue={""} id="status"
                     name="status"
                     onChange={handleChange}
+                    value={product.status}
                   >
                     {status.map((item, index) => {
                       return (
@@ -478,6 +537,7 @@ const AddProduct = () => {
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="qty" className="form-label inline-block mb-2 text-gray-700">ចំនួន</label>
                   <input
+                    value={product.qty}
                     type="number"
                     className="
                     form-control
@@ -511,6 +571,7 @@ const AddProduct = () => {
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="qtyAlert" className="form-label inline-block mb-2 text-gray-700">ចំនួនដាស់តឿន(Optional)</label>
                   <input
+                    value={product.reorder_number}
                     type="number"
                     className="
                     form-control
@@ -554,6 +615,7 @@ const AddProduct = () => {
                                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example" defaultValue={""} id="sup"
                     name="sub_id"
                     onChange={handleChange}
+                    value={product.sub_id}
                   >
                     <option value={0}>ជ្រើសរើសអ្នកផ្គត់ផ្គង់</option>
                     {
@@ -568,6 +630,7 @@ const AddProduct = () => {
                 <div className="mb-7 xl:w-96">
                   <label htmlFor="desc" className="form-label inline-block mb-2 text-gray-700">ការបរិយាយ(Optional)</label>
                   <textarea
+                    value={product.desc}
                     className="
                     form-control
                     block
@@ -610,6 +673,7 @@ const AddProduct = () => {
                               m-0
                               focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="photo"
                     name="product_image"
+                    ref={inputFileRef}
                     onChange={(e) => {
                       setProduct((prev) => ({ ...prev, [e.target.name]: e.target.files[0] }))
                     }}
@@ -622,7 +686,9 @@ const AddProduct = () => {
               <button type="button" className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                 onClick={handleSubmit}
               >បញ្ជូន</button>
-              <button type="button" className="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">សម្អាត</button>
+              <button type="button" className="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
+                onClick={clear_data}
+              >សម្អាត</button>
             </div>
           </div>
         </div>

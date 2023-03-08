@@ -12,6 +12,12 @@ const fetchRoles = async () => {
   return data;
 }
 
+// fetch status from api
+const fetchStatus = async () => {
+  const { data } = await axios.get('http://localhost:3001/status');
+  return data;
+}
+
 const Adduser = () => {
 
   // =============== useRef ==============
@@ -28,7 +34,8 @@ const Adduser = () => {
     password: '',
     email: '',
     phone_number: '',
-    role_id: ''
+    role_id: '',
+    status_id: 1
   })
 
   // clear data function
@@ -55,6 +62,9 @@ const Adduser = () => {
 
   // fetch user role data 
   const { data } = useQuery('roles', fetchRoles)
+
+  // fetch status
+  const res = useQuery('status', fetchStatus)
 
   //play sound 
   function playAudio(url) {
@@ -211,6 +221,45 @@ const Adduser = () => {
             </div>
             <div className="mb-6">
               <label
+                htmlFor="comfirmPassword"
+                className="block mb-2 text-sm font-medium text-gray-900 "
+              >
+                ផ្ទៀងផ្ទាត់ពាក្យសម្ងាត់
+              </label>
+              <input
+                onKeyDown={(e) => {
+                  if (e.code === "Space") {
+                    e.preventDefault();
+                  }
+                }}
+                type="password"
+                id="comfirmPassword"
+                name="comfirmPassword"
+                className="
+                  form-control
+                  block
+                  w-full
+                  px-3
+                  py-2.5
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                "
+                placeholder=""
+
+              />
+              {pwdMsg && <span className="text-red-500 text-sm">{pwdMsg}</span>}
+
+            </div>
+            <div className="mb-6">
+              <label
                 htmlFor="roles"
                 className="block mb-2 text-sm font-medium text-gray-900 "
               >
@@ -251,6 +300,45 @@ const Adduser = () => {
 
           </div>
           <div className="col-span-2 px-9">
+            <div className="mb-6">
+              <label
+                htmlFor="status_id"
+                className="block mb-2 text-sm font-medium text-gray-900 "
+              >
+                ស្ថានភាព
+              </label>
+              <select
+                onChange={handleChange}
+                id="status_id"
+                name="status_id"
+                value={user.status_id}
+                className="form-select appearance-none
+                                    block
+                                    w-full
+                                    px-3
+                                    py-2.5
+                                    text-base
+                                    font-normal
+                                    text-gray-700
+                                    bg-white bg-clip-padding bg-no-repeat
+                                    border border-solid border-gray-300
+                                    rounded
+                                    transition
+                                    ease-in-out
+                                    m-0
+                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                aria-label="Default select example"
+              >
+
+                {res.data && res.data.map((item, index) => {
+                  return (
+                    <option value={item.status} key={index + 1}>{item.status}</option>
+                  )
+                })}
+              </select>
+
+            </div>
+
             <div className="mb-6">
               <label
                 htmlFor="phone_number"
