@@ -18,18 +18,111 @@ const fetchUsers = async () => {
   return data
 }
 
+//play sound 
+function playAudio(url) {
+  const audio = new Audio(url);
+  audio.play();
+}
+
 
 const ListUsers = () => {
-  const auth = useAuth()
-  // get users
-  const { data } = useQuery('listUsers', fetchUsers);
-  const queryClient = useQueryClient();
   // hook
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [id, setId] = useState('');
   const [name, setName] = useState('')
+  // change password hook
+  const [changePasswordModal, setChnagePasswordModal] = useState(false)
+  const [password, setPassword] = useState({
+    password: '',
+    cpassword: ''
+  })
+
+  const [msgPwd, setMsgPwd] = useState('')
+  const [msgcpwd, setMsgcpwd] = useState('')
+
+  const showChangePasswordModal = () => {
+    setMsgPwd('')
+    setMsgcpwd('')
+    setPassword({
+      password: '',
+      cpassword: ''
+    })
+    setChnagePasswordModal(true);
+  }
+  const closeChangePasswordModal = () => {
+    setId('')
+    setChnagePasswordModal(false)
+  }
+
+  const handleChagePassword = async () => {
+    try {
+      if (password.password === '') {
+        setMsgPwd('សូម! បញ្ជូលពាក្យសម្ងាត់ថ្មី!')
+      } else if (password.cpassword === '') {
+        setMsgcpwd('សូម! ផ្ទៀងផ្ទាត់ពាក្យសម្ងាត់')
+      } else if (password.password !== password.cpassword) {
+        setMsgcpwd('ពាក្យសម្ងាត់មិនផ្ទៀងផ្ទាត់!')
+      } else {
+        if (id !== '') {
+          const { data } = await axios.put(`http://localhost:3001/api/change-user-pwd/${id}`, password)
+          if (data.success) {
+            playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+            toast.success(`${data.message}`, {
+              position: "top-center",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            setMsgPwd('')
+            setMsgcpwd('')
+            setPassword({
+              password: '',
+              cpassword: ''
+            })
+            closeChangePasswordModal()
+          } else {
+            playAudio('http://localhost:3001/audio/audio-notification-sound.mp3');
+            toast.error(`${data.message}`, {
+              position: "top-center",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+        } setMsgPwd('')
+        setMsgcpwd('')
+        setPassword({
+          password: '',
+          cpassword: ''
+        })
+      }
+
+    } catch (err) {
+      console.log(err)
+    }
+
+  }
+  // ==== end of change password ======
+
+  const auth = useAuth()
+
+  // get users
+  const { data } = useQuery('listUsers', fetchUsers);
+  const queryClient = useQueryClient();
+
+
+  // message hooks
+  const [msg, setMsg] = useState('')
 
   // ======== hook for update user ========
   const [user, setUser] = useState({
@@ -71,12 +164,6 @@ const ListUsers = () => {
 
   const showUpdateModal = () => {
     setUpdateModal(true)
-  }
-
-  //play sound 
-  function playAudio(url) {
-    const audio = new Audio(url);
-    audio.play();
   }
 
   // handle delete
@@ -160,11 +247,12 @@ const ListUsers = () => {
             progress: undefined,
             theme: "light",
           });
-          setUpdateModal(false)
+          //setUpdateModal(false)
           setLoading(false)
-          setId('')
+          //setId('')
         }
       }
+
     } catch (err) {
       console.log(err)
     }
@@ -185,6 +273,7 @@ const ListUsers = () => {
     setOpen(false)
     setLoading(false)
   }
+
 
   return (
     <div className="h-screen bg-gray-100 flex-1">
@@ -264,7 +353,11 @@ const ListUsers = () => {
                         }}>
                           <AiTwotoneDelete size={20} />
                         </button>
-                        <button className="px-3 py-1.5 ml-2 rounded font-medium tracking-wider text-white bg-green-500 hover:shadow" >
+                        <button className="px-3 py-1.5 ml-2 rounded font-medium tracking-wider text-white bg-green-500 hover:shadow" onClick={() => {
+                          showChangePasswordModal()
+                          setId(user.id)
+                          setName(user.username)
+                        }}>
                           <RiLockPasswordFill size={20} />
                         </button>
                       </> : <>
@@ -355,11 +448,13 @@ const ListUsers = () => {
                       onChange={handleChange}
                       value={user.username}
                     />
+                    {/* ============= message ============= */}
+                    {msg && <span className="text-red-500 text-xs">{msg}</span>}
                   </div>
                   <div className="mt-4">
                     <label
                       htmlFor="email"
-                      className="form-label inline-block text-gray-700 mt-5​ text-sm mb-2"
+                      className="form-label inline-block text-gray-700 mt-5 text-sm mb-2"
                     >
                       អុីមែល
                     </label>
@@ -488,6 +583,105 @@ const ListUsers = () => {
                 {/* ========= end of content ==== */}
               </Modal>
               {/* end of update user model */}
+
+              {/* change password user modal */}
+              <Modal title="ផ្លាស់ប្ដូរពាក្យសម្ងាត់" width={800} className="modal-fonts" onCancel={closeChangePasswordModal} open={changePasswordModal} footer={[
+                <Button
+                  key="cancel"
+                  type="button"
+                  className="bg-red-500 text-white leading-tight rounded shadow-md hover:bg-red-600 hover:shadow-lg focus:bg-red-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-700 active:shadow-lg transition duration-150 ease-in-out ml-1 text-md"
+                  onClick={closeChangePasswordModal}
+                >
+                  បោះបង់
+                </Button>,
+                <Button
+                  key="submit"
+                  // loading={loading}
+                  type="button"
+                  className="bg-blue-600 text-white text-md leading-tight rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
+                  onClick={handleChagePassword}
+                >
+                  បញ្ជូន
+                </Button>
+              ]}>
+                {/* ======== content ======== */}
+                <div className="grid grid-cols-1">
+                  <div className="">
+                    <label
+                      htmlFor="username"
+                      className="form-label inline-block text-gray-700 mt-5 text-sm mb-2"
+                    >
+                      ពាក្យសម្ងាត់ថ្មី ({name})
+                    </label>
+                    <input
+                      className="form-control
+                                block
+                                w-full
+                                px-4
+                                py-2
+                                text-base
+                                font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                              focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                      placeholder=""
+                      id="password"
+                      name="password"
+                      type={"password"}
+                      onChange={(e) => {
+                        setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+                      }
+                      }
+                      value={password.password}
+                    />
+                    {/* ============= message ============= */}
+                    {msgPwd && <span className="text-red-500 text-xs">{msgPwd}</span>}
+                  </div>
+                  <div className="mb-5">
+                    <label
+                      htmlFor="email"
+                      className="form-label inline-block text-gray-700 mt-5 text-sm mb-2"
+                    >
+                      ផ្ទៀងផ្ទាត់ពាក្យសម្ងាត់
+                    </label>
+                    <input
+                      className="form-control
+                                block
+                                w-full
+                                px-4
+                                py-2
+                                text-base
+                                font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                              focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                      placeholder=""
+                      id="cpassword"
+                      name="cpassword"
+                      type={"password"}
+                      onChange={(e) => {
+                        setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+                      }
+                      }
+                      value={password.cpassword}
+                    />
+                    {msgcpwd && <span className="text-red-500 text-xs">{msgcpwd}</span>}
+                  </div>
+                </div>
+                {/* ========= end of content ==== */}
+              </Modal>
+
+              {/* end of change password modal */}
 
             </tbody>
           </table>

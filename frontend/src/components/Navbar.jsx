@@ -6,9 +6,11 @@ import Dates from "../components/date-time/Dates";
 import { useAuth } from "../utls/auth";
 import axios from "axios";
 import React, { useState } from "react";
-import { Modal } from 'antd';
-import { toast, ToastContainer } from "react-toastify";
+import { Modal, Button } from 'antd';
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { RiLockPasswordFill } from 'react-icons/ri'
+import { MdOutlineManageAccounts } from 'react-icons/md'
 
 
 const Navbar = () => {
@@ -25,6 +27,24 @@ const Navbar = () => {
   const [msgNewPassword, setMsgNewPassword] = useState("");
   const [msgComfirm, setMsgComfirm] = useState("");
   const [color, setColor] = useState("");
+
+  // logout modal hook
+  const [openLogoutModal, setOpenLogoutModal] = useState(false)
+  const showLogout = () => {
+    setOpenLogoutModal(true)
+  }
+  const closeLogout = () => {
+    setOpenLogoutModal(false)
+  }
+
+  // account modal
+  const [accountModal, setOpenAccountModal] = useState(false);
+  const showAccountModal = () => {
+    setOpenAccountModal(true)
+  }
+  const closeAccountModal = () => {
+    setOpenAccountModal(false)
+  }
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -140,18 +160,18 @@ const Navbar = () => {
           <>
             <nav
               className="
-        relative
-        w-full
-        flex flex-wrap
-        items-center
-        justify-between
-        py-4
-        bg-gray-100
-        text-gray-500
-        hover:text-gray-700
-        focus:text-gray-700
-        shadow-lg
-        navbar navbar-expand-lg navbar-light"
+                relative
+                w-full
+                flex flex-wrap
+                items-center
+                justify-between
+                py-4
+                bg-gray-100
+                text-gray-500
+                hover:text-gray-700
+                focus:text-gray-700
+                shadow-lg
+                navbar navbar-expand-lg navbar-light"
 
             >
               <div className="container-fluid w-full flex flex-wrap items-center justify-between px-6">
@@ -236,25 +256,26 @@ const Navbar = () => {
                 right-0
               " aria-labelledby="dropdownMenuButton2">
                       <li>
+
                         <a className="
                           dropdown-item
                           text-sm
                           py-2
                           px-4
-                          font-normal
-                          block
+                          font-bold
                           w-full
                           whitespace-nowrap
                           bg-transparent
                           text-gray-700
                           hover:bg-gray-100
                           cursor-pointer
+                          flex
                         "
                           onClick={showModal}
-                        >Change password?</a>
+                        ><RiLockPasswordFill size={20} className='mr-1 -mt-[1.5px]' /> ផ្លាស់ប្ដូរពាក្យសម្ងាត់?</a>
 
                         {/* change password modal */}
-                        <Modal title="Change Password" open={isModalOpen} width={800} onCancel={handleCancel}
+                        <Modal title={<span className="text-blue-500">ផ្លាស់ប្ដូរពាក្យសម្ងាត់</span>} open={isModalOpen} width={800} onCancel={handleCancel}
                           footer={[
                             <button
                               type="button"
@@ -263,14 +284,14 @@ const Navbar = () => {
                               "
                               onClick={handleCancel}
                             >
-                              Cancel
+                              បោះបង់
                             </button>,
                             <button
                               type="button"
                               className="inline-block px-6 py-2.5 bg-blue-600 text-white text-md leading-tight rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
                               onClick={handleUpdate}
                             >
-                              update
+                              កែប្រែ
                             </button>
                           ]}
                           className={"modal-font"}
@@ -278,7 +299,7 @@ const Navbar = () => {
                           <div className="mb-4">
                             <label
                               htmlFor="exampleFormControlInput1"
-                              className="form-label inline-block text-gray-700 mt-5​ text-lg mb-2"
+                              className="form-label inline-block text-gray-700 mt-5 mb-2"
                             >
                               ពាក្យសម្ងាត់
                             </label>
@@ -325,12 +346,12 @@ const Navbar = () => {
                                 }
                               }}
                             />
-                            {msg && <span className={`text-sm mt-2 text-red-500`}>{msg}</span>}
+                            {msg && <span className={`text-xs mt-2 text-red-500`}>{msg}</span>}
                           </div>
                           <div className="mb-4">
                             <label
                               htmlFor="exampleFormControlInput1"
-                              className="form-label inline-block text-gray-700 mb-2 text-lg"
+                              className="form-label inline-block text-gray-700 mb-2"
                             >
                               ពាក្យសម្ងាត់ថ្មី
                             </label>
@@ -376,12 +397,12 @@ const Navbar = () => {
                                 }
                               }}
                             />
-                            {msgNewPassword && <span className={`text-sm mt-2 ${color}`}>{msgNewPassword}</span>}
+                            {msgNewPassword && <span className={`text-xs mt-2 ${color}`}>{msgNewPassword}</span>}
                           </div>
                           <div>
                             <label
                               htmlFor="exampleFormControlInput1"
-                              className="form-label inline-block mb-2 text-gray-700​ text-lg"
+                              className="form-label inline-block mb-2 text-gray-700 text-sm"
                             >
                               ផ្ទៀងផ្ទាត់ពាក្យសម្ងាត់
                             </label>
@@ -423,53 +444,235 @@ const Navbar = () => {
                                 }
                               }}
                             />
-                            {msgComfirm && <span className={`text-sm mt-2 ${color}`}>{msgComfirm}</span>}
+                            {msgComfirm && <span className={`text-xs mt-2 ${color}`}>{msgComfirm}</span>}
                           </div>
 
                           {/* end of change password modal */}
                         </Modal>
 
                       </li>
+                      <li onClick={showAccountModal}>
+                        <a className="
+                          dropdown-item
+                          text-sm
+                          py-2
+                          px-4
+                          font-bold
+                          cursor-pointer
+                          flex
+                          w-full
+                          whitespace-nowrap
+                          bg-transparent
+                          text-gray-700
+                          hover:bg-gray-100
+                          
+                          ">
+                          <MdOutlineManageAccounts size={20} className='mr-1' />គណនីរបស់អ្នក
+                        </a>
+                      </li>
                       <li>
                         <span className="
-                    flex
-                    dropdown-item
-                    text-sm
-                    py-2
-                    px-4
-                    font-normal
-                    items-center
-                    w-full
-                    whitespace-nowrap
-                    bg-transparent
-                    text-gray-700
-                    hover:bg-gray-100
-                    cursor-pointer
-                    "
-                          onClick={logoutHandler}
-                        ><MdOutlineLogout size={20} style={{ marginRight: "5px" }} />Logout</span>
+                          flex
+                          dropdown-item
+                          text-sm
+                          py-2
+                          px-4
+                          font-bold
+                          items-center
+                          w-full
+                          whitespace-nowrap
+                          bg-transparent
+                          text-gray-700
+                          hover:bg-gray-100
+                          cursor-pointer
+                        "
+                          onClick={showLogout}
+                        ><MdOutlineLogout size={20} style={{ marginRight: "5px" }} />ចាកចេញ</span>
                       </li>
-                      <li>
-                        <a className="
-                dropdown-item
-                text-sm
-                py-2
-                px-4
-                font-normal
-                block
-                w-full
-                whitespace-nowrap
-                bg-transparent
-                text-gray-700
-                hover:bg-gray-100
-      ">Something else here</a>
-                      </li>
+
                     </ul>
                   </div>
                 </div>
                 {/* <!-- Right elements --> */}
               </div>
             </nav>
+            {/* logout modal */}
+            <Modal title="ចាកចេញ" className="modal-fonts" open={openLogoutModal} onCancel={closeLogout} footer={[
+              <Button
+                key="cancel"
+                type="button"
+                className="bg-red-500 text-white leading-tight rounded shadow-md hover:bg-red-600 hover:shadow-lg focus:bg-red-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-700 active:shadow-lg transition duration-150 ease-in-out ml-1 text-md"
+                onClick={closeLogout}
+              >
+                ទេ
+              </Button>,
+              <Button
+                key="submit"
+                // loading={loading}
+                type="button"
+                className="bg-blue-600 text-white text-md leading-tight rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
+                onClick={logoutHandler}
+              >
+                បាទ/ចាស
+              </Button>
+            ]}>
+              <h1 className="text-lg text-center p-10">តើអ្នកចង់ចាកចេញពីប្រព័ន្ធមែនទេ?</h1>
+            </Modal>
+            {/* end of logout modal */}
+
+            {/*============== Account =================*/}
+
+            <Modal title="គណនី" width={900} onCancel={closeAccountModal} className="modal-fonts" open={accountModal} footer={[
+              <Button
+                key="cancel"
+                type="button"
+                className="bg-red-500 text-white leading-tight rounded shadow-md hover:bg-red-600 hover:shadow-lg focus:bg-red-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-700 active:shadow-lg transition duration-150 ease-in-out ml-1 text-md"
+                onClick={closeAccountModal}
+              >
+                ទេ
+              </Button>,
+              <Button
+                key="submit"
+                // loading={loading}
+                type="button"
+                className="bg-blue-600 text-white text-md leading-tight rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
+
+              >
+                បាទ/ចាស
+              </Button>
+            ]}>
+              {/* ======== content ======== */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="mt-4">
+                  <label
+                    htmlFor="username"
+                    className="form-label inline-block text-gray-700 mt-5 text-sm mb-2"
+                  >
+                    ឈ្មោះ​អ្នកប្រើប្រាស់
+                  </label>
+                  <input
+                    className="form-control
+                                block
+                                w-full
+                                px-4
+                                py-2
+                                text-base
+                                font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                              focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder=""
+                    id="username"
+                    name="username"
+                    type={"text"}
+
+                  />
+                  {/* ============= message ============= */}
+
+                </div>
+                <div className="mt-4">
+                  <label
+                    htmlFor="email"
+                    className="form-label inline-block text-gray-700 mt-5 text-sm mb-2"
+                  >
+                    អុីមែល
+                  </label>
+                  <input
+                    className="form-control
+                                block
+                                w-full
+                                px-4
+                                py-2
+                                text-base
+                                font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                              focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder=""
+                    id="email"
+                    name="email"
+                    type={"email"}
+
+                  />
+                </div>
+                <div className="mt-4">
+                  <label
+                    htmlFor="roles"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
+                  >
+                    ប្រភេទអ្នកប្រើប្រាស់
+                  </label>
+                  <select
+
+                    id="rolse"
+                    name="role_id"
+
+                    className="form-select appearance-none
+                                    block
+                                    w-full
+                                    px-3
+                                    py-2.5
+                                    text-base
+                                    font-normal
+                                    text-gray-700
+                                    bg-white bg-clip-padding bg-no-repeat
+                                    border border-solid border-gray-300
+                                    rounded
+                                    transition
+                                    ease-in-out
+                                    m-0
+                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    aria-label="Default select example"
+                  >
+                    <option value={1}>Admin</option>
+                    <option value={2}>User</option>
+                  </select>
+                </div>
+                <div className="mt-4 mb-5">
+                  <label
+                    htmlFor="phone_number"
+                    className="form-label inline-block text-gray-700 mt-5​ text-sm mb-2"
+                  >
+                    លេខទូរស័ព្ទ
+                  </label>
+                  <input
+                    className="form-control
+                                block
+                                w-full
+                                px-4
+                                py-2
+                                text-base
+                                font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                              focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder=""
+                    id="phone_number"
+                    name="phone_number"
+                    type={"text"}
+
+                  />
+                </div>
+
+              </div>
+              {/* ========= end of content ==== */}
+            </Modal>
+            {/* end of Account Modal */}
 
             {/* Offcanvas */}
             <div className="offcanvas offcanvas-end fixed bottom-0 flex flex-col max-w-full bg-white invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 right-0 border-none w-96" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
@@ -484,8 +687,6 @@ const Navbar = () => {
           </>
         )
       }
-      {/* toast message */}
-      <ToastContainer />
     </>
   );
 

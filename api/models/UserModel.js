@@ -90,6 +90,11 @@ class Users {
       id,
     ]);
   }
+
+  static update_duplicate(id, userName) {
+    const sql = "SELECT *FROM tblUsers WHERE NOT id = ? AND username = ?";
+    return db.execute(sql, [id, userName]);
+  }
 }
 
 module.exports = Users;

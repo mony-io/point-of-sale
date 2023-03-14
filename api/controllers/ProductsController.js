@@ -13,7 +13,7 @@ exports.createNewProduct = async (req, res, next) => {
     expDate = null;
   }
   // console.log(req.file);
-  console.log(req.body);
+  //console.log(req.body);
   try {
     // get product name
     const [product_name] = await Product.findProductByName(
@@ -102,7 +102,7 @@ exports.uppdateProduct = async (req, res, next) => {
     );
     if (pro_name.length !== 0) {
       if (req.file) {
-        deleteImg(path);
+        //deleteImg(path);
       }
       return res.send({
         message: "Sorry! Product name already exist.",
@@ -117,7 +117,7 @@ exports.uppdateProduct = async (req, res, next) => {
     );
     if (pro.length !== 0) {
       if (req.file) {
-        deleteImg(path);
+        //deleteImg(path);
       }
       return res.send({
         message: "Sorry! Product Code already exist.",
@@ -144,7 +144,7 @@ exports.uppdateProduct = async (req, res, next) => {
 
     if (result.affectedRows !== 0) {
       if (req.file) {
-        await deleteImg(oldPath[0].product_image);
+        // await deleteImg(oldPath[0].product_image);
       }
 
       res.send({ message: "ការប្រែជោគជ័យ!", success: true });
@@ -196,7 +196,7 @@ exports.delete = async (req, res, next) => {
     const [result] = await Product.deleteById(req.params.product_id);
 
     if (result.affectedRows !== 0) {
-      deleteImg(path[0].product_image);
+      //deleteImg(path[0].product_image);
       res.send({ message: "Product has been deleted.", success: true });
     } else {
       res.send({ message: "Product has been failed.", success: false });
@@ -213,7 +213,7 @@ exports.deleteImageOne = async (req, res, next) => {
 
     const [result] = await Product.deleteImageById(req.params.product_id);
     if (result.affectedRows !== 0) {
-      deleteImg(path[0].product_image);
+      //deleteImg(path[0].product_image);
       res.end();
     }
   } catch {

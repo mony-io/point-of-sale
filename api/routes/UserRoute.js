@@ -17,5 +17,6 @@ router.post("/reset_password_mail", Users.resetpassword_mail);
 router.get("/forgotpassword/:id/:token", Users.forgotpassword);
 router.put("/forgotpassword/:id/:token", Users.updatePassword);
 router.put("/change-password/:id", Users.changePassword);
+router.put("/api/change-user-pwd/:id", Users.change_user_pwd);
 
 module.exports = router;

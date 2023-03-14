@@ -59,3 +59,15 @@ body {
 
   
 }
+
+.ant-btn:not([disabled]):hover {
+  color: white;
+  border: none;
+}
+
+.ant-btn-sm{
+  color:white;
+  background-color: #1677ff;
+  display: inline-block;
+}
+

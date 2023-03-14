@@ -16,7 +16,8 @@ const AuthContext = createContext({
   Loading: () => { },
   isAdmin: false,
   open: true,
-  setOpen: () => { }
+  setOpen: () => { },
+  setAdmin: (role) => { }
 });
 
 let logoutTimer;
@@ -36,7 +37,7 @@ const retrieveStoredToken = () => {
 
   const remainingTime = calculateRemainingTime(storedExpirationDate);
 
-  if (remainingTime <= 3600) {
+  if (remainingTime <= 2 * 3600) {
     localStorage.removeItem('token');
     localStorage.removeItem('expirationTime');
     return null;
@@ -95,21 +96,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loginHandler = (token, expirationTime) => {
+  // const loginHandler = (token, expirationTime) => {
+  //   setToken(token);
+  //   localStorage.setItem('token', token);
+  //   localStorage.setItem('expirationTime', expirationTime);
+
+  //   const remainingTime = calculateRemainingTime(expirationTime);
+
+  //   logoutTimer = setTimeout(logoutHandler, remainingTime);
+  // };
+
+  const loginHandler = (token) => {
     setToken(token);
     localStorage.setItem('token', token);
-    localStorage.setItem('expirationTime', expirationTime);
-
-    const remainingTime = calculateRemainingTime(expirationTime);
-
-    logoutTimer = setTimeout(logoutHandler, remainingTime);
   };
+
 
   const setAdmin = (role) => {
     if (role === 'Admin') {
       setIsAdmin(true);
+      localStorage.setItem('isAdmin', true);
     } else {
       setIsAdmin(false)
+      localStorage.setItem('isAdmin', false);
     }
   }
 
@@ -130,13 +139,10 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (tokenData) {
-      //console.log(tokenData.duration);
-      logoutTimer = setTimeout(logoutHandler, tokenData.duration);
-    }
+
     refreshToken();
 
-  }, [tokenData, logoutHandler]);
+  }, [tokenData]);
 
   const contextValue = {
     token: token,
@@ -151,7 +157,8 @@ export const AuthProvider = ({ children }) => {
     id: id,
     isAdmin: isAdmin,
     open: isOpen,
-    setOpen: setOpen
+    setOpen: setOpen,
+    setAdmin: setAdmin
   };
 
   localStorage.setItem("token", "true");

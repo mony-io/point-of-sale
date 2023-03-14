@@ -6,7 +6,8 @@ import { Spin, Space } from 'antd';
 import { toast, ToastContainer } from "react-toastify";
 import logo from "../assets/logo.png"
 import "react-toastify/dist/ReactToastify.css";
-
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import jwt_decode from 'jwt-decode'
 
 const Login = () => {
 
@@ -22,6 +23,13 @@ const Login = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  // show password hook
+  const [isHidden, setHidden] = useState(true)
+
+  const showPwd = () => {
+    setHidden(!isHidden)
+  }
 
   const EMAIL_REX = /^\S+$/
   const PWD_REX = /^\S+$/
@@ -40,7 +48,7 @@ const Login = () => {
     const audio = new Audio(url);
     audio.play();
   }
-  // console.log(email)
+
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -64,12 +72,16 @@ const Login = () => {
           );
           //console.log(res.data.token)
           if (res.data.success) {
+            const decode = jwt_decode(res.data.token)
+            console.log(decode)
+            auth.getUser(decode.username)
+            auth.setAdmin(decode.role)
             sessionStorage.setItem("bool", true);
             auth.Loading(true);
-            const expirationTime = new Date(
-              new Date().getTime() + +60 * 24 * 1000
-            );
-            auth.login(res.data.token, expirationTime.toISOString())
+            // const expirationTime = new Date(
+            //   new Date().getTime() + 60 * 24 * 1000
+            // );
+            auth.login(res.data.token)
             // console.log(res.data.token)
             navigate("/", { replace: true })
           } else {
@@ -170,44 +182,51 @@ const Login = () => {
                     >
                       ពាក្យសម្ងាត់
                     </label>
-                    <input
-                      ref={pwdRef}
-                      onKeyDown={(e) => {
-                        if (e.code === "Space") {
-                          e.preventDefault();
-                        }
-                      }}
-                      onKeyUp={
-                        () => {
-                          if (password !== "") {
-                            if (PWD_REX.test(password)) {
-                              setValidPwd(true);
-                              setMsgPwd("");
+                    <div className="relative">
+                      <input
+                        ref={pwdRef}
+                        onKeyDown={(e) => {
+                          if (e.code === "Space") {
+                            e.preventDefault();
+                          }
+                        }}
+                        onKeyUp={
+                          () => {
+                            if (password !== "") {
+                              if (PWD_REX.test(password)) {
+                                setValidPwd(true);
+                                setMsgPwd("");
+                              } else {
+                                setValidPwd(false);
+                                setMsgPwd("Not valid password.");
+                              }
                             } else {
+                              setMsgPwd("Please! Enter your password.")
                               setValidPwd(false);
-                              setMsgPwd("Not valid password.");
                             }
-                          } else {
-                            setMsgPwd("Please! Enter your password.")
-                            setValidPwd(false);
                           }
                         }
-                      }
-                      value={password.trim()}
-                      onChange={(e) => setPassword(e.target.value)}
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded p-3 w-full outline-none"
-                    // required=""
-                    />
+                        value={password.trim()}
+                        onChange={(e) => setPassword(e.target.value)}
+                        type={isHidden ? 'password' : 'text'}
+                        name="password"
+                        id="password"
+                        placeholder="••••••••"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded p-3 w-full outline-none"
+                      // required=""
+                      />
+                      <span onClick={showPwd} className=''>
+                        {isHidden ? <AiOutlineEyeInvisible className="absolute -mt-8 right-0 mr-2" size={20} /> : <AiOutlineEye className="absolute -mt-8 right-0 mr-2" size={20} />}
+                      </span>
+
+                    </div>
+
                     {msgPwd && <span className="text-red-500 text-sm mt-2">{msgPwd}</span>}
                   </div>
-                  <div class="flex justify-end">
+                  <div className="flex justify-end">
                     <a
                       href="#"
-                      class="text-xs text-primary-600 text-blue-500 underline ml-1 -mt-5"
+                      className="text-xs text-primary-600 text-blue-500 underline ml-1 -mt-4"
                     >
                       <Link to="/resetpassword">ភ្លេច​លេខសំងាត់​ ?</Link>
                     </a>
@@ -215,7 +234,7 @@ const Login = () => {
                   <button
                     onClick={handleClick}
                     type="submit"
-                    class="w-full text-md text-[#fff] bg-teal-400 hover:bg-teal-300 p-3 rounded"
+                    className="w-full text-md text-[#fff] bg-teal-400 hover:bg-teal-300 p-3 rounded"
                   >
                     <Link to="/">ចូល</Link>
                   </button>

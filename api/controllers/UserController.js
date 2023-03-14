@@ -88,12 +88,9 @@ exports.UserLogin = async (req, res, next) => {
       res.send({ token: accessToken, success: true });
     } else {
       // work when email not correct
-      const [username] = await Users.findByUsername(req.body.email);
-      if (username.length > 0) {
-        const match = await bcrypt.compare(
-          req.body.password,
-          username[0].password
-        );
+      const [user] = await Users.findByUsername(req.body.email);
+      if (user.length > 0) {
+        const match = await bcrypt.compare(req.body.password, user[0].password);
         if (!match) {
           return res.send({
             message: "Wrong email/username or password.",
@@ -101,19 +98,19 @@ exports.UserLogin = async (req, res, next) => {
           });
         }
 
-        const userid = username[0].id;
-        const user_name = username[0].username;
-        const email = username[0].email;
-        let role = username[0].role_name;
+        const userid = user[0].id;
+        const username = user[0].username;
+        const email = user[0].email;
+        let role = user[0].role_name;
 
         const accessToken = jwt.sign(
-          { role, userid, user_name, email },
+          { role, userid, username, email },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "30s" }
         );
 
         const refreshToken = jwt.sign(
-          { userid, user_name, email, role },
+          { userid, username, email, role },
           process.env.REFRESH_TOKEN_SECRET,
           {
             expiresIn: "1d",
@@ -271,14 +268,14 @@ exports.updatePassword = async (req, res, next) => {
 
 exports.changePassword = async (req, res, next) => {
   try {
-    console.log(req.body);
+    //console.log(req.body);
     const newPassword = await bcrypt.hash(req.body.newPassword, 10);
 
     const [user] = await Users.findById(req.params.id);
 
-    console.log(user[0].password);
+    //console.log(user[0].password);
     const match = await bcrypt.compare(req.body.password, user[0].password);
-    console.log(match);
+    //console.log(match);
     if (!match) {
       return res.send({
         message: "លេខសម្ងាត់របស់អ្នកមិនត្រូវ!",
@@ -333,6 +330,25 @@ module.exports.deleteById = async (req, res, next) => {
 
 module.exports.updateOne = async (req, res, next) => {
   try {
+    if (req.body.username === "") {
+      return res.send({
+        message: "សូម! បញ្ជូលឈ្មោះអ្នកប្រើប្រាស់!",
+        success: false,
+      });
+    }
+
+    const [user] = await Users.update_duplicate(
+      req.params.id,
+      req.body.username
+    );
+
+    if (user.length > 0) {
+      return res.send({
+        message: "អ្នកប្រើប្រាស់មាននៅក្នុងប្រព័ន្ធរួចរាល់ហើយ!",
+        success: false,
+      });
+    }
+
     const [result] = await Users.updateOne(
       req.body.username,
       req.body.email,
@@ -341,6 +357,7 @@ module.exports.updateOne = async (req, res, next) => {
       req.body.status_id,
       req.params.id
     );
+
     if (result.affectedRows > 0) {
       res.send({
         message: "អ្នកប្រើប្រាស់ត្រូវបានកែប្រែដដោយជោគជ័យ!",
@@ -348,6 +365,37 @@ module.exports.updateOne = async (req, res, next) => {
       });
     } else {
       res.send({ message: "ការកែប្រែបរាជ័យ!", success: false });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+// change user password
+module.exports.change_user_pwd = async (req, res, next) => {
+  try {
+    const { password, cpassword } = req.body;
+    if (password === "") {
+      return res.send({ message: "សូម! បញ្ជូលពាក្យសម្ងាត់ថ្មី" });
+    } else if (cpassword === "") {
+      return res.send({ message: "សូម! ផ្ទៀងផ្ទាត់ពាក្យសម្ងាត់" });
+    } else if (password !== cpassword) {
+      return res.send({ message: "ពាក្យសម្ងាត់មិនផ្ទៀងផ្ទាត់" });
+    }
+
+    const newpwd = await bcrypt.hash(password, 10);
+    const [result] = await Users.updatePassword(newpwd, req.params.id);
+
+    if (result.affectedRows > 0) {
+      res.send({
+        message: "ពាក្យសម្ងាត់ត្រូវបានផ្លាស់ប្ដូរដោយជោគជ័យ!",
+        success: true,
+      });
+    } else {
+      res.send({
+        message: "ពាក្យសម្ងាត់ផ្លាស់ប្ដូរបរាជោគជ័យ!",
+        success: false,
+      });
     }
   } catch (err) {
     next(err);

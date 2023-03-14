@@ -6,10 +6,10 @@ import Navbar from "../components/Navbar";
 import axios from 'axios';
 import { Space, Spin } from 'antd';
 import { useQuery } from "react-query";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Select, Modal, Button } from "antd";
-import useScanDetection from 'use-scan-detection';
+//import useScanDetection from 'use-scan-detection';
 
 
 const fetchProducts = async () => {
@@ -29,11 +29,14 @@ const Sale = () => {
   const [productCode, setProductCode] = useState('')
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState('');
-  console.log(selectCategory)
-  useScanDetection({
-    onComplete: setProductCode,
-    minLength: 4
-  })
+  //console.log(selectCategory)
+
+  console.log(productCode)
+
+  // useScanDetection({
+  //   onComplete: setProductCode,
+  //   minLength: 4
+  // })
 
   // hook for add customer
   const [customer, setCustomer] = useState({
@@ -273,13 +276,18 @@ const Sale = () => {
                   <div className="" onClick={openModal}>
                     <AiFillPlusSquare size={36} className="text-blue-400  cursor-pointer rounded-lg hover:shadow-sm" />
                   </div>
-
                 </div>
                 <div className="flex items-center overflow-hidden mt-[1px]">
                   <input
                     value={productCode.trim()}
                     onChange={(e) => {
                       setProductCode(e.target.value)
+                      console.log(e.target.value)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.code === "Space") {
+                        e.preventDefault();
+                      }
                     }}
                     type="search"
                     placeholder="ស្វែងរក"
@@ -496,9 +504,6 @@ const Sale = () => {
           </div>
           {/* ========= end of content ==== */}
         </Modal>
-
-        {/* toast message */}
-        <ToastContainer />
       </div>
     </>
   );
