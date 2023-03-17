@@ -76,6 +76,7 @@ const Login = () => {
             console.log(decode)
             auth.getUser(decode.username)
             auth.setAdmin(decode.role)
+            auth.getId(decode.userid)
             sessionStorage.setItem("bool", true);
             auth.Loading(true);
             // const expirationTime = new Date(
@@ -215,7 +216,7 @@ const Login = () => {
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded p-3 w-full outline-none"
                       // required=""
                       />
-                      <span onClick={showPwd} className=''>
+                      <span onClick={showPwd} className="cursor-pointer">
                         {isHidden ? <AiOutlineEyeInvisible className="absolute -mt-8 right-0 mr-2" size={20} /> : <AiOutlineEye className="absolute -mt-8 right-0 mr-2" size={20} />}
                       </span>
 

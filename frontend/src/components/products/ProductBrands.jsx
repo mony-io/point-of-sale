@@ -124,9 +124,8 @@ const ProductBrands = () => {
 
   return (
     <>
-      <div className="flex-1">
+      <div className="flex-1 h-screen overflow-auto">
         <Navbar />
-
         <div className="p-5 h-screen bg-gray-100 flex-1">
           <h1 className="text-xl mb-4 text-left">ម៉ាកផលិតផល</h1>
           <div className="w-full h-1 bg-blue-400 mb-7 shadow-sm"></div>
@@ -277,7 +276,7 @@ const ProductBrands = () => {
             </div>
             {/* end of add model */}
           </div>
-          <div className="rounded-lg shadow overflow-auto hidden md:block mt-6">
+          <div className="rounded-lg shadow overflow-auto hidden md:block mt-6 h-[600px]">
             <table className="w-full table-auto">
               <thead className="bg-gray-50 border-gray-200">
                 <tr className="border-b-2 border-gray-100">
@@ -518,54 +517,6 @@ const ProductBrands = () => {
                 })}
               </tbody>
             </table>
-            <div class="flex justify-center">
-              <nav aria-label="Page navigation example">
-                <ul class="flex list-style-none">
-                  <li class="page-item">
-                    <a
-                      class="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 focus:shadow-none"
-                      href="#"
-                      aria-label="Previous"
-                    >
-                      <span aria-hidden="true">&laquo;</span>
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a
-                      class="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-                      href="#"
-                    >
-                      1
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a
-                      class="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-                      href="#"
-                    >
-                      2
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a
-                      class="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-                      href="#"
-                    >
-                      3
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a
-                      class="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-                      href="#"
-                      aria-label="Next"
-                    >
-                      <span aria-hidden="true">&raquo;</span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
           </div>
           {/* toast message */}
           <ToastContainer />

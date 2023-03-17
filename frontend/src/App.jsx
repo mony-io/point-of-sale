@@ -24,7 +24,7 @@ import ListUsers from "./pages/users/ListUsers";
 import { useMemo } from 'react'
 import EditeProduct from "./components/products/EditeProduct";
 import { ToastContainer } from "react-toastify";
-
+import ProductReport from "./pages/reports/ProductReport";
 function App() {
 
   return (
@@ -49,11 +49,12 @@ function App() {
             <Route path="/addcustomer" element={<AddCustomer />} />
             <Route path="/listcustomer" element={<ListCustomer />} />
             <Route path="/product-brands" element={<ProductBrands />} />
-            <Route path="/update-product/:id" element={<EditeProduct />}></Route>
+            <Route path="/update-product/:id" element={<EditeProduct />} />
             <Route element={<RequireAuth />}>
               <Route path="/adduser" element={<AddUser />} />
               <Route path="/listuser" element={<ListUsers />} />
             </Route>
+            <Route path="/productReport" element={<ProductReport />} />
           </Route>
 
           <Route element={<PublicRoute />}>

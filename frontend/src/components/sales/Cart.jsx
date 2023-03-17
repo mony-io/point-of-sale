@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useAuth } from "../../utls/auth";
 import { useReactToPrint } from "react-to-print";
 import PrintPayment from "./PrintPayment";
+import { FaRegMoneyBillAlt } from 'react-icons/fa'
 
 
 
@@ -25,7 +26,7 @@ const Cart = (props) => {
     + currentdate.getMinutes() + "/"
     + currentdate.getSeconds();
   // PAYMENT
-  console.log(datetime)
+  //console.log(datetime)
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -38,7 +39,7 @@ const Cart = (props) => {
   const { data } = useQuery('paymentType', fetchPayment)
   const [payemntType, setPaymentType] = useState('')
 
-  const { cartItems, onAdd, onRemove, onChangeHandler, deleteHandler, customerId, setCustomerId } = props;
+  const { cartItems, onAdd, onRemove, onChangeHandler, deleteHandler, customerId, setCustomerId, RemoveAll } = props;
   const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
 
   const totalPrice = itemsPrice;
@@ -57,6 +58,11 @@ const Cart = (props) => {
       setRemain(Number(paid - totalPrice))
     }
 
+  }
+
+  const clear_data = () => {
+    RemoveAll();
+    setCustomerId(1)
   }
   // total item
   const totalItem = cartItems.reduce((pre, cur) => pre + cur.qty, 0)
@@ -101,7 +107,7 @@ const Cart = (props) => {
           const res = await axios.get(`http://localhost:3001/api/saleInvoice/${sale.data.id}`);
           setInvoice(res.data[0])
           setOpen(false)
-          cartItems.splice(0, cartItems.length)
+          RemoveAll()
           setCustomerId(1)
           localStorage.removeItem('cartItems')
         }
@@ -141,12 +147,11 @@ const Cart = (props) => {
           )}
         </div>
         {cartItems.map((item) => (
-
           <div
             key={item.product_id}
-            className="flex justify-between items-center m-2 text-slate-600"
+            className="flex justify-between items-center m-[2px] text-slate-600 bg-blue-100 p-1 rounded-sm"
           >
-            <div className="text-sm w-[70px] ml-6 whitespace-nowrap">{item.product_name}</div>
+            <div className="text-sm w-[70px] ml-6 whitespace-nowrap text-black">{item.product_name}</div>
             <div className="flex items-center">
               <GoPlus className="text-blue-500 mr-1 cursor-pointer" onClick={() => onAdd(item)} />
               <input
@@ -181,26 +186,25 @@ const Cart = (props) => {
         ))}
       </div>
       <div className="col-span-4 row-span-2 h-24">
-        <div className="grid grid-cols-4 gap-4">
-          <div className="border col-span-4 text-sm flex justify-between pt-1 pb-1 ">
-            <span className="font-semibold ml-2">Price</span>
-            <span>${itemsPrice.toFixed(2)}</span>
-            {/* <span className="font-semibold">Tax</span>${taxPrice.toFixed(2)} */}
+        <div className="grid grid-cols-4 gap-1">
+          <div className="border col-span-4 text-sm flex justify-between pt-1 pb-1 bg-blue-200 rounded">
+            <span className="font-semibold ml-2">ចំនួនសរុប</span>
+            <span className="mr-2">{totalItem}</span>
           </div>
-          <div className="border col-span-4 text-sm flex justify-between pt-1 pb-1">
-            {/* <span className="font-semibold ml-4">Shipping</span>$ */}
-            {/* {shippingPrice.toFixed(2)} */}
-            <span className="font-semibold mx-2">Total</span>${totalPrice.toFixed(2)}
+          <div className="border col-span-4 text-sm flex justify-between pt-1 pb-1 bg-blue-200 rounded">
+            <span className="font-semibold mx-2 inline-block">ទឹកប្រាក់សរុប</span>
+            <span className="mr-2">${totalPrice.toFixed(2)}</span>
+
           </div>
-          <div className="col-span-4 flex pr-1 justify-end items-center">
-            <button onClick={onClose}>
-              <span className="bg-red-500 w-full p-2 px-6 hover:bg-red-600 duration-200 text-[#fff] rounded-sm shadow-sm text-lg text-center cursor-pointer">
-                បោះបង់
+          <div className="col-span-4 flex pr-1 justify-end items-center mt-3">
+            <button onClick={clear_data}>
+              <span className="bg-red-500 w-full px-6 hover:bg-red-600 duration-200 text-[#fff] rounded shadow-sm text-center cursor-pointer py-[2px]">
+                សម្អាត
               </span>
             </button>
             <button onClick={showModal}>
-              <span className={`bg-green-500 w-full p-2 px-6 ml-1 hover:bg-green-600 duration-200 text-[#fff] rounded-sm shadow-sm text-lg text-center cursor-pointer`}>
-                ការទូទាត់
+              <span className={`bg-blue-500 w-full px-7 ml-1 hover:bg-blue-600 duration-200 text-[#fff] rounded shadow-sm text-lg text-center cursor-pointer`}>
+                <FaRegMoneyBillAlt size={30} className='inline-block' />
               </span>
             </button>
           </div>

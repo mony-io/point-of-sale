@@ -175,7 +175,7 @@ const Category = () => {
 
   return (
     <>
-      <div className="flex-1">
+      <div className="flex-1 h-screen overflow-auto">
         <Navbar />
         <div className="p-5 h-screen bg-gray-100 flex-1">
           <h1 className="text-xl mb-4 text-left">ប្រភេទផលិតផល</h1>
@@ -326,7 +326,7 @@ const Category = () => {
             </div>
             {/* end of add model */}
           </div>
-          <div className="rounded-lg shadow overflow-auto mt-6">
+          <div className="rounded-lg shadow overflow-auto mt-6 h-[600px]">
             <table className="w-full table-auto">
               <thead className="bg-gray-50 border-gray-200">
                 <tr className="border-b-2 border-gray-100">
@@ -588,15 +588,15 @@ const Category = () => {
               </tbody>
             </table>
             {/* pagination */}
-            < Pagination
-              pages={pages}
-              setTodosPerPage={setTodosPerPage}
-              nextPageHandler={nextPageHandler}
-              prevPageHandler={prevPageHandler}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
           </div>
+          < Pagination
+            pages={pages}
+            setTodosPerPage={setTodosPerPage}
+            nextPageHandler={nextPageHandler}
+            prevPageHandler={prevPageHandler}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
           <ToastContainer />
         </div>
       </div>

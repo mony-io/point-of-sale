@@ -11,7 +11,7 @@ function PrintPayment(props) {
         <>
             <div ref={componentRef} className="w-full h-[window.innerHeight]">
                 <div className="flex justify-between my-3 py-9 px-6 flex-col border-b-2 mx-9 border-b-gray-800">
-                    <h1 className="text-center text-3xl mb-2">
+                    <h1 className="text-center text-3xl mb-9">
                         PSS <span className="text-2xl">គ្រឿងសំណង់</span>
                     </h1>
                     <h2 className="">កាលបរិច្ឆេទ: {data[0].sale_date}</h2>

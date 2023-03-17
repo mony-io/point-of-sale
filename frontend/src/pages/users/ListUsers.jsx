@@ -276,9 +276,9 @@ const ListUsers = () => {
 
 
   return (
-    <div className="h-screen bg-gray-100 flex-1">
+    <div className="h-screen overflow-auto bg-gray-100 flex-1">
       <Navbar />
-      <div className="p-5 mt-3">
+      <div className="p-5 mt-3 h-screen">
         <h1 className="text-xl mb-3 text-left">បញ្ជីអ្នកប្រើប្រាស់</h1>
         <div className="w-full h-1 bg-blue-400 shadow-sm mb-5"></div>
         <div className="flex justify-between mb-3">
@@ -294,7 +294,7 @@ const ListUsers = () => {
             style={{ width: "20rem" }}
           />
         </div>
-        <div className="rounded-sm overflow-auto shadow-sm">
+        <div className="rounded-sm overflow-auto h-[600px] shadow-sm">
           <table className="w-full table-auto">
             <thead className="bg-gray-50 border-gray-200">
               <tr className="border-b-2 border-gray-100">
@@ -585,7 +585,7 @@ const ListUsers = () => {
               {/* end of update user model */}
 
               {/* change password user modal */}
-              <Modal title="ផ្លាស់ប្ដូរពាក្យសម្ងាត់" width={800} className="modal-fonts" onCancel={closeChangePasswordModal} open={changePasswordModal} footer={[
+              <Modal title={<span>ផ្លាស់ប្ដូរពាក្យសម្ងាត់({name})</span>} width={800} className="modal-fonts" onCancel={closeChangePasswordModal} open={changePasswordModal} footer={[
                 <Button
                   key="cancel"
                   type="button"
@@ -611,7 +611,7 @@ const ListUsers = () => {
                       htmlFor="username"
                       className="form-label inline-block text-gray-700 mt-5 text-sm mb-2"
                     >
-                      ពាក្យសម្ងាត់ថ្មី ({name})
+                      ពាក្យសម្ងាត់ថ្មី
                     </label>
                     <input
                       className="form-control

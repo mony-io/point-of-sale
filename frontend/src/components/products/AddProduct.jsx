@@ -253,7 +253,7 @@ const AddProduct = () => {
   // console.log(supplies)
   return (
     <>
-      <div className="flex-1 h-screen bg-slate-50">
+      <div className="flex-1 h-screen overflow-auto bg-slate-50">
         <Navbar />
         <div className="p-5">
           <h1 className="text-xl mb-4 text-left">បន្ថែមផលិតផល</h1>

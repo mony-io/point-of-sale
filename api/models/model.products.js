@@ -149,6 +149,11 @@ class Product {
       "SELECT product_id,product_name,price,product_image,qty,product_code FROM tblProducts WHERE `status` = 1 AND product_code=?";
     return db.execute(sql, [procode]);
   }
+
+  static productReports() {
+    const sql = "SELECT *FROM V_ProductReports";
+    return db.execute(sql);
+  }
 }
 
 module.exports = Product;

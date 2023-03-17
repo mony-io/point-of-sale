@@ -22,6 +22,17 @@ const Navbar = () => {
   const [comfirmPassword, setComfirmPassword] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [match, setMatch] = useState(false);
+
+  const [isHidden, setIsHidden] = useState(false)
+
+  const showPassword = (e) => {
+    if (e.target.checked) {
+      setIsHidden(true)
+    } else {
+      setIsHidden(false)
+    }
+  }
+
   // message
   const [msg, setMsg] = useState("");
   const [msgNewPassword, setMsgNewPassword] = useState("");
@@ -47,6 +58,7 @@ const Navbar = () => {
   }
 
   const showModal = () => {
+    setIsHidden(false)
     setIsModalOpen(true);
     clearFormData()
     setValidPwd(false)
@@ -65,10 +77,6 @@ const Navbar = () => {
       }
     }
   }
-
-  // fetch product name
-
-
 
   // regular expressions
   const PWD_REX = /^(?=.*).{4,}$/
@@ -160,7 +168,9 @@ const Navbar = () => {
           <>
             <nav
               className="
-                relative
+              sticky
+              z-30
+              top-0
                 w-full
                 flex flex-wrap
                 items-center
@@ -212,7 +222,9 @@ const Navbar = () => {
                focus:text-gray-700
                mr-4
                dropdown-toggle
-               hidden-arrow
+               hidde￼
+               №	Brand Name	Description	Action
+               1n-arrow
                flex items-center
               " data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                       <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bell"
@@ -322,7 +334,7 @@ const Navbar = () => {
                               placeholder="••••••••"
                               id="exampleFormControlInput1"
                               name="password"
-                              type={"password"}
+                              type={isHidden ? 'text' : 'password'}
                               onChange={(e) => setPassword(e.target.value)}
                               value={password.trim()}
                               onKeyUp={() => {
@@ -374,7 +386,7 @@ const Navbar = () => {
                               placeholder="••••••••"
                               id="exampleFormControlInput1"
                               name="newPassword"
-                              type={"password"}
+                              type={isHidden ? 'text' : 'password'}
                               onChange={(e) => setNewPassword(e.target.value)}
                               value={newPassword.trim()}
                               onKeyUp={() => {
@@ -425,7 +437,7 @@ const Navbar = () => {
                               placeholder="••••••••"
                               id="exampleFormControlInput1"
                               name="ComfirmPassword"
-                              type={"password"}
+                              type={isHidden ? 'text' : 'password'}
                               onChange={(e) => setComfirmPassword(e.target.value)}
                               value={comfirmPassword.trim()}
                               onKeyUp={() => {
@@ -444,7 +456,16 @@ const Navbar = () => {
                                 }
                               }}
                             />
-                            {msgComfirm && <span className={`text-xs mt-2 ${color}`}>{msgComfirm}</span>}
+
+                            <div className={`flex ${msgComfirm ? 'justify-between' : 'justify-end'} mb-5`}>
+                              {msgComfirm && <span className={`text-xs mt-2 ${color}`}>{msgComfirm}</span>}
+                              <div className="flex items-center mt-2">
+                                <input type="checkbox" className=" w-4 h-4 rounded mr-1" onChange={showPassword} checked={isHidden} />
+                                <label htmlFor="" className="text-blue-400 text-xs mt-[2px]">
+                                  បង្ហាញពាក្យសម្ងាត់?
+                                </label>
+                              </div>
+                            </div>
                           </div>
 
                           {/* end of change password modal */}

@@ -530,30 +530,33 @@ const Sidebar = () => {
                     aria-labelledby="sidenavEx3"
                     data-bs-parent="#sidenavExample"
                   >
-                    <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
+
+                    <li className="cursor-pointer relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
                       <span className="pl-6">
                         <RxDot size={20} />
                       </span>
                       <span
                         className="mt-[2px]"
-                        // data-mdb-ripple="true"
+                        //data-mdb-ripple="true"
                         data-mdb-ripple-color="dark"
                       >
-                        add-category
+                        របាយការណ៏ការលក់
                       </span>
                     </li>
-                    <li className="relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
-                      <span className="pl-6">
-                        <RxDot size={20} />
-                      </span>
-                      <span
-                        className="mt-[2px]"
-                        // data-mdb-ripple="true"
-                        data-mdb-ripple-color="dark"
-                      >
-                        add-category
-                      </span>
-                    </li>
+                    <Link to={'/productReport'}>
+                      <li className="cursor-pointer relative flex items-center text-[14px] py-[18px] h-6 overflow-hidden text-ellipsis whitespace-nowrap rounded hover:bg-[#111] transition duration-300 ease-in-out">
+                        <span className="pl-6">
+                          <RxDot size={20} />
+                        </span>
+                        <span
+                          className="mt-[2px]"
+                          // data-mdb-ripple="true"
+                          data-mdb-ripple-color="dark"
+                        >
+                          របាយការណ៏ផលិតផល
+                        </span>
+                      </li>
+                    </Link>
                   </ul>
                 )}
               </li>

@@ -11,13 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { Select, Modal, Button } from "antd";
 //import useScanDetection from 'use-scan-detection';
 
-
 const fetchProducts = async () => {
   const { data } = await axios.get('http://localhost:3001/product_card');
   return data
 }
-
-
 
 const Sale = () => {
 
@@ -150,6 +147,11 @@ const Sale = () => {
       );
     }
   };
+  // remove all 
+  const RemoveAll = () => {
+    localStorage.removeItem('cartItems')
+    setCartItems([])
+  }
 
   const onChangeHandler = (product, qty) => {
     console.log(product)
@@ -231,13 +233,13 @@ const Sale = () => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems))
   }
 
-  console.log(cartItems.length)
+  //console.log(cartItems.length)
 
   useEffect(() => {
     fetchAllCustomer()
     fetchAllCategories()
     let localStorageCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-    console.log(localStorageCartItems)
+    //console.log(localStorageCartItems)
     if (localStorageCartItems.length !== null) {
       setCartItems([...localStorageCartItems])
     }
@@ -252,10 +254,10 @@ const Sale = () => {
   //console.log(categories)
   return (
     <>
-      <div className="flex-1">
-        <Navbar />
+      <div className="flex-1 h-screen overflow-auto">
+        <Navbar className="fixed top-0" />
         <div className="grid grid-cols-6 gap-4 ml-4 mr-4 pt-4">
-          <div className="col-span-2 mr-6 bg-blue-50 h-[775px]">
+          <div className="col-span-2 mr-6 bg-blue-50 h-[800px]">
             <div className="grid grid-cols-4 gap-4">
               <div className="col-span-4 h-[38px] mt-[4px] px-1">
                 <div className="flex items-center justify-items-stretch">
@@ -297,7 +299,7 @@ const Sale = () => {
               </div>
               <div className="col-span-4 mt-5">
                 <div className="grid grid-cols-4 gap-4 px-1">
-                  <div className="col-span-4 flex justify-between rounded-sm pt-3 shadow-sm bg-[#333] p-2 items-center text-[#fff]">
+                  <div className="col-span-4 flex justify-between rounded pt-3 shadow bg-[#333] p-2 items-center text-[#fff]">
                     <span className="ml-6">ផលិតផល</span>
                     <span>ចំនួន</span>
                     <span>តម្លៃ</span>
@@ -313,12 +315,13 @@ const Sale = () => {
                     deleteHandler={deleteHandler}
                     customerId={cusId}
                     setCustomerId={setCustomerId}
+                    RemoveAll={RemoveAll}
                   />
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-span-4 -ml-6 overflow-auto scrollbar h-[775px] bg-blue-50">
+          <div className="col-span-4 -ml-6 overflow-auto scrollbar h-[800px] bg-blue-50">
             <div className="h-12 px-1 flex justify-between items-center">
               <div className="flex items-center rounded-sm overflow-hidden">
                 <input

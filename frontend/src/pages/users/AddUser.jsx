@@ -120,7 +120,6 @@ const Adduser = () => {
     } catch (err) {
       console.log(err)
     }
-
   }
 
   useEffect(() => {
@@ -128,7 +127,7 @@ const Adduser = () => {
   }, [])
 
   return (
-    <div className="h-screen bg-gray-100 flex-1">
+    <div className="h-screen overflow-auto bg-gray-100 flex-1">
       <Navbar />
       <div className="p-5 mt-5">
         <h1 className="text-xl mb-4 text-left">បន្ថែមអ្នកប្រើប្រាស់</h1>

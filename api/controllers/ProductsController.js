@@ -309,3 +309,12 @@ exports.findByProcode = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.ProductReports = async (req, res, next) => {
+  try {
+    const [result] = await Product.productReports();
+    res.send(result);
+  } catch (err) {
+    next(err);
+  }
+};

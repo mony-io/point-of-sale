@@ -419,7 +419,7 @@ CREATE TABLE `tblUsers` (
 
 LOCK TABLES `tblUsers` WRITE;
 /*!40000 ALTER TABLE `tblUsers` DISABLE KEYS */;
-INSERT INTO `tblUsers` VALUES (4,1,1,'saochea','$2b$10$PrlT4grXpwfPF0TEXYRCTOcno/Z74Tm6JoLYx0EBaWZkMQIMHaE3y','saocheaphan@gmail.com','908755','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQsInVzZXJuYW1lIjoic2FvY2hlYSIsImVtYWlsIjoic2FvY2hlYXBoYW5AZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjc4Njg3NTk4LCJleHAiOjE2Nzg3NzM5OTh9.RJGaeTFqICdwDkO7LmEhYysgEPydpU_u2Ms3Azq11-M'),(10,2,2,'chea@#','$2b$10$XQph20tIZ.HUDYxv.QQFDuxALn10IoaK2eXhPYIin.BXMEjZm2rB.','dara@gmail.com','908755',NULL),(15,1,2,'chea','$2b$10$UOebboThYNxNWEbW2betU.a/BJyfFFySjJicAIFdxJNPUgoX5zqQ6','','',NULL),(16,1,2,'netfighter','$2b$10$ErpcXibhWTRGZuw5mLCm7eAWukqrZACiexIWPaOuv/CZi52dJoWcm','','',NULL);
+INSERT INTO `tblUsers` VALUES (4,1,1,'saochea','$2b$10$PrlT4grXpwfPF0TEXYRCTOcno/Z74Tm6JoLYx0EBaWZkMQIMHaE3y','saocheaphan@gmail.com','908755','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQsInVzZXJuYW1lIjoic2FvY2hlYSIsImVtYWlsIjoic2FvY2hlYXBoYW5AZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjc4Nzg2MzYzLCJleHAiOjE2Nzg4NzI3NjN9.OW-25aloiupSO76xM05Pybvdc-5mOIZ5EXW2TT6ekYg'),(10,2,1,'chea@#','$2b$10$RO3255Z3EdwFXEUcwiAW6.9BuXuEYofrfCVGYjjV533SDPMDHhaym','dara@gmail.com','908755',NULL),(15,1,2,'chea','$2b$10$UOebboThYNxNWEbW2betU.a/BJyfFFySjJicAIFdxJNPUgoX5zqQ6','','',NULL),(16,1,2,'netfighter','$2b$10$ErpcXibhWTRGZuw5mLCm7eAWukqrZACiexIWPaOuv/CZi52dJoWcm','','',NULL);
 /*!40000 ALTER TABLE `tblUsers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -450,4 +450,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-13 13:18:55
+-- Dump completed on 2023-03-14 16:35:38

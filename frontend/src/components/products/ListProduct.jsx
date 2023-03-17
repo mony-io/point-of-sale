@@ -96,9 +96,9 @@ const ListProduct = () => {
 
   return (
     <>
-      <div className="h-screen bg-gray-100 flex-1">
+      <div className="h-screen bg-gray-100 overflow-auto flex-1">
         <Navbar />
-        <div className="p-5">
+        <div className="p-5 h-screen">
           <h1 className="text-xl mb-2 text-left mt-3">បញ្ជីផលិតផល</h1>
           <div className="w-full h-1 bg-blue-400 mb-7 shadow-sm"></div>
           <div className="flex justify-between mb-3">
@@ -114,7 +114,7 @@ const ListProduct = () => {
               style={{ width: "20rem" }}
             />
           </div>
-          <div className="rounded-lg shadow overflow-auto hidden md:block">
+          <div className="rounded-lg shadow overflow-auto hidden md:block h-[600px]">
             <table className="w-full table-auto">
               <thead className="bg-gray-50 border-gray-200">
                 <tr className="border-b-2 border-gray-100">
