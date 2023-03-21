@@ -16,6 +16,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Temporary view structure for view `V_ProductReports`
+--
+
+DROP TABLE IF EXISTS `V_ProductReports`;
+/*!50001 DROP VIEW IF EXISTS `V_ProductReports`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `V_ProductReports` AS SELECT 
+ 1 AS `product_id`,
+ 1 AS `product_code`,
+ 1 AS `product_name`,
+ 1 AS `qty_sales`,
+ 1 AS `unit`,
+ 1 AS `cost`,
+ 1 AS `revenue`,
+ 1 AS `profit`,
+ 1 AS `qty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Temporary view structure for view `getAllProducts`
 --
 
@@ -153,7 +173,7 @@ CREATE TABLE `tblInvoice` (
   `amount` float NOT NULL,
   `money_change` float NOT NULL,
   PRIMARY KEY (`invoice_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,7 +182,7 @@ CREATE TABLE `tblInvoice` (
 
 LOCK TABLES `tblInvoice` WRITE;
 /*!40000 ALTER TABLE `tblInvoice` DISABLE KEYS */;
-INSERT INTO `tblInvoice` VALUES (1,'',1,66,0),(2,'',1,55,0),(3,'',1,22,0),(4,'',1,44,0),(5,'',1,45,1),(6,'',1,33,0),(7,'',2,55,0),(8,'',1,22,0),(9,'PSS020230225135260',1,22,0),(10,'PSS2023225010',1,22,0),(11,'PSS2023225011',1,11,0),(12,'PSS2023225012',1,33,0),(13,'PSS2023225013',1,99,0),(14,'PSS2023226014',1,234,146),(15,'PSS2023226015',1,77,0),(16,'PSS2023226016',1,33,0),(17,'PSS2023226017',2,22,0),(18,'PSS2023227018',1,22,0),(19,'PSS2023227019',1,11,0),(20,'PSS2023227020',1,11,0),(21,'PSS2023227021',1,11,0),(22,'PSS2023227022',1,22,0),(23,'PSS2023227023',1,11,0),(24,'PSS2023227024',1,11,0),(25,'PSS2023227025',1,11,0),(26,'PSS2023227026',1,11,0),(27,'PSS2023228027',1,22,0),(28,'PSS202332028',1,74,0),(29,'PSS202332029',1,37,0),(30,'PSS202332030',1,53,0),(31,'PSS202332031',2,178,0),(32,'PSS202332032',1,16,0),(33,'PSS202332033',1,1000,-143),(34,'PSS202333034',2,53,0),(35,'PSS202333035',1,11,0),(36,'PSS202333036',1,11,0),(37,'PSS202335037',1,1136,0),(38,'PSS202335038',1,57,0),(39,'PSS202336039',1,42,0),(40,'PSS202336040',1,26,0),(41,'PSS202337041',1,1102,0),(42,'PSS202337042',1,15,0),(43,'PSS202337043',1,11,0),(44,'PSS202337044',1,15,0),(45,'PSS202337045',1,26,0),(46,'PSS202337046',1,11,0),(47,'PSS202338047',1,111,0),(48,'PSS202338048',1,63,0),(49,'PSS202338049',2,52,0),(50,'PSS202339050',1,170,0);
+INSERT INTO `tblInvoice` VALUES (1,'',1,66,0),(2,'',1,55,0),(3,'',1,22,0),(4,'',1,44,0),(5,'',1,45,1),(6,'',1,33,0),(7,'',2,55,0),(8,'',1,22,0),(9,'PSS020230225135260',1,22,0),(10,'PSS2023225010',1,22,0),(11,'PSS2023225011',1,11,0),(12,'PSS2023225012',1,33,0),(13,'PSS2023225013',1,99,0),(14,'PSS2023226014',1,234,146),(15,'PSS2023226015',1,77,0),(16,'PSS2023226016',1,33,0),(17,'PSS2023226017',2,22,0),(18,'PSS2023227018',1,22,0),(19,'PSS2023227019',1,11,0),(20,'PSS2023227020',1,11,0),(21,'PSS2023227021',1,11,0),(22,'PSS2023227022',1,22,0),(23,'PSS2023227023',1,11,0),(24,'PSS2023227024',1,11,0),(25,'PSS2023227025',1,11,0),(26,'PSS2023227026',1,11,0),(27,'PSS2023228027',1,22,0),(28,'PSS202332028',1,74,0),(29,'PSS202332029',1,37,0),(30,'PSS202332030',1,53,0),(31,'PSS202332031',2,178,0),(32,'PSS202332032',1,16,0),(33,'PSS202332033',1,1000,-143),(34,'PSS202333034',2,53,0),(35,'PSS202333035',1,11,0),(36,'PSS202333036',1,11,0),(37,'PSS202335037',1,1136,0),(38,'PSS202335038',1,57,0),(39,'PSS202336039',1,42,0),(40,'PSS202336040',1,26,0),(41,'PSS202337041',1,1102,0),(42,'PSS202337042',1,15,0),(43,'PSS202337043',1,11,0),(44,'PSS202337044',1,15,0),(45,'PSS202337045',1,26,0),(46,'PSS202337046',1,11,0),(47,'PSS202338047',1,111,0),(48,'PSS202338048',1,63,0),(49,'PSS202338049',2,52,0),(50,'PSS202339050',1,170,0),(51,'PSS2023317051',1,52,0),(52,'PSS2023317052',1,22,0);
 /*!40000 ALTER TABLE `tblInvoice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,7 +267,7 @@ CREATE TABLE `tblProducts` (
 
 LOCK TABLES `tblProducts` WRITE;
 /*!40000 ALTER TABLE `tblProducts` DISABLE KEYS */;
-INSERT INTO `tblProducts` VALUES (1,1,1,1,1,'2001203','សុីម៉ង់ត័ K Cement',176,10,11,'2023-03-12','images/1678633685762cement.png','',1,3),(2,2,0,1,3,'2919183','Khmer Angkor',3,10,11,'2023-03-12','images/1678633696821cement.png','',1,3),(3,1,0,0,2,'20012','អូឌ',20,12,15,'2023-03-12','images/1678633840046cement.png','',1,3);
+INSERT INTO `tblProducts` VALUES (1,1,1,1,1,'2001203','សុីម៉ង់ត័ K Cement',174,10,11,'2023-03-12','images/1678633685762cement.png','',1,3),(2,2,0,1,3,'2919183','Khmer Angkor',28,10,11,'2023-03-12','images/1678633696821cement.png','',1,3),(3,1,0,0,2,'20012','អូឌ',18,12,15,'2023-03-12','images/1678633840046cement.png','',1,3);
 /*!40000 ALTER TABLE `tblProducts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -295,7 +315,7 @@ CREATE TABLE `tblSaleDetails` (
 
 LOCK TABLES `tblSaleDetails` WRITE;
 /*!40000 ALTER TABLE `tblSaleDetails` DISABLE KEYS */;
-INSERT INTO `tblSaleDetails` VALUES (1,1,2),(1,2,4),(2,1,2),(2,2,3),(3,1,1),(3,2,1),(4,1,1),(4,2,3),(5,1,2),(5,2,2),(6,1,1),(6,2,2),(7,1,4),(7,2,1),(8,1,1),(8,2,1),(9,1,1),(9,2,1),(10,1,1),(10,2,1),(11,1,1),(12,1,1),(12,2,2),(13,1,1),(13,2,8),(14,1,3),(14,2,5),(15,1,7),(16,1,1),(16,2,2),(17,1,1),(17,2,1),(18,1,1),(18,2,1),(19,1,1),(20,1,1),(21,1,1),(22,1,1),(22,2,1),(23,1,1),(24,2,1),(25,1,1),(26,1,1),(27,1,1),(27,2,1),(28,1,2),(28,2,2),(28,3,2),(29,1,1),(29,2,1),(29,3,1),(30,1,1),(30,2,1),(30,3,1),(30,4,1),(31,2,11),(31,1,1),(31,3,1),(31,4,1),(31,6,1),(32,4,1),(33,1,1),(33,2,1),(33,3,1),(33,4,1),(33,6,1),(33,7,1),(34,1,1),(34,2,1),(34,3,1),(34,4,1),(35,2,1),(36,2,1),(37,6,2),(37,3,1),(37,4,1),(37,7,1),(38,2,1),(38,3,1),(38,4,1),(38,6,1),(39,1,1),(39,3,1),(39,4,1),(40,1,1),(40,3,1),(41,1,1),(41,4,1),(41,7,1),(42,3,1),(43,1,1),(44,3,1),(45,1,1),(45,3,1),(46,1,1),(47,1,4),(47,2,2),(47,3,3),(48,1,2),(48,2,1),(48,3,2),(49,1,1),(49,2,1),(49,3,2),(50,1,7),(50,2,3),(50,3,4);
+INSERT INTO `tblSaleDetails` VALUES (1,1,1),(1,2,1),(1,3,2),(2,1,1),(2,2,1);
 /*!40000 ALTER TABLE `tblSaleDetails` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -328,7 +348,7 @@ CREATE TABLE `tblSales` (
   `invoice_id` int(11) NOT NULL,
   `sale_date` date NOT NULL,
   PRIMARY KEY (`sale_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -337,7 +357,7 @@ CREATE TABLE `tblSales` (
 
 LOCK TABLES `tblSales` WRITE;
 /*!40000 ALTER TABLE `tblSales` DISABLE KEYS */;
-INSERT INTO `tblSales` VALUES (1,10,0,1,'2023-02-24'),(2,10,0,2,'2023-02-24'),(3,4,0,3,'2023-02-24'),(4,4,0,4,'2023-02-24'),(5,4,0,5,'2023-02-24'),(6,4,0,6,'2023-02-25'),(7,4,0,7,'2023-02-25'),(8,4,0,8,'2023-02-25'),(9,4,0,9,'2023-02-25'),(10,4,0,10,'2023-02-25'),(11,4,0,11,'2023-02-25'),(12,4,0,12,'2023-02-25'),(13,4,0,13,'2023-02-25'),(14,4,0,14,'2023-02-26'),(15,4,0,15,'2023-02-26'),(16,4,0,16,'2023-02-26'),(17,4,0,17,'2023-02-26'),(18,4,1,18,'2023-02-27'),(19,4,5,19,'2023-02-27'),(20,4,4,20,'2023-02-27'),(21,4,3,21,'2023-02-27'),(22,4,1,22,'2023-02-27'),(23,4,1,23,'2023-02-27'),(24,4,1,24,'2023-02-27'),(25,4,1,25,'2023-02-27'),(26,4,3,26,'2023-02-27'),(27,4,1,27,'2023-02-28'),(28,4,1,28,'2023-03-02'),(29,4,1,29,'2023-03-02'),(30,4,1,30,'2023-03-02'),(31,4,1,31,'2023-03-02'),(32,4,1,32,'2023-03-02'),(33,4,1,33,'2023-03-02'),(34,4,1,34,'2023-03-03'),(35,4,1,35,'2023-03-03'),(36,4,1,36,'2023-03-03'),(37,4,1,37,'2023-03-05'),(38,4,1,38,'2023-03-05'),(39,4,1,39,'2023-03-06'),(40,4,1,40,'2023-03-06'),(41,4,1,41,'2023-03-07'),(42,4,1,42,'2023-03-07'),(43,4,1,43,'2023-03-07'),(44,4,1,44,'2023-03-07'),(45,4,1,45,'2023-03-07'),(46,4,1,46,'2023-03-07'),(47,4,1,47,'2023-03-08'),(48,4,1,48,'2023-03-08'),(49,4,1,49,'2023-03-08'),(50,4,1,50,'2023-03-09');
+INSERT INTO `tblSales` VALUES (1,4,1,51,'2023-03-17'),(2,4,1,52,'2023-03-17');
 /*!40000 ALTER TABLE `tblSales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -419,9 +439,27 @@ CREATE TABLE `tblUsers` (
 
 LOCK TABLES `tblUsers` WRITE;
 /*!40000 ALTER TABLE `tblUsers` DISABLE KEYS */;
-INSERT INTO `tblUsers` VALUES (4,1,1,'saochea','$2b$10$PrlT4grXpwfPF0TEXYRCTOcno/Z74Tm6JoLYx0EBaWZkMQIMHaE3y','saocheaphan@gmail.com','908755','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQsInVzZXJuYW1lIjoic2FvY2hlYSIsImVtYWlsIjoic2FvY2hlYXBoYW5AZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjc4Nzg2MzYzLCJleHAiOjE2Nzg4NzI3NjN9.OW-25aloiupSO76xM05Pybvdc-5mOIZ5EXW2TT6ekYg'),(10,2,1,'chea@#','$2b$10$RO3255Z3EdwFXEUcwiAW6.9BuXuEYofrfCVGYjjV533SDPMDHhaym','dara@gmail.com','908755',NULL),(15,1,2,'chea','$2b$10$UOebboThYNxNWEbW2betU.a/BJyfFFySjJicAIFdxJNPUgoX5zqQ6','','',NULL),(16,1,2,'netfighter','$2b$10$ErpcXibhWTRGZuw5mLCm7eAWukqrZACiexIWPaOuv/CZi52dJoWcm','','',NULL);
+INSERT INTO `tblUsers` VALUES (4,1,1,'saochea','$2b$10$PrlT4grXpwfPF0TEXYRCTOcno/Z74Tm6JoLYx0EBaWZkMQIMHaE3y','saocheaphan@gmail.com','908755','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQsInVzZXJuYW1lIjoic2FvY2hlYSIsImVtYWlsIjoic2FvY2hlYXBoYW5AZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjc5MDQxNzAyLCJleHAiOjE2NzkxMjgxMDJ9.2LQDo8l0pkl3-4LeK6Rd_P2qVYek_GKX0TF6C-T4DyM'),(10,2,2,'chea@#','$2b$10$XQph20tIZ.HUDYxv.QQFDuxALn10IoaK2eXhPYIin.BXMEjZm2rB.','dara@gmail.com','908755',NULL),(15,1,2,'chea','$2b$10$UOebboThYNxNWEbW2betU.a/BJyfFFySjJicAIFdxJNPUgoX5zqQ6','','',NULL),(16,1,2,'netfighter','$2b$10$ErpcXibhWTRGZuw5mLCm7eAWukqrZACiexIWPaOuv/CZi52dJoWcm','','',NULL);
 /*!40000 ALTER TABLE `tblUsers` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `V_ProductReports`
+--
+
+/*!50001 DROP VIEW IF EXISTS `V_ProductReports`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `V_ProductReports` AS select `tblProducts`.`product_id` AS `product_id`,`tblProducts`.`product_code` AS `product_code`,`tblProducts`.`product_name` AS `product_name`,sum(`tblSaleDetails`.`qty_sales`) AS `qty_sales`,`tblProductUnits`.`unit` AS `unit`,sum(`tblSaleDetails`.`qty_sales`) * `tblProducts`.`unit_price` AS `cost`,sum(`tblSaleDetails`.`qty_sales`) * `tblProducts`.`price` AS `revenue`,sum(`tblSaleDetails`.`qty_sales`) * `tblProducts`.`price` - sum(`tblSaleDetails`.`qty_sales`) * `tblProducts`.`unit_price` AS `profit`,`tblProducts`.`qty` AS `qty` from ((`tblSaleDetails` left join `tblProducts` on(`tblSaleDetails`.`product_id` = `tblProducts`.`product_id`)) join `tblProductUnits` on(`tblProducts`.`unit_id` = `tblProductUnits`.`id`)) group by `tblSaleDetails`.`product_id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
 -- Final view structure for view `getAllProducts`
@@ -450,4 +488,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-14 16:35:38
+-- Dump completed on 2023-03-17 15:56:25
