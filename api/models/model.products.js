@@ -1,4 +1,4 @@
-const db = require("../config/db");
+const db = require('../config/db');
 
 class Product {
   constructor(
@@ -35,7 +35,7 @@ class Product {
 
   save() {
     const sql =
-      "INSERT INTO tblProducts(`category_id`,`brand_id`,`sub_id`,`unit_id`,`product_code`,`product_name`,qty,unit_price,price,exp_date,product_image,`desc`,`status`,reorder_number) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      'INSERT INTO tblProducts(`category_id`,`brand_id`,`sub_id`,`unit_id`,`product_code`,`product_name`,qty,unit_price,price,exp_date,product_image,`desc`,`status`,reorder_number) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
     return db.execute(sql, [
       this.category_id,
@@ -72,7 +72,7 @@ class Product {
     product_id
   ) {
     const sql =
-      "UPDATE tblProducts SET category_id=?,brand_id=?,sub_id=?,product_code=?,product_name=?,qty=?,unit_price=?,price=?,exp_date=?,product_image=?,`desc`=?,`status`=?,reorder_number=? WHERE product_id=?";
+      'UPDATE tblProducts SET category_id=?,brand_id=?,sub_id=?,product_code=?,product_name=?,qty=?,unit_price=?,price=?,exp_date=?,product_image=?,`desc`=?,`status`=?,reorder_number=? WHERE product_id=?';
     return db.query(sql, [
       category_id,
       brand_id,
@@ -92,17 +92,17 @@ class Product {
   }
 
   static findImageById(id) {
-    const sql = "SELECT product_image FROM tblProducts WHERE product_id=?";
+    const sql = 'SELECT product_image FROM tblProducts WHERE product_id=?';
     return db.execute(sql, [id]);
   }
 
   static findProductByName(product_name) {
-    const sql = "SELECT product_name FROM tblProducts WHERE product_name = ?";
+    const sql = 'SELECT product_name FROM tblProducts WHERE product_name = ?';
     return db.execute(sql, [product_name]);
   }
 
   static findProductCode(product_code) {
-    const sql = "SELECT product_code FROM tblProducts WHERE product_code = ?";
+    const sql = 'SELECT product_code FROM tblProducts WHERE product_code = ?';
     return db.execute(sql, [product_code]);
   }
 
@@ -113,18 +113,18 @@ class Product {
 
   static findDuplicateByName(id, product_name) {
     const sql =
-      "SELECT *FROM tblProducts WHERE NOT product_id=? AND product_name=?";
+      'SELECT *FROM tblProducts WHERE NOT product_id=? AND product_name=?';
     return db.execute(sql, [id, product_name]);
   }
 
   static findDuplicateByProductCode(id, product_code) {
     const sql =
-      "SELECT *FROM tblProducts WHERE NOT product_id=? AND product_code=?";
+      'SELECT *FROM tblProducts WHERE NOT product_id=? AND product_code=?';
     return db.execute(sql, [id, product_code]);
   }
 
   static deleteById(id) {
-    const sql = "DELETE FROM tblProducts WHERE product_id = ?";
+    const sql = 'DELETE FROM tblProducts WHERE product_id = ?';
     return db.execute(sql, [id]);
   }
 
@@ -134,25 +134,36 @@ class Product {
   }
 
   static findProductById(id) {
-    const sql = "SELECT *FROM tblProducts WHERE product_id=?";
+    const sql = 'SELECT *FROM tblProducts WHERE product_id=?';
     return db.execute(sql, [id]);
   }
 
   static productCard() {
     const sql =
-      "SELECT product_id,product_name,price,product_image,qty,product_code,category_id FROM tblProducts WHERE `status` = 1 AND qty>0";
+      'SELECT product_id,product_name,price,product_image,qty,product_code,category_id FROM tblProducts WHERE `status` = 1 AND qty>0';
     return db.execute(sql);
   }
 
   static findByProcode(procode) {
     const sql =
-      "SELECT product_id,product_name,price,product_image,qty,product_code FROM tblProducts WHERE `status` = 1 AND product_code=?";
+      'SELECT product_id,product_name,price,product_image,qty,product_code FROM tblProducts WHERE `status` = 1 AND product_code=?';
     return db.execute(sql, [procode]);
   }
 
   static productReports() {
-    const sql = "SELECT *FROM V_ProductReports";
+    const sql = 'SELECT *FROM V_ProductReports';
     return db.execute(sql);
+  }
+
+  // pagination
+  static searchProduct(search, limit, page) {
+    const sql = 'call SP_SearchProduct(?,?,?)';
+    return db.execute(sql, [search, limit, page]);
+  }
+
+  static pagination(search) {
+    const sql = 'call SP_ProductPagination(?)';
+    return db.execute(sql, [search]);
   }
 }
 

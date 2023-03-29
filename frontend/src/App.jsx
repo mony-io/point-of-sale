@@ -44,8 +44,6 @@ function App() {
             <Route path="/productunit" element={<ProductUnit />} />
             <Route path="/addproduct" element={<AddProduct />} />
             <Route path="/listproduct" element={<ListProduct />} />
-            <Route path="/addstaff" element={<AddStaff />} />
-            <Route path="/liststaff" element={<ListStaff />} />
             <Route path="/addcustomer" element={<AddCustomer />} />
             <Route path="/listcustomer" element={<ListCustomer />} />
             <Route path="/product-brands" element={<ProductBrands />} />

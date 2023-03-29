@@ -1,67 +1,176 @@
-import React from "react";
+import Navbar from '../Navbar';
+import React from 'react';
 
 const AddCustomer = () => {
   return (
     <>
-      <div className="flex-1">
-        <h3 className="h-16 ml-6 flex items-center text-xl">បន្ថែមផលិតផល</h3>
-        <div className="grid grid-cols-4 gap-4 ml-6 mr-6 bg-[#DDDDDD] h-[630px] border-t-4 border-t-blue-400">
-          <div className="col-span-2">
-            <h3 className="text-md m-2 my-6 text-gray-600">
-              សូមបញ្ចូលពត៍មានរបស់​អាតិថិជន
-            </h3>
-            <div className="flex flex-col m-2 ml-6 mt-4">
-              <label htmlFor="text" className="text-sm mb-1">
-                នាមត្រកូល
-              </label>
-              <input type="text" className="outline-none h-8 p-2" />
+      <div className="h-screen overflow-auto bg-gray-100 flex-1">
+        <Navbar />
+        <div className="p-5 mt-5">
+          <h1 className="text-xl mb-4 text-left">បន្ថែមអតិថិជន</h1>
+          <div className="w-full h-1 bg-blue-400 mb-3 shadow-sm"></div>
+          <h2 className="ml-3 text-lg">សូមបញ្ជូលពត៍មានខាងក្រោម</h2>
+          <div className="grid grid-cols-4 gap-4 mt-7">
+            <div className="col-span-2 px-9">
+              <div className="mb-6">
+                <label
+                  htmlFor="username"
+                  className="block mb-2 text-sm font-medium text-gray-900 ">
+                  ឈ្មោះអតិថិជន
+                </label>
+                <input
+                  // onKeyDown={(e) => {
+                  //   if (e.code === 'Space') {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
+                  // onChange={handleChange}
+                  // value={user.username}
+                  // ref={usernameRef}
+                  type="text"
+                  id="username"
+                  name="username"
+                  className="
+                  form-control
+                  block
+                  w-full
+                  px-3
+                  py-2.5
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                "
+                  placeholder=""
+                />
+                {/* {userMsg && (
+                  <span className="text-red-500 text-sm">{userMsg}</span>
+                )} */}
+              </div>
+              <div className="mb-6">
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 ">
+                  លេខទូរសព្ទ
+                </label>
+                <input
+                  // onKeyDown={(e) => {
+                  //   if (e.code === 'Space') {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
+                  // onChange={handleChange}
+                  // ref={pwdRef}
+                  // value={user.password}
+                  type="password"
+                  id="password"
+                  name="password"
+                  className="
+                  form-control
+                  block
+                  w-full
+                  px-3
+                  py-2.5
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                "
+                  placeholder=""
+                />
+                {/* {pwdMsg && (
+                  <span className="text-red-500 text-sm">{pwdMsg}</span>
+                )} */}
+              </div>
+              <div className="mb-6">
+                <label
+                  htmlFor="comfirmPassword"
+                  className="block mb-2 text-sm font-medium text-gray-900 ">
+                  អ៊ីមែល
+                </label>
+                <input
+                  // onKeyDown={(e) => {
+                  //   if (e.code === 'Space') {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
+                  type="password"
+                  id="comfirmPassword"
+                  name="comfirmPassword"
+                  className="
+                  form-control
+                  block
+                  w-full
+                  px-3
+                  py-2.5
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                "
+                  placeholder=""
+                />
+                {/* {pwdMsg && (
+                  <span className="text-red-500 text-sm">{pwdMsg}</span>
+                )} */}
+              </div>
             </div>
-            <div className="flex flex-col m-2 ml-6 mt-4">
-              <label htmlFor="text" className="text-sm mb-1">
-                នាមខ្លួន
-              </label>
-              <input type="select" className="outline-none h-8 p-2" />
-            </div>
-            <div className="flex flex-col m-2 ml-6 mt-4">
-              <label htmlFor="text" className="text-sm mb-1">
-                លេខទូរសព្ទ
-              </label>
-              <input type="text" className="outline-none h-8 p-2" />
-            </div>
-            <div className="flex flex-col m-2 ml-6 mt-4">
-              <label htmlFor="text" className="text-sm mb-1">
-                អុីម៉ែល
-              </label>
-              <input type="text" className="outline-none h-8 p-2" />
-            </div>
-            <div className="flex flex-col m-2 ml-6 mt-4">
-              <label htmlFor="text" className="text-sm mb-1">
-                អាស័យដ្ថានទី​-១
-              </label>
-              <input type="text" className="outline-none h-8 p-2" />
-            </div>
-            <div className="flex flex-col m-2 ml-6 mt-4">
-              <label htmlFor="text" className="text-sm mb-1">
-                អាស័យដ្ថានទី​-២
-              </label>
-              <input type="text" className="outline-none h-8 p-2" />
-            </div>
-            <div className="flex flex-col m-2 ml-6 mt-4">
-              <label htmlFor="text" className="text-sm mb-1">
-                ទីក្រុង
-              </label>
-              <input type="text" className="outline-none h-8 p-2" />
-            </div>
-          </div>
-          <div className="col-span-2 mt-14">
-            <div className="flex flex-col m-2 ml-6 mt-4">
-              <label htmlFor="text" className="text-sm mb-1">
-                ជ្រើសរើសរូបភាព
-              </label>
-              <input type="file" className="outline-none h-32 p-2" />
+            <div className="col-span-2 px-9">
+              <div className="">
+                <label
+                  htmlFor="comfirmPassword"
+                  className="block mb-2 text-sm font-medium text-gray-900 ">
+                  អាសយដ្ឋាន
+                </label>
+                <textarea
+                  name=""
+                  id=""
+                  className="h-36 p-3 w-full nt-normal
+                  text-gray-700
+                  bg-white bg-clip-padding
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  border border-solid border-gray-300 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"></textarea>
+              </div>
+
+              <div className="mt-[52px]">
+                <button
+                  // onClick={clear_data}
+                  type="submit"
+                  className="text-white bg-red-700 mr-4 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:focus:ring-red-800">
+                  សម្អាត
+                </button>
+                <button
+                  // onClick={handleSubmit}
+                  type="submit"
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:focus:ring-blue-800">
+                  បញ្ជូន
+                </button>
+              </div>
             </div>
           </div>
         </div>
+        {/* <ToastContainer /> */}
       </div>
     </>
   );

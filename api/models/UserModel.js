@@ -95,6 +95,17 @@ class Users {
     const sql = "SELECT *FROM tblUsers WHERE NOT id = ? AND username = ?";
     return db.execute(sql, [id, userName]);
   }
+
+  // pagination
+  static searchUser(search, limit, page) {
+    const sql = 'call SP_SearchProduct(?,?,?)';
+    return db.execute(sql, [search, limit, page]);
+  }
+
+  static pagination(search) {
+    const sql = 'call SP_UserPagination(?)';
+    return db.execute(sql, [search]);
+  }
 }
 
 module.exports = Users;

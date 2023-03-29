@@ -39,6 +39,17 @@ class ProductUnits {
     const sql = "DELETE FROM tblProductUnits WHERE id = ?";
     return db.query(sql, [id]);
   }
+
+   // pagination
+   static searchProductUnit(search, limit, page) {
+    const sql = 'call  SP_SearchProductUnit(?,?,?)';
+    return db.execute(sql, [search, limit, page]);
+  }
+
+  static pagination(search) {
+    const sql = 'call SP_ProductUnitPagination(?)';
+    return db.execute(sql, [search]);
+  }
 }
 
 module.exports = ProductUnits;

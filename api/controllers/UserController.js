@@ -32,14 +32,40 @@ exports.create = async (req, res, next) => {
   }
 };
 
+// exports.findAll = async (req, res, next) => {
+//   try {
+//     const [users] = await Users.findAll();
+//     res.send(users);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 exports.findAll = async (req, res, next) => {
   try {
-    const [users] = await Users.findAll();
-    res.send(users);
-  } catch (error) {
-    next(error);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    // get number of row
+    const [nRows] = await Users.pagination(search);
+    console.log(nRows)
+
+    const totalPage = Math.ceil(nRows[0][0].TotalRows / limit);
+
+    const [result] = await Users.searchUser(search, limit, page);
+
+    res.send({
+      result: result[0],
+      page: page,
+      limit: limit,
+      totalRows: nRows[0][0],
+      totalPage: totalPage,
+    });
+  } catch (err) {
+    next(err);
   }
 };
+
 
 exports.UserLogin = async (req, res, next) => {
   try {

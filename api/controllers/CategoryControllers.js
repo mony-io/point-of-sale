@@ -3,10 +3,26 @@ require("dotenv").config();
 
 exports.findAllCategories = async (req, res, next) => {
   try {
-    const [categories, _] = await Category.findAll();
-    res.send(categories);
-  } catch (error) {
-    next(error);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    // get number of row
+    const [nRows] = await Category.pagination(search);
+    console.log(nRows)
+
+    const totalPage = Math.ceil(nRows[0][0].TotalRows / limit);
+
+    const [result] = await Category.searchCategory(search, limit, page);
+
+    res.send({
+      result: result[0],
+      page: page,
+      limit: limit,
+      totalRows: nRows[0][0],
+      totalPage: totalPage,
+    });
+  } catch (err) {
+    next(err);
   }
 };
 

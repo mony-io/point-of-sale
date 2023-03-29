@@ -41,6 +41,18 @@ class Category {
     const sql = "SELECT *FROM tblCategories WHERE NOT id=? AND categoryName=?";
     return db.execute(sql, [id, catName]);
   }
+
+  // pagiante
+  // pagination
+  static searchCategory(search, limit, page) {
+    const sql = 'call  SP_Category(?,?,?)';
+    return db.execute(sql, [search, limit, page]);
+  }
+
+  static pagination(search) {
+    const sql = 'call SP_CategoryPagination(?)';
+    return db.execute(sql, [search]);
+  }
 }
 
 module.exports = Category;

@@ -67,7 +67,7 @@ const ResetPassword = () => {
     emailRef.current?.focus();
   }, [])
   return (
-    <section className="bg-gradient-to-r from-[#aaa] to-[#ddd] w-full absolute top-0">
+    <section className="bg-[#fff] w-full absolute top-0">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-[#fff] rounded-lg shadow-md dark:border md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -116,7 +116,7 @@ const ResetPassword = () => {
               </div>
               <button
                 type="submit"
-                className="w-full text-md text-[#fff] bg-teal-400 hover:bg-teal-300 p-3 rounded"
+                className="w-full text-md text-[#fff] bg-blue-400 hover:bg-blue-300 p-3 rounded"
                 onClick={handleClicked}
               >
                 {spin ? <span><Spin indicator={antIcon} className="text-blue-100" /> Loading...</span> : "បញ្ចូន"}

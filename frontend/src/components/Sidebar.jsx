@@ -178,7 +178,7 @@ const Sidebar = () => {
         auth.isLoggedIn && (<>
           <div
             className={`flex-2 ${auth.open ? "w-56" : "w-12"
-              } bg-[#222] scrollbar h-[100vh] relative duration-200 shadow-lg font-bold`}
+              } bg-[#222] scrollbar h-[100vh] overflow-auto relative duration-200 shadow-lg font-bold`}
             id="sidebar"
           >
 

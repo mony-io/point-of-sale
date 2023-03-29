@@ -28,8 +28,24 @@ exports.createNewUnit = async (req, res, next) => {
 
 exports.findAllUnit = async (req, res, next) => {
   try {
-    const [units] = await ProductUnits.findAll();
-    res.send(units);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    // get number of row
+    const [nRows] = await ProductUnits.pagination(search);
+    console.log(nRows)
+
+    const totalPage = Math.ceil(nRows[0][0].TotalRows / limit);
+
+    const [result] = await ProductUnits.searchProductUnit(search, limit, page);
+
+    res.send({
+      result: result[0],
+      page: page,
+      limit: limit,
+      totalRows: nRows[0][0],
+      totalPage: totalPage,
+    });
   } catch (err) {
     next(err);
   }

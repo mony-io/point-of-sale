@@ -72,7 +72,7 @@ const AddProduct = () => {
   const fetchCategories = async () => {
     try {
       const res = await axios.get("http://localhost:3001/categories");
-      setCategories(res.data);
+      setCategories(res.data.result);
     } catch (err) {
       console.log(err);
     }
@@ -91,7 +91,7 @@ const AddProduct = () => {
   async function fetchUnits() {
     try {
       const res = await axios.get("http://localhost:3001/product-units");
-      setUnits(res.data);
+      setUnits(res.data.result);
     } catch (err) {
       console.log(err);
     }
